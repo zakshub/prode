@@ -208,6 +208,22 @@ class TestProdeCompanyOS(unittest.TestCase):
         self.assertEqual(code, 201)
         self.assertEqual(art["artifact_type"], "ADR")
 
+        code, prop = dispatch_api_request(
+            self.engine,
+            "POST",
+            "/api/proposal/generate",
+            {},
+            {
+                "client_name": "Apex Health",
+                "client_email": "founder@apexhealth.com",
+                "project_title": "Sprint Zero Medical Architecture",
+                "total_cost_usd": 12500.0,
+            },
+        )
+        self.assertEqual(code, 201)
+        self.assertIn("Statement of Work", prop["proposal_markdown"])
+        self.assertEqual(prop["payment_schedule"]["m1_deposit_50"], 6250)
+
     def test_10_ui_companion_themes_and_wcag_labels(self) -> None:
         html = Path(UI_HTML_PATH).read_text(encoding="utf-8")
         self.assertIn('[data-theme="light"]', html)

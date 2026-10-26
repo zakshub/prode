@@ -456,6 +456,101 @@ class ProdeEngine:
         )
         return next(a for a in self.db.get_knowledge_vault() if a["id"] == art_id)
 
+    def generate_client_proposal(
+        self,
+        client_name: str,
+        client_email: str,
+        project_title: str,
+        project_type: str = "sprint_zero",
+        total_cost_usd: float = 7500.0,
+        timeline_str: str = "10 Business Days",
+        problem_summary: str = "Engineering and prototyping a production-grade digital/physical product.",
+    ) -> Dict[str, Any]:
+        p1 = round(total_cost_usd * 0.50)
+        p2 = round(total_cost_usd * 0.25)
+        p3 = round(total_cost_usd - p1 - p2)
+        date_today = utc_now().split("T")[0]
+
+        proposal_md = f"""# Statement of Work & Project Proposal: {project_title}
+
+**Client Organization:** {client_name} ({client_email})  
+**Engineering Firm:** PRODE — Product Design & Interactive Technology Company  
+**Primary Architect:** Zak (EXEC-01)  
+**Date Issued:** {date_today}  
+**Total Fixed Investment:** ${total_cost_usd:,.2f} USD  
+**Guaranteed Timeline:** {timeline_str}  
+
+---
+
+## 1. Executive Summary & Objective
+{client_name} is partnering with PRODE to design and engineer a production-ready solution.
+* **The Challenge:** {problem_summary}
+* **Our Commitment:** Deliver working, build-validated software and interactive systems rather than static concepts or unverified mockups.
+
+---
+
+## 2. Guaranteed Deliverables ({timeline_str})
+1. **Product Architecture & Requirements Blueprint:** Complete system specification, state diagrams, and database schemas.
+2. **Accessible UX/UI Screen Layouts:** High-contrast, responsive interfaces designed in strict compliance with W3C WCAG 2.2 AA accessibility standards.
+3. **Interactive Working Prototype:** Clickable, testable staging deployment you can review directly on your phone and desktop.
+4. **Production Codebase / Implementation Package:** Clean, type-checked code (Next.js / React / TypeScript / Tailwind) that compiles with zero errors.
+5. **Guaranteed Fixed-Price Quote for Subsequent Milestones:** Full transparency for long-term expansion.
+
+---
+
+## 3. Transparent 50/25/25 Cash Flow & Milestone Schedule
+PRODE operates with a strict milestone-governed payment schedule:
+
+| Milestone Phase | Amount (USD) | Trigger Event & Acceptance Condition |
+| :--- | :---: | :--- |
+| **Milestone 1 (50% Upfront)** | **${p1:,.2f}** | Due upon contract signing prior to sprint commencement. |
+| **Milestone 2 (25% Staging Demo)** | **${p2:,.2f}** | Due upon demonstration of the verified interactive staging build. |
+| **Milestone 3 (25% Final Handover)** | **${p3:,.2f}** | Due upon production release, repository transfer, and IP handover. |
+
+---
+
+## 4. Intellectual Property & Ownership
+* **Client IP Rights:** Upon 100% settlement of Milestone 3, all custom source code, databases, designs, and brand assets created specifically for {client_name} become the exclusive, transferable property of {client_name}.
+* **PRODE Background Tools:** Core proprietary generator engines and internal tooling libraries remain owned by PRODE, with an irrevocable, royalty-free license granted to {client_name} for runtime use.
+
+---
+
+## 5. Acceptance & Authorization
+
+| Authorized Representative for {client_name}: | For PRODE Product Engineering: |
+| :--- | :--- |
+| **Name:** ________________________________ | **Name:** Zak |
+| **Title:** _______________________________ | **Title:** Founder & Sovereign Architect |
+| **Signature:** __________________________ | **Signature:** __________________________ |
+| **Date:** _______________________________ | **Date:** {date_today} |
+"""
+        artifact = self.create_vault_artifact(
+            artifact_type="PROPOSAL",
+            project_id=f"PROP-{client_name.replace(' ', '-').upper()[:12]}",
+            title=f"Official Proposal: {project_title} for {client_name}",
+            content=proposal_md,
+            ip_classification="CLIENT_PROPOSAL",
+            governing_brain="designer",
+            created_by_role="MKT-08",
+        )
+
+        self.db.log_event(
+            actor="MKT-08 (Proposal Architect)",
+            action="CLIENT_PROPOSAL_GENERATED",
+            target_id=artifact["id"],
+            details=f"Generated ${total_cost_usd:,.2f} USD proposal for {client_name} ({project_title}).",
+        )
+
+        return {
+            "artifact_id": artifact["id"],
+            "client_name": client_name,
+            "project_title": project_title,
+            "total_cost_usd": total_cost_usd,
+            "timeline": timeline_str,
+            "proposal_markdown": proposal_md,
+            "payment_schedule": {"m1_deposit_50": p1, "m2_staging_25": p2, "m3_final_25": p3},
+        }
+
     def get_dashboard_summary(self) -> Dict[str, Any]:
         state = self.db.get_company_state()
         depts = self.db.get_departments()

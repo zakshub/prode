@@ -407,6 +407,94 @@ function cmdServe(port = 8080) {
           return sendJson(201, art);
         }
 
+        if (url.pathname === "/api/proposal/generate") {
+          const clientName = body.client_name || "Acme Corp";
+          const clientEmail = body.client_email || "contact@acme.com";
+          const projTitle = body.project_title || "Sprint Zero Blueprint & Clickable Prototype";
+          const cost = Number(body.total_cost_usd || 7500);
+          const timeline = body.timeline_str || "10 Business Days";
+          const problem = body.problem_summary || "Transforming product concept into verified software.";
+          const p1 = Math.round(cost * 0.5);
+          const p2 = Math.round(cost * 0.25);
+          const p3 = cost - p1 - p2;
+          const today = utcNow().split("T")[0];
+
+          const md = `# Statement of Work & Project Proposal: ${projTitle}
+
+**Client Organization:** ${clientName} (${clientEmail})
+**Engineering Firm:** PRODE — Product Design & Interactive Technology Company
+**Primary Architect:** Zak (EXEC-01)
+**Date Issued:** ${today}
+**Total Fixed Investment:** $${cost.toLocaleString()} USD
+**Guaranteed Timeline:** ${timeline}
+
+---
+
+## 1. Executive Summary & Objective
+${clientName} is partnering with PRODE to design and engineer a production-ready solution.
+* **The Challenge:** ${problem}
+* **Our Commitment:** Deliver working, build-validated software and interactive systems rather than static concepts or unverified mockups.
+
+---
+
+## 2. Guaranteed Deliverables (${timeline})
+1. **Product Architecture & Requirements Blueprint:** Complete system specification, state diagrams, and database schemas.
+2. **Accessible UX/UI Screen Layouts:** High-contrast, responsive interfaces designed in strict compliance with W3C WCAG 2.2 AA standards.
+3. **Interactive Working Prototype:** Clickable, testable staging deployment you can review directly on your phone and desktop.
+4. **Production Codebase / Implementation Package:** Clean, type-checked code (Next.js / React / TypeScript / Tailwind) that compiles with zero errors.
+5. **Guaranteed Fixed-Price Quote for Subsequent Milestones:** Full transparency for long-term expansion.
+
+---
+
+## 3. Transparent 50/25/25 Cash Flow & Milestone Schedule
+| Milestone Phase | Amount (USD) | Trigger Event & Acceptance Condition |
+| :--- | :---: | :--- |
+| **Milestone 1 (50% Upfront)** | **$${p1.toLocaleString()}** | Due upon contract signing prior to sprint commencement. |
+| **Milestone 2 (25% Staging Demo)** | **$${p2.toLocaleString()}** | Due upon demonstration of the verified interactive staging build. |
+| **Milestone 3 (25% Final Handover)** | **$${p3.toLocaleString()}** | Due upon production release, repository transfer, and IP handover. |
+
+---
+
+## 4. Intellectual Property & Ownership
+* **Client IP Rights:** Upon 100% settlement of Milestone 3, all custom source code, databases, designs, and brand assets created specifically for ${clientName} become the exclusive, transferable property of ${clientName}.
+* **PRODE Background Tools:** Core proprietary generator engines and internal tooling libraries remain owned by PRODE, with an irrevocable, royalty-free license granted to ${clientName} for runtime use.
+
+---
+
+## 5. Acceptance & Authorization
+| Authorized Representative for ${clientName}: | For PRODE Product Engineering: |
+| :--- | :--- |
+| **Name:** ________________________________ | **Name:** Zak |
+| **Title:** _______________________________ | **Title:** Founder & Sovereign Architect |
+| **Signature:** __________________________ | **Signature:** __________________________ |
+| **Date:** _______________________________ | **Date:** ${today} |
+`;
+          const artId = `KV-PROPOSAL-${String(state.knowledge_vault.length + 1).padStart(3, "0")}`;
+          const art = {
+            id: artId,
+            artifact_type: "PROPOSAL",
+            project_id: `PROP-${clientName.replace(/\s+/g, "-").toUpperCase().slice(0, 12)}`,
+            title: `Official Proposal: ${projTitle} for ${clientName}`,
+            ip_classification: "CLIENT_PROPOSAL",
+            governing_brain: "designer",
+            content: md,
+            created_by_role: "MKT-08",
+            created_at: utcNow(),
+          };
+          state.knowledge_vault.unshift(art);
+          logEvent(state, "MKT-08 (Proposal Architect)", "CLIENT_PROPOSAL_GENERATED", artId, `Generated $${cost} proposal for ${clientName}.`);
+          saveState(state);
+          return sendJson(201, {
+            artifact_id: artId,
+            client_name: clientName,
+            project_title: projTitle,
+            total_cost_usd: cost,
+            timeline,
+            proposal_markdown: md,
+            payment_schedule: { m1_deposit_50: p1, m2_staging_25: p2, m3_final_25: p3 },
+          });
+        }
+
         if (url.pathname === "/api/validate/opportunity") {
           const checks = [
             Number(body.pain_severity_annual_usd) >= 20000,

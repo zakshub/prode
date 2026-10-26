@@ -85,6 +85,22 @@ def dispatch_api_request(
                     details=summary,
                 )
                 return 201, {"inquiry_id": inq_id, "status": "PENDING_OWNER_REVIEW", "summary": summary}
+            if path == "/api/proposal/generate":
+                client_name = body.get("client_name", "Acme Corp")
+                client_email = body.get("client_email", "contact@acme.com")
+                project_title = body.get("project_title", "Sprint Zero Blueprint & Clickable Prototype")
+                cost = float(body.get("total_cost_usd", 7500.0))
+                timeline = body.get("timeline_str", "10 Business Days")
+                problem = body.get("problem_summary", "Transforming product concept into verified software.")
+                res = engine.generate_client_proposal(
+                    client_name=client_name,
+                    client_email=client_email,
+                    project_title=project_title,
+                    total_cost_usd=cost,
+                    timeline_str=timeline,
+                    problem_summary=problem,
+                )
+                return 201, res
             if path == "/api/vault/create":
                 art = engine.create_vault_artifact(
                     artifact_type=body.get("artifact_type", "PRD"),
