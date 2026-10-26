@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PRODE — Company OS Blueprint & Strategic Control Center</title>
+  <style>
+    /* ==========================================================================
+       Sentinel Designer Brain — Intentional Companion Appearances
+       Light Mode: Architectural Drafting Paper (#F7F8FA / Deep Slate / Cobalt)
+       Dark Mode:  Precision Obsidian Lab (#0B0F17 / Elevated Graphite / Cyan)
+       ========================================================================== */
+    :root, [data-theme="light"] {
+      --bg-canvas: #F7F8FA;
+      --bg-surface: #FFFFFF;
+      --bg-subtle: #EEF2F6;
+      --bg-nav: #0F172A;
+      --text-primary: #0F172A;
+      --text-secondary: #334155;
+      --text-muted: #475569;
+      --border-color: #CBD5E1;
+      --accent-primary: #1D4ED8;
+      --accent-primary-hover: #1E40AF;
+      --accent-primary-fg: #FFFFFF;
+      --badge-success-bg: #DCFCE7;
+      --badge-success-fg: #166534;
+      --badge-warn-bg: #FEF3C7;
+      --badge-warn-fg: #92400E;
+      --badge-info-bg: #DBEAFE;
+      --badge-info-fg: #1E40AF;
+      --badge-neutral-bg: #E2E8F0;
+      --badge-neutral-fg: #1E293B;
+      --focus-ring: #2563EB;
+      --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.07);
+    }
+
+    [data-theme="dark"] {
+      --bg-canvas: #0B0F17;
+      --bg-surface: #131B2E;
+      --bg-subtle: #1E293B;
+      --bg-nav: #06090F;
+      --text-primary: #F1F5F9;
+      --text-secondary: #CBD5E1;
+      --text-muted: #94A3B8;
+      --border-color: #334155;
+      --accent-primary: #38BDF8;
+      --accent-primary-hover: #7DD3FC;
+      --accent-primary-fg: #0B0F17;
+      --badge-success-bg: #064E3B;
+      --badge-success-fg: #6EE7B7;
+      --badge-warn-bg: #78350F;
+      --badge-warn-fg: #FCD34D;
+      --badge-info-bg: #1E3A8A;
+      --badge-info-fg: #93C5FD;
+      --badge-neutral-bg: #334155;
+      --badge-neutral-fg: #E2E8F0;
+      --focus-ring: #38BDF8;
+      --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.4);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, sans-serif;
+      background-color: var(--bg-canvas);
+      color: var(--text-primary);
+      line-height: 1.5;
+      font-size: 15px;
+    }
+
+    /* Header & Top Bar */
+    .top-header {
+      background-color: var(--bg-nav);
+      color: #F8FAFC;
+      padding: 1rem 1.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .brand-block h1 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    .brand-block p {
+      font-size: 0.82rem;
+      color: #94A3B8;
+    }
+
+    .header-meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.25rem 0.65rem;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+
+    .pill-success { background: var(--badge-success-bg); color: var(--badge-success-fg); }
+    .pill-warn { background: var(--badge-warn-bg); color: var(--badge-warn-fg); }
+    .pill-info { background: var(--badge-info-bg); color: var(--badge-info-fg); }
+    .pill-neutral { background: var(--badge-neutral-bg); color: var(--badge-neutral-fg); }
+
+    /* Navigation Tabs */
+    .nav-tabs {
+      background-color: var(--bg-surface);
+      border-bottom: 1px solid var(--border-color);
+      padding: 0.5rem 1.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .tab-btn {
+      background: transparent;
+      color: var(--text-secondary);
+      border: 1px solid transparent;
+      padding: 0.55rem 1rem;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .tab-btn:hover {
+      background: var(--bg-subtle);
+    }
+
+    .tab-btn[aria-selected="true"] {
+      background: var(--accent-primary);
+      color: var(--accent-primary-fg);
+    }
+
+    button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+      outline: 2px solid var(--focus-ring);
+      outline-offset: 2px;
+    }
+
+    .btn {
+      background: var(--accent-primary);
+      color: var(--accent-primary-fg);
+      border: none;
+      padding: 0.5rem 0.95rem;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      background: var(--accent-primary-hover);
+    }
+
+    .btn-secondary {
+      background: var(--bg-subtle);
+      color: var(--text-primary);
+      border: 1px solid var(--border-color);
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 1.5rem;
+    }
+
+    .tab-panel {
+      display: none;
+    }
+
+    .tab-panel.active {
+      display: block;
+    }
+
+    /* Grid Layouts */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 1.15rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .kpi-card .kpi-label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .kpi-card .kpi-value {
+      font-size: 1.65rem;
+      font-weight: 700;
+      margin-top: 0.25rem;
+    }
+
+    .section-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 0.85rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 0.65rem 0.75rem;
+      border-bottom: 1px solid var(--border-color);
+      vertical-align: top;
+    }
+
+    th {
+      background: var(--bg-subtle);
+      color: var(--text-secondary);
+      font-weight: 600;
+    }
+
+    .form-group {
+      margin-bottom: 0.9rem;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      font-size: 0.86rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .form-hint {
+      display: block;
+      font-size: 0.76rem;
+      color: var(--text-muted);
+      margin-bottom: 0.35rem;
+    }
+
+    input[type="text"], input[type="number"], select, textarea {
+      width: 100%;
+      padding: 0.5rem 0.65rem;
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
+      background: var(--bg-canvas);
+      color: var(--text-primary);
+      font-size: 0.9rem;
+    }
+
+    .milestone-box {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 0.85rem;
+      margin-top: 0.75rem;
+    }
+
+    .status-toast {
+      margin-bottom: 1rem;
+      padding: 0.75rem 1rem;
+      border-radius: 6px;
+      font-weight: 600;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <header class="top-header">
+    <div class="brand-block">
+      <h1>PRODE — Company OS Blueprint &amp; Control Center</h1>
+      <p>AI-Native Product Engineering &amp; Interactive Technology Company | Execution Twin: ZaxterLab</p>
+    </div>
+    <div class="header-meta">
+      <span class="pill pill-info" id="header-version">Version: v1.0</span>
+      <span class="pill pill-success" id="header-spend">Authorized Spend: $0.00 USD (Locked)</span>
+      <span class="pill pill-neutral">Sovereign: Zak (EXEC-01)</span>
+      <button type="button" class="btn btn-secondary" id="theme-toggle-btn" onclick="toggleTheme()">
+        Switch Appearance Mode
+      </button>
+    </div>
+  </header>
+
+  <nav class="nav-tabs" role="tablist" aria-label="PRODE Control Center Sections">
+    <button type="button" class="tab-btn" role="tab" aria-selected="true" onclick="switchTab('overview', this)">
+      1. Executive Command &amp; Revenue
+    </button>
+    <button type="button" class="tab-btn" role="tab" aria-selected="false" onclick="switchTab('departments', this)">
+      2. 9 Functions &amp; 69 Roles
+    </button>
+    <button type="button" class="tab-btn" role="tab" aria-selected="false" onclick="switchTab('roadmap', this)">
+      3. Roadmap, Projects &amp; Task DAGs (v1-v5)
+    </button>
+    <button type="button" class="tab-btn" role="tab" aria-selected="false" onclick="switchTab('vault', this)">
+      4. Knowledge Vault &amp; Studio
+    </button>
+    <button type="button" class="tab-btn" role="tab" aria-selected="false" onclick="switchTab('governance', this)">
+      5. Sovereign Approvals &amp; Audit Log
+    </button>
+  </nav>
+
+  <main class="container">
+    <div id="status-toast" class="status-toast pill-success" role="status" aria-live="polite"></div>
+
+    <!-- TAB 1: EXECUTIVE COMMAND & REVENUE -->
+    <section id="tab-overview" class="tab-panel active" role="tabpanel">
+      <div class="kpi-grid" id="kpi-grid"></div>
+
+      <h2 class="section-title">Three Complementary Revenue Engines</h2>
+      <div class="grid-3" id="revenue-grid"></div>
+
+      <div class="grid-2">
+        <div class="card">
+          <h3 class="section-title">5-Point Opportunity Validation Filter (MKT-04)</h3>
+          <form onsubmit="runOpportunityCheck(event)">
+            <div class="form-group">
+              <label for="opp-pain">Annual Customer Pain Cost (USD)</label>
+              <span class="form-hint">Minimum threshold: $20,000/year in lost productivity or cost.</span>
+              <input id="opp-pain" type="number" value="35000" required />
+            </div>
+            <div class="form-group">
+              <label for="opp-vel">10x AI Velocity Advantage Available?</label>
+              <select id="opp-vel">
+                <option value="true">Yes — Designer/Studio/CodeLift accelerates delivery</option>
+                <option value="false">No — Commodity manual labor</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="opp-fit">Requires Multi-Disciplinary Synthesis (UX + Code + 3D/Hardware)?</label>
+              <select id="opp-fit">
+                <option value="true">Yes — Synthesist moat applies</option>
+                <option value="false">No — Single-silo commodity</option>
+              </select>
+            </div>
+            <button type="submit" class="btn">Evaluate Opportunity</button>
+          </form>
+          <div id="opp-result" style="margin-top:0.75rem;font-weight:600;"></div>
+        </div>
+
+        <div class="card">
+          <h3 class="section-title">4-Gate Proprietary SaaS Spinout Filter (PRD-01)</h3>
+          <form onsubmit="runSaasCheck(event)">
+            <div class="form-group">
+              <label for="saas-clients">Number of Paying Clients Solved First</label>
+              <span class="form-hint">Must be validated across at least 3 paying clients before spinout.</span>
+              <input id="saas-clients" type="number" value="3" required />
+            </div>
+            <div class="form-group">
+              <label for="saas-reuse">Reusable Core Codebase Ratio (0.0 to 1.0)</label>
+              <span class="form-hint">Minimum 0.60 (60% reusable multi-tenant architecture).</span>
+              <input id="saas-reuse" type="number" step="0.05" value="0.70" required />
+            </div>
+            <button type="submit" class="btn">Evaluate SaaS Spinout Readiness</button>
+          </form>
+          <div id="saas-result" style="margin-top:0.75rem;font-weight:600;"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: 9 FUNCTIONS & 69 ROLES -->
+    <section id="tab-departments" class="tab-panel" role="tabpanel">
+      <h2 class="section-title">9 Company Functions &amp; 69 Specialist Roles</h2>
+      <p style="margin-bottom:1rem;color:var(--text-secondary);">
+        Select any department to inspect its responsibilities, governing intelligence brain, deliverables, and active/dormant status.
+      </p>
+      <div class="filter-bar" id="dept-filter-bar"></div>
+      <div class="grid-3" id="dept-summary-cards"></div>
+      <div class="card" style="overflow-x:auto;">
+        <table>
+          <thead>
+            <tr>
+              <th>Role ID</th>
+              <th>Dept</th>
+              <th>Title &amp; Archetype</th>
+              <th>Mode &amp; Brain</th>
+              <th>Phase</th>
+              <th>Responsibilities &amp; Deliverables</th>
+              <th>Status / Action</th>
+            </tr>
+          </thead>
+          <tbody id="roles-table-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- TAB 3: ROADMAP, PROJECTS & TASK DAGS -->
+    <section id="tab-roadmap" class="tab-panel" role="tabpanel">
+      <h2 class="section-title">5-Phase Progression Roadmap (v1.0 &rarr; v5.0)</h2>
+      <div class="filter-bar" id="version-filter-bar"></div>
+      <div id="versions-container" style="margin-bottom:1.5rem;"></div>
+      <div id="projects-container"></div>
+    </section>
+
+    <!-- TAB 4: KNOWLEDGE VAULT & STUDIO -->
+    <section id="tab-vault" class="tab-panel" role="tabpanel">
+      <div class="grid-2">
+        <div class="card">
+          <h3 class="section-title">Author New Knowledge Vault Artifact</h3>
+          <form onsubmit="createArtifact(event)">
+            <div class="form-group">
+              <label for="art-type">Artifact Type</label>
+              <span class="form-hint">Select ADR, PRD, PROPOSAL, or CASE_STUDY.</span>
+              <select id="art-type">
+                <option value="PRD">PRD (Product Requirement Document)</option>
+                <option value="PROPOSAL">PROPOSAL (Sprint Zero / Full Build SOW)</option>
+                <option value="ADR">ADR (Architectural Decision Record)</option>
+                <option value="CASE_STUDY">CASE_STUDY (Verified Proof of Execution)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="art-proj">Target Project ID</label>
+              <span class="form-hint">Example: PROJ-V1-01, PROJ-V3-01, PROJ-V4-01</span>
+              <input id="art-proj" type="text" value="PROJ-V1-02" required />
+            </div>
+            <div class="form-group">
+              <label for="art-title">Artifact Title</label>
+              <span class="form-hint">Provide a descriptive, traceable title.</span>
+              <input id="art-title" type="text" value="Sprint Zero Architecture Specification" required />
+            </div>
+            <div class="form-group">
+              <label for="art-content">Specification &amp; Evidence Content</label>
+              <span class="form-hint">Include Designer intent, Studio reality locks, and CodeLift acceptance criteria.</span>
+              <textarea id="art-content" rows="4" required>Verified scope with W3C WCAG 2.2 compliance, Studio physical causality locks, and 50/25/25 milestone schedule.</textarea>
+            </div>
+            <button type="submit" class="btn">Save Artifact to Knowledge Vault</button>
+          </form>
+        </div>
+
+        <div class="card">
+          <h3 class="section-title">Stored Institutional Knowledge Vault</h3>
+          <div id="vault-list"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 5: SOVEREIGN APPROVALS & AUDIT LOG -->
+    <section id="tab-governance" class="tab-panel" role="tabpanel">
+      <div class="grid-2">
+        <div class="card">
+          <h3 class="section-title">Sovereign Owner Approval Queue (Zak / EXEC-01)</h3>
+          <div id="approvals-list"></div>
+        </div>
+        <div class="card">
+          <h3 class="section-title">Immutable Transactional Audit Ledger</h3>
+          <div id="audit-list" style="max-height:480px;overflow-y:auto;"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    let STATE = null;
+    let SELECTED_DEPT = 'ALL';
+    let SELECTED_VERSION = 'ALL';
+
+    function showToast(msg) {
+      const el = document.getElementById('status-toast');
+      el.textContent = msg;
+      el.style.display = 'block';
+      setTimeout(() => { el.style.display = 'none'; }, 4000);
+    }
+
+    function toggleTheme() {
+      const html = document.documentElement;
+      const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
+    }
+
+    function switchTab(tabId, btnEl) {
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.setAttribute('aria-selected', 'false'));
+      document.getElementById('tab-' + tabId).classList.add('active');
+      btnEl.setAttribute('aria-selected', 'true');
+    }
+
+    async function loadDashboard() {
+      const res = await fetch('/api/dashboard');
+      STATE = await res.json();
+      renderAll();
+    }
+
+    function renderAll() {
+      if (!STATE) return;
+      const m = STATE.metrics;
+      document.getElementById('kpi-grid').innerHTML = `
+        <div class="card kpi-card"><div class="kpi-label">Functions / Depts</div><div class="kpi-value">${m.total_departments}</div></div>
+        <div class="card kpi-card"><div class="kpi-label">Specialist Roles</div><div class="kpi-value">${m.active_roles} / ${m.total_roles}</div></div>
+        <div class="card kpi-card"><div class="kpi-label">Versions (Phases)</div><div class="kpi-value">${m.total_versions}</div></div>
+        <div class="card kpi-card"><div class="kpi-label">Total Projects</div><div class="kpi-value">${m.total_projects}</div></div>
+        <div class="card kpi-card"><div class="kpi-label">Milestones Done</div><div class="kpi-value">${m.completed_milestones} / ${m.total_milestones}</div></div>
+        <div class="card kpi-card"><div class="kpi-label">Tasks Completed</div><div class="kpi-value">${m.completed_tasks} / ${m.total_tasks}</div></div>
+      `;
+
+      document.getElementById('revenue-grid').innerHTML = STATE.revenue_engines.map(r => `
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem;">
+            <span class="pill pill-info">${r.id}</span>
+            <span class="pill pill-success">Margin: ${r.target_gross_margin}</span>
+          </div>
+          <h3 style="font-size:1rem;margin-bottom:0.4rem;">${r.name}</h3>
+          <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:0.4rem;"><strong>What you sell:</strong> ${r.what_you_sell}</p>
+          <p style="font-size:0.85rem;color:var(--text-muted);"><strong>Purpose:</strong> ${r.business_purpose}</p>
+        </div>
+      `).join('');
+
+      renderDepartmentsAndRoles();
+      renderRoadmapAndProjects();
+      renderVault();
+      renderGovernance();
+    }
+
+    function renderDepartmentsAndRoles() {
+      const bar = document.getElementById('dept-filter-bar');
+      bar.innerHTML = `<button type="button" class="btn ${SELECTED_DEPT === 'ALL' ? '' : 'btn-secondary'}" onclick="filterDept('ALL')">All 9 Departments (69 Roles)</button>` +
+        STATE.departments.map(d => `
+          <button type="button" class="btn ${SELECTED_DEPT === d.id ? '' : 'btn-secondary'}" onclick="filterDept('${d.id}')">
+            ${d.id}: ${d.name} (${d.role_count})
+          </button>
+        `).join('');
+
+      const filteredDepts = SELECTED_DEPT === 'ALL' ? STATE.departments : STATE.departments.filter(d => d.id === SELECTED_DEPT);
+      document.getElementById('dept-summary-cards').innerHTML = filteredDepts.map(d => `
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;margin-bottom:0.35rem;">
+            <span class="pill pill-info">${d.id}</span>
+            <span class="pill pill-success">${d.active_role_count} / ${d.role_count} Active</span>
+          </div>
+          <h3 style="font-size:1rem;margin-bottom:0.25rem;">${d.name}</h3>
+          <p style="font-size:0.83rem;color:var(--text-secondary);margin-bottom:0.35rem;">${d.mission}</p>
+          <div style="font-size:0.78rem;color:var(--text-muted);">Brains: ${d.governing_brains.join(', ')} | Lead: ${d.lead_role_id}</div>
+        </div>
+      `).join('');
+
+      const roles = SELECTED_DEPT === 'ALL' ? STATE.roles : STATE.roles.filter(r => r.department_id === SELECTED_DEPT);
+      document.getElementById('roles-table-body').innerHTML = roles.map(r => `
+        <tr>
+          <td><strong>${r.id}</strong></td>
+          <td>${r.department_id}</td>
+          <td><strong>${r.title}</strong><br/><span style="font-size:0.78rem;color:var(--text-muted);">${r.agent_archetype}</span></td>
+          <td><span class="pill pill-neutral">${r.execution_mode}</span><br/><span style="font-size:0.78rem;">Brain: ${r.governing_brain}</span></td>
+          <td><span class="pill pill-info">${r.activation_version}</span></td>
+          <td>${r.responsibilities}<br/><span style="font-size:0.78rem;color:var(--text-muted);">Deliverables: ${r.deliverables.join(', ')}</span></td>
+          <td>
+            <span class="pill ${r.is_active ? 'pill-success' : 'pill-warn'}">${r.is_active ? 'ACTIVE' : 'DORMANT'}</span>
+            ${r.id !== 'EXEC-01' ? `<br/><button type="button" class="btn btn-secondary" style="margin-top:0.35rem;padding:0.25rem 0.5rem;font-size:0.75rem;" onclick="toggleRole('${r.id}', ${!r.is_active})">${r.is_active ? 'Set Dormant' : 'Activate Role'}</button>` : ''}
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function filterDept(deptId) {
+      SELECTED_DEPT = deptId;
+      renderDepartmentsAndRoles();
+    }
+
+    function renderRoadmapAndProjects() {
+      const vbar = document.getElementById('version-filter-bar');
+      vbar.innerHTML = `<button type="button" class="btn ${SELECTED_VERSION === 'ALL' ? '' : 'btn-secondary'}" onclick="filterVersion('ALL')">All 5 Versions (v1.0 - v5.0)</button>` +
+        STATE.versions.map(v => `
+          <button type="button" class="btn ${SELECTED_VERSION === v.version ? '' : 'btn-secondary'}" onclick="filterVersion('${v.version}')">
+            ${v.version.toUpperCase()}: Phase ${v.phase_number}
+          </button>
+        `).join('');
+
+      const versions = SELECTED_VERSION === 'ALL' ? STATE.versions : STATE.versions.filter(v => v.version === SELECTED_VERSION);
+      document.getElementById('versions-container').innerHTML = versions.map(v => `
+        <div class="card" style="margin-bottom:0.75rem;">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <h3>${v.version.toUpperCase()} — ${v.name}</h3>
+            <span class="pill ${v.status === 'ACTIVE' ? 'pill-success' : 'pill-info'}">${v.status}</span>
+          </div>
+          <p style="font-size:0.88rem;color:var(--text-secondary);margin-top:0.3rem;"><strong>Goal:</strong> ${v.goal}</p>
+          <p style="font-size:0.82rem;color:var(--text-muted);margin-top:0.2rem;"><strong>Exit Gate:</strong> ${v.exit_criteria}</p>
+        </div>
+      `).join('');
+
+      const projects = SELECTED_VERSION === 'ALL' ? STATE.projects : STATE.projects.filter(p => p.version === SELECTED_VERSION);
+      document.getElementById('projects-container').innerHTML = projects.map(p => `
+        <div class="card" style="margin-bottom:1.25rem;">
+          <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:0.5rem;">
+            <div>
+              <span class="pill pill-info">${p.id}</span>
+              <span class="pill pill-neutral">${p.version.toUpperCase()}</span>
+              <span class="pill pill-neutral">${p.revenue_engine}</span>
+              <strong style="font-size:1.05rem;margin-left:0.4rem;">${p.title}</strong>
+            </div>
+            <div style="display:flex;gap:0.5rem;align-items:center;">
+              <span class="pill ${p.status === 'COMPLETED' ? 'pill-success' : 'pill-warn'}">${p.status}</span>
+              <button type="button" class="btn" onclick="simulateProject('${p.id}')">Run Project DAG &amp; Triple QC</button>
+            </div>
+          </div>
+          <p style="font-size:0.88rem;color:var(--text-secondary);margin:0.5rem 0;">${p.goal}</p>
+          <div style="display:flex;flex-wrap:wrap;gap:0.5rem;font-size:0.8rem;margin-bottom:0.5rem;">
+            <span class="pill ${p.deposit_50_cleared ? 'pill-success' : 'pill-warn'}">50% Deposit: ${p.deposit_50_cleared ? 'CLEARED' : 'LOCKED'}</span>
+            <span class="pill ${p.staging_25_cleared ? 'pill-success' : 'pill-neutral'}">25% Staging: ${p.staging_25_cleared ? 'CLEARED' : 'PENDING'}</span>
+            <span class="pill ${p.final_25_cleared ? 'pill-success' : 'pill-neutral'}">25% Final: ${p.final_25_cleared ? 'CLEARED' : 'PENDING'}</span>
+          </div>
+          ${p.milestones.map(ms => `
+            <div class="milestone-box">
+              <div style="display:flex;justify-content:space-between;margin-bottom:0.4rem;">
+                <strong>${ms.id}: ${ms.title}</strong>
+                <span class="pill ${ms.status === 'COMPLETED' ? 'pill-success' : 'pill-info'}">${ms.status}</span>
+              </div>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Task ID</th>
+                    <th>Task Title</th>
+                    <th>Assigned &rarr; Reviewer</th>
+                    <th>Brain &amp; Gate</th>
+                    <th>Deps</th>
+                    <th>Acceptance Criteria</th>
+                    <th>Triple QC Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${ms.tasks.map(t => `
+                    <tr>
+                      <td><strong>${t.id}</strong></td>
+                      <td>${t.title}</td>
+                      <td>${t.assigned_role_id} &rarr; ${t.reviewer_role_id}</td>
+                      <td>${t.governing_brain} (${t.qc_gate})</td>
+                      <td>${t.depends_on.length ? t.depends_on.join(', ') : 'None'}</td>
+                      <td>${t.acceptance_criteria}</td>
+                      <td>
+                        <span class="pill ${t.status === 'COMPLETED' ? 'pill-success' : 'pill-neutral'}">${t.status}</span>
+                      </td>
+                    </tr>
+                  `).join('')}
+                </tbody>
+              </table>
+            </div>
+          `).join('')}
+        </div>
+      `).join('');
+    }
+
+    function filterVersion(ver) {
+      SELECTED_VERSION = ver;
+      renderRoadmapAndProjects();
+    }
+
+    function renderVault() {
+      document.getElementById('vault-list').innerHTML = STATE.knowledge_vault.map(a => `
+        <div class="milestone-box" style="margin-top:0;margin-bottom:0.75rem;">
+          <div style="display:flex;justify-content:space-between;">
+            <strong>${a.id} — ${a.title}</strong>
+            <span class="pill pill-info">${a.artifact_type}</span>
+          </div>
+          <p style="font-size:0.84rem;margin:0.35rem 0;">${a.content}</p>
+          <div style="font-size:0.76rem;color:var(--text-muted);">
+            Project: ${a.project_id} | IP: ${a.ip_classification} | Brain: ${a.governing_brain} | Role: ${a.created_by_role}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderGovernance() {
+      document.getElementById('approvals-list').innerHTML = STATE.approvals.map(ap => `
+        <div class="milestone-box" style="margin-top:0;margin-bottom:0.75rem;">
+          <div style="display:flex;justify-content:space-between;">
+            <strong>${ap.id} (${ap.approval_type}) — Target: ${ap.target_id}</strong>
+            <span class="pill ${ap.status === 'APPROVED' ? 'pill-success' : ap.status === 'REJECTED' ? 'pill-warn' : 'pill-info'}">${ap.status}</span>
+          </div>
+          <p style="font-size:0.85rem;margin:0.35rem 0;">${ap.summary}</p>
+          ${ap.status === 'PENDING' ? `
+            <div style="display:flex;gap:0.5rem;margin-top:0.5rem;">
+              <button type="button" class="btn" onclick="decideApproval('${ap.id}', 'APPROVED')">Approve as Zak (EXEC-01)</button>
+              <button type="button" class="btn btn-secondary" onclick="decideApproval('${ap.id}', 'REJECTED')">Reject</button>
+            </div>
+          ` : `<div style="font-size:0.76rem;color:var(--text-muted);">Decided by ${ap.decided_by} at ${ap.decided_at}</div>`}
+        </div>
+      `).join('');
+
+      document.getElementById('audit-list').innerHTML = STATE.audit_log.map(log => `
+        <div style="padding:0.5rem 0;border-bottom:1px solid var(--border-color);font-size:0.82rem;">
+          <strong>[${log.timestamp}] ${log.action}</strong> (${log.target_id}) by <em>${log.actor}</em><br/>
+          <span style="color:var(--text-secondary);">${log.details}</span>
+        </div>
+      `).join('');
+    }
+
+    async function toggleRole(roleId, active) {
+      const res = await fetch('/api/roles/toggle', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({role_id: roleId, active})
+      });
+      const data = await res.json();
+      showToast(`Role ${roleId} updated to ${data.is_active ? 'ACTIVE' : 'DORMANT'}`);
+      await loadDashboard();
+    }
+
+    async function simulateProject(projectId) {
+      const res = await fetch('/api/projects/simulate', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({project_id: projectId, auto_clear_deposit: true})
+      });
+      const data = await res.json();
+      showToast(`Simulated ${data.project_id}: Executed ${data.tasks_executed} tasks with Triple QC PASS!`);
+      await loadDashboard();
+    }
+
+    async function decideApproval(approvalId, decision) {
+      await fetch('/api/approvals/decide', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({approval_id: approvalId, decision})
+      });
+      showToast(`Sovereign decision recorded: ${approvalId} -> ${decision}`);
+      await loadDashboard();
+    }
+
+    async function createArtifact(e) {
+      e.preventDefault();
+      const payload = {
+        artifact_type: document.getElementById('art-type').value,
+        project_id: document.getElementById('art-proj').value,
+        title: document.getElementById('art-title').value,
+        content: document.getElementById('art-content').value
+      };
+      await fetch('/api/vault/create', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(payload)
+      });
+      showToast('Artifact saved to Institutional Knowledge Vault.');
+      await loadDashboard();
+    }
+
+    async function runOpportunityCheck(e) {
+      e.preventDefault();
+      const res = await fetch('/api/validate/opportunity', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          pain_severity_annual_usd: parseFloat(document.getElementById('opp-pain').value),
+          velocity_10x_advantage: document.getElementById('opp-vel').value === 'true',
+          multidisciplinary_fit: document.getElementById('opp-fit').value === 'true',
+          yields_reusable_ip: true,
+          zero_speculative_spend: true
+        })
+      });
+      const data = await res.json();
+      document.getElementById('opp-result').textContent = `Score: ${data.score} -> ${data.recommendation}`;
+    }
+
+    async function runSaasCheck(e) {
+      e.preventDefault();
+      const res = await fetch('/api/validate/saas', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          paying_clients_count: parseInt(document.getElementById('saas-clients').value, 10),
+          reusable_code_ratio: parseFloat(document.getElementById('saas-reuse').value),
+          external_debt_usd: 0.0,
+          has_direct_distribution: true
+        })
+      });
+      const data = await res.json();
+      document.getElementById('saas-result').textContent = `Result: ${data.recommendation}`;
+    }
+
+    loadDashboard();
+  </script>
+</body>
+</html>

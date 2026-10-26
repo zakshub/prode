@@ -1,0 +1,10 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Local runtime SQLite database & daemon logs
+prode.db
+prode.db-journal
+.prode.pid
+.prode.log

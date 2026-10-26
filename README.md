@@ -1,5 +1,5 @@
 # PRODE (Product Design & Engineering)
-### Canonical Blueprint for an AI-Native Product Engineering & Interactive Technology Company
+### Canonical Company OS Blueprint & Control Plane for an AI-Native Product Engineering & Interactive Technology Company
 
 ```
    ██████╗ ██████╗  ██████╗ ██████╗ ███████╗
@@ -15,81 +15,60 @@
 
 ## 1. Executive Summary
 
-**PRODE** is the foundational strategic and operational blueprint for building an **AI-Native Product Engineering & Interactive Technology Company**. 
+**PRODE** is the canonical strategic blueprint, 69-role organizational registry, SOP governance engine, and local control plane for an **AI-Native Product Engineering & Interactive Technology Company**.
 
-Rather than conforming to traditional agency or venture stereotypes—such as pure-play SaaS startups, isolated Figma design houses, or capital-intensive game studios—PRODE articulates a **synthesized cyber-physical product engineering model**. 
+Rather than building six disconnected businesses—or trapping yourself in a speculative pure-play SaaS startup, a Figma-only design boutique, or a capital-burning game studio—PRODE unifies **Product Design (`zakshub/designer`), Visual Physics (`zakshub/studio`), AI-Native Software (`zakshub/codelift`), Real-Time 3D/Spatial Tech (`zakshub/bob`), and Cyber-Physical Electronic Engineering** under one coherent operating system.
 
-PRODE defines how a multidisciplinary founder with an **Electronic Engineering foundation, systemic UX/UI intelligence, physical visual realism mastery, and autonomous software capabilities** executes high-value product development. It establishes the organizational architecture, commercial engines, operating procedures, and technical lifecycles needed to take a complex problem from raw discovery into working web applications, real-time spatial experiences, and edge hardware products.
-
-While **[ZaxterLab](https://github.com/zakshub/zaxterlab)** acts as the digital multi-agent execution runtime, **PRODE** serves as the authoritative strategic blueprint and company constitution governing *what* to build, *why* to build it, and *how* to govern commercial operations.
+While **[ZaxterLab](https://github.com/zakshub/zaxterlab)** serves as the adaptive multi-agent execution runtime, **PRODE** governs company strategy, commercial revenue engines, the 9 functional departments & 69 specialist roles, the 50/25/25 cash-flow lock, the `$0.00` spend guard, and the 5-Phase progression from `v1.0` to `v5.0`.
 
 ---
 
-## 2. Core Pillars & Unfair Advantages
+## 2. Quick Start (Pull & Run Locally)
 
-```mermaid
-graph TD
-    A[PRODE Hybrid Core] --> B[1. UX & Cognitive Intelligence]
-    A --> C[2. Studio Visual Physics]
-    A --> D[3. AI Autonomous Engineering]
-    A --> E[4. Interactive & Real-Time 3D]
-    A --> F[5. Cyber-Physical & Electronics]
+PRODE runs 100% offline using standard Python 3 + SQLite3 with **zero external package dependencies** and a hard-locked **`$0.00 USD`** spend boundary.
 
-    B --- B1[Sentinel Designer Brain / WCAG / Design Systems]
-    C --- C1[Photographic Realism / Forensic Reality QC]
-    D --- D1[CodeLift AST Reconstruction / Zero-Spend Ops]
-    E --- E1[WebGL / Three.js / VisionOS / Simulation]
-    F --- F1[ESP32 / Embedded Sensors / Edge AI / TinyML]
+```bash
+# 1. Clone or pull the repository
+git clone https://github.com/zakshub/prode.git
+cd prode
+
+# 2. Validate workspace & run the 10-part hermetic test suite
+python3 scripts/validate_workspace.py
+python3 -m unittest discover -s tests -v
+
+# 3. Inspect Company OS status, 9 Functions & 69 Roles, and Roadmap (v1.0 -> v5.0)
+python3 -m prode status
+python3 -m prode roles --department all
+python3 -m prode roadmap --version all
+
+# 4. Simulate any project's Task DAG through Triple QC gates
+python3 -m prode simulate --project PROJ-V1-01
+
+# 5. Launch the interactive Web Control Center (http://127.0.0.1:8080)
+python3 -m prode serve --host 127.0.0.1 --port 8080
+# Or run in background via daemon script:
+./scripts/run_prode.sh start
 ```
 
-1. **UX/UI & Cognitive Architecture:** Grounded in W3C accessibility, state machine mechanics, and responsive design systems via canonical intelligence (`zakshub/designer`).
-2. **Photographic & Cinematic Production:** Asset generation strictly governed by physical causality (shadow $\leftarrow$ light, fold $\leftarrow$ gravity, camera optics) via (`zakshub/studio`).
-3. **AI-Native Autonomous Software:** Reliable AST code generation, dependency compilation, and zero-defect validation gates via (`zakshub/codelift`).
-4. **Interactive & Spatial Technologies:** Real-time 3D, WebGL shaders, camera motion pipelines, and spatial computing interfaces (`zakshub/bob`, `zakshub/multarc`).
-5. **Cyber-Physical Systems & Electronics:** Direct bridging of software into physical reality using Electronic Engineering fundamentals, microcontrollers (ESP32/ARM), sensor telemetry, and edge machine learning.
-
 ---
 
-## 3. Repository Documentation Map
+## 3. Repository Documentation & Runtime Map
 
-All strategic, operational, and technical frameworks are systematically documented in [`docs/`](./docs/):
-
-| Document | Purpose & Scope |
+| File / Module | Purpose & Scope |
 | :--- | :--- |
-| **[`01_COMPANY_IDENTITY.md`](./docs/01_COMPANY_IDENTITY.md)** | Mission, vision, core values, positioning quadrant, and the "Synthesist" thesis. |
-| **[`02_BUSINESS_MODEL.md`](./docs/02_BUSINESS_MODEL.md)** | The 3 complementary revenue paths (Client Services, Productized Packages, Owned SaaS/IP). |
-| **[`03_MARKET_STRATEGY.md`](./docs/03_MARKET_STRATEGY.md)** | Target customer archetypes, problem validation pipelines, competitive moats. |
-| **[`04_ORGANIZATION_AND_ROLES.md`](./docs/04_ORGANIZATION_AND_ROLES.md)** | 9 core functional departments, 36 specialist roles, RACI matrix, human authority boundaries. |
-| **[`05_AI_WORKFORCE_ARCHITECTURE.md`](./docs/05_AI_WORKFORCE_ARCHITECTURE.md)** | Multi-agent cognitive mesh, specialist capabilities, review loops, ZaxterLab bridge. |
-| **[`06_OPERATING_PROCEDURES.md`](./docs/06_OPERATING_PROCEDURES.md)** | Standard operating procedures: Lead-to-Contract, Contract-to-Delivery, QA gates, release. |
-| **[`07_PRODUCT_ENGINEERING_FRAMEWORK.md`](./docs/07_PRODUCT_ENGINEERING_FRAMEWORK.md)** | 6-phase engineering lifecycle from Discovery to CodeLift compilation and deployment. |
-| **[`08_CYBER_PHYSICAL_ROADMAP.md`](./docs/08_CYBER_PHYSICAL_ROADMAP.md)** | Roadmap for electronics, digital twins, IoT telemetry, TinyML, and robotics interaction. |
-| **[`09_KNOWLEDGE_AND_ARTIFACTS.md`](./docs/09_KNOWLEDGE_AND_ARTIFACTS.md)** | Artifact retention, evidence-backed records, decision logging, and intellectual property. |
-| **[`10_FINANCIAL_AND_RISK_CONTROLS.md`](./docs/10_FINANCIAL_AND_RISK_CONTROLS.md)** | Zero-spend default boundaries, spend limits, client data isolation, security guardrails. |
-| **[`11_IMPLEMENTATION_ROADMAP.md`](./docs/11_IMPLEMENTATION_ROADMAP.md)** | Phased commercial progression from boutique studio to spatial & cyber-physical leader. |
-
----
-
-## 4. Schemas & Templates
-
-* **[`schemas/role_taxonomy.json`](./schemas/role_taxonomy.json)**: Machine-readable role hierarchy and departmental mapping.
-* **[`schemas/project_manifest_schema.json`](./schemas/project_manifest_schema.json)**: JSON schema validating client engagements and internal ventures.
-* **[`templates/proposal_template.md`](./templates/proposal_template.md)**: Standardized Sprint Zero and Full-Lifecycle client proposal.
-* **[`templates/prd_template.md`](./templates/prd_template.md)**: Product Requirement Document enforcing Designer-Studio contract compliance.
-* **[`templates/forensic_qc_checklist.md`](./templates/forensic_qc_checklist.md)**: Rigorous dual-gate checklist for physical reality and code compilation.
-
----
-
-## 5. Sovereign Authority & Governance
-
-1. **Zak is the Sovereign Decision-Maker:** All commercial commitments, intellectual property transfers, capital spending, and production releases require explicit owner sign-off.
-2. **Zero-Spend Financial Default:** Infrastructure, API integrations, and cloud resources operate under a strict zero-authorized spend boundary until backed by client revenue or formal allocation.
-3. **Evidence-Driven Engineering:** No software is committed without AST validation and test compilation. No visual asset is accepted without passing physical causality review.
-
----
-
-## 6. License & Status
-
-* **Status:** Canonical Strategic Blueprint (Active)
-* **Author:** Zak (`zakshub`)
-* **Operating Runtime:** Integrated with [ZaxterLab](https://github.com/zakshub/zaxterlab)
+| **[`docs/01_COMPANY_IDENTITY.md`](./docs/01_COMPANY_IDENTITY.md)** | Mission, vision, core values, positioning quadrant, and the "Synthesist" thesis. |
+| **[`docs/02_BUSINESS_MODEL.md`](./docs/02_BUSINESS_MODEL.md)** | The 3 complementary revenue paths (`REV-01` Client Services, `REV-02` Productized Packages, `REV-03` Owned SaaS/IP). |
+| **[`docs/03_MARKET_STRATEGY.md`](./docs/03_MARKET_STRATEGY.md)** | Target customer archetypes, 5-Point Validation Filter, and competitive moats. |
+| **[`docs/04_ORGANIZATION_AND_ROLES.md`](./docs/04_ORGANIZATION_AND_ROLES.md)** | All **9 Departments** and **69 Specialist Roles** (`7+8+7+9+9+8+8+7+6`), RACI, and authority boundaries. |
+| **[`docs/05_AI_WORKFORCE_ARCHITECTURE.md`](./docs/05_AI_WORKFORCE_ARCHITECTURE.md)** | Multi-agent cognitive mesh, specialist sandboxes, and ZaxterLab execution bridge. |
+| **[`docs/06_OPERATING_PROCEDURES.md`](./docs/06_OPERATING_PROCEDURES.md)** | SOPs for Lead-to-Contract, Sprint Zero, Core Engineering, Triple QC, and Release. |
+| **[`docs/07_PRODUCT_ENGINEERING_FRAMEWORK.md`](./docs/07_PRODUCT_ENGINEERING_FRAMEWORK.md)** | 6-phase engineering lifecycle from Discovery to CodeLift AST build and deployment. |
+| **[`docs/08_CYBER_PHYSICAL_ROADMAP.md`](./docs/08_CYBER_PHYSICAL_ROADMAP.md)** | Electronic engineering progression: Digital twins $\rightarrow$ ESP32/STM32 $\rightarrow$ TinyML $\rightarrow$ Robotics. |
+| **[`docs/09_KNOWLEDGE_AND_ARTIFACTS.md`](./docs/09_KNOWLEDGE_AND_ARTIFACTS.md)** | Institutional Knowledge Vault, ADR protocols, and evidence-backed records. |
+| **[`docs/10_FINANCIAL_AND_RISK_CONTROLS.md`](./docs/10_FINANCIAL_AND_RISK_CONTROLS.md)** | Hard `$0.00` spend guardrails, IP ring-fencing, and 50/25/25 cash-flow locks. |
+| **[`docs/11_IMPLEMENTATION_ROADMAP.md`](./docs/11_IMPLEMENTATION_ROADMAP.md)** | Strategic progression across Phases 1 to 5. |
+| **[`docs/12_MASTER_EXECUTION_PLAN.md`](./docs/12_MASTER_EXECUTION_PLAN.md)** | Complete breakdown of **5 Versions (`v1.0`–`v5.0`)**, **15 Projects**, **30 Milestones**, and **90 Tasks**. |
+| **[`docs/13_OPERATOR_MANUAL.md`](./docs/13_OPERATOR_MANUAL.md)** | Step-by-step CLI, Web Control Center, API, and local operation manual. |
+| **[`prode/`](./prode/)** | Executable Python/SQLite Company OS engine, CLI (`prode/cli.py`), API (`prode/server.py`), and Light/Dark Companion Web UI (`prode/ui/index.html`). |
+| **[`schemas/role_taxonomy.json`](./schemas/role_taxonomy.json)** | Machine-readable JSON catalog of all 9 departments and 69 specialist roles. |
+| **[`tests/test_prode.py`](./tests/test_prode.py)** | Hermetic unit & integration test suite verifying all 69 roles, 90 tasks, spend locks, and QC gates. |

@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """
 PRODE Repository Workspace Validator
-Ensures that all mandatory blueprints, schemas, and templates are present and compliant.
+Ensures that all mandatory blueprints, schemas, templates, runtime modules, and tests are present and compliant.
 """
 
+import json
 import sys
 from pathlib import Path
 
@@ -20,20 +21,33 @@ REQUIRED_FILES = [
     "docs/09_KNOWLEDGE_AND_ARTIFACTS.md",
     "docs/10_FINANCIAL_AND_RISK_CONTROLS.md",
     "docs/11_IMPLEMENTATION_ROADMAP.md",
+    "docs/12_MASTER_EXECUTION_PLAN.md",
+    "docs/13_OPERATOR_MANUAL.md",
     "schemas/role_taxonomy.json",
     "schemas/project_manifest_schema.json",
     "templates/proposal_template.md",
     "templates/prd_template.md",
     "templates/forensic_qc_checklist.md",
+    "scripts/run_prode.sh",
+    "prode/__init__.py",
+    "prode/__main__.py",
+    "prode/catalog.py",
+    "prode/db.py",
+    "prode/engine.py",
+    "prode/server.py",
+    "prode/cli.py",
+    "prode/ui/index.html",
+    "tests/test_prode.py",
 ]
+
 
 def main() -> int:
     root = Path(__file__).resolve().parent.parent
     print(f"Scanning PRODE repository at: {root}")
-    
+
     missing = []
     empty = []
-    
+
     for relative_path in REQUIRED_FILES:
         file_path = root / relative_path
         if not file_path.exists():
@@ -42,21 +56,34 @@ def main() -> int:
             empty.append(relative_path)
 
     if missing:
-        print("\n[ERROR] Missing required blueprint files:")
+        print("\n[ERROR] Missing required files:")
         for m in missing:
             print(f"  - {m}")
-            
+
     if empty:
         print("\n[ERROR] Empty files detected:")
         for e in empty:
             print(f"  - {e}")
 
+    taxonomy_path = root / "schemas" / "role_taxonomy.json"
+    if taxonomy_path.exists():
+        data = json.loads(taxonomy_path.read_text(encoding="utf-8"))
+        if data.get("total_departments") != 9 or data.get("total_roles") != 69:
+            print(
+                f"\n[ERROR] role_taxonomy.json must contain 9 departments and 69 roles "
+                f"(found {data.get('total_departments')} depts, {data.get('total_roles')} roles)."
+            )
+            return 1
+
     if missing or empty:
         print("\nRepository validation failed.")
         return 1
 
-    print(f"\n[SUCCESS] All {len(REQUIRED_FILES)} required PRODE specification files are present and valid.")
+    print(
+        f"\n[SUCCESS] All {len(REQUIRED_FILES)} required PRODE blueprint & runtime files are present and valid."
+    )
     return 0
+
 
 if __name__ == "__main__":
     sys.exit(main())

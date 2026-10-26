@@ -1,39 +1,1240 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "PRODE_RoleTaxonomy",
-  "type": "object",
-  "properties": {
-    "version": { "type": "string" },
-    "last_updated": { "type": "string" },
-    "departments": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "id": { "type": "string" },
-          "name": { "type": "string" },
-          "head_of_department": { "type": "string" },
-          "roles": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "id": { "type": "string" },
-                "title": { "type": "string" },
-                "agent_archetype": { "type": "string" },
-                "permissions": {
-                  "type": "array",
-                  "items": { "type": "string" }
-                },
-                "governing_system": { "type": "string" }
-              },
-              "required": ["id", "title", "agent_archetype", "governing_system"]
-            }
-          }
+  "version": "1.0.0",
+  "total_departments": 9,
+  "total_roles": 69,
+  "departments": [
+    {
+      "id": "DEPT-01",
+      "name": "Executive & Governance",
+      "role_count": 7,
+      "head_of_department": "EXEC-01",
+      "governing_brains": [
+        "zedcu",
+        "zis",
+        "zaxterlab"
+      ],
+      "mission": "Sovereign direction, capital allocation, strategic governance, and zero-spend enforcement.",
+      "roles": [
+        {
+          "id": "EXEC-01",
+          "department_id": "DEPT-01",
+          "title": "Founder / CEO",
+          "agent_archetype": "Zak (Human Sovereign)",
+          "execution_mode": "HUMAN_SOVEREIGN",
+          "governing_brain": "all",
+          "activation_version": "v1.0",
+          "default_active": true,
+          "permission_tier": "TIER_4_SOVEREIGN",
+          "responsibilities": "Final authority on company vision, contracts, pricing, spend overrides, and production releases.",
+          "deliverables": [
+            "Signed Contracts",
+            "Spend Authorizations",
+            "Release Approvals"
+          ]
         },
-        "required": ["id", "name", "roles"]
-      }
+        {
+          "id": "EXEC-02",
+          "department_id": "DEPT-01",
+          "title": "Co-founder / Business Partner",
+          "agent_archetype": "Strategic Partner Node",
+          "execution_mode": "HUMAN_OR_ADVISOR",
+          "governing_brain": "wise",
+          "activation_version": "v2.0",
+          "default_active": false,
+          "permission_tier": "TIER_3_EXECUTIVE",
+          "responsibilities": "Enterprise relationship expansion, joint ventures, and commercial deal structuring.",
+          "deliverables": [
+            "Joint Venture Agreements",
+            "Enterprise Deal Briefs"
+          ]
+        },
+        {
+          "id": "EXEC-03",
+          "department_id": "DEPT-01",
+          "title": "Chief Operating Officer",
+          "agent_archetype": "Sirfaraz (Central Command)",
+          "execution_mode": "AI_COMMAND",
+          "governing_brain": "zaxterlab",
+          "activation_version": "v1.0",
+          "default_active": true,
+          "permission_tier": "TIER_2_ORCHESTRATOR",
+          "responsibilities": "Cross-departmental task triage, SOP enforcement, SLA monitoring, and daily execution routing.",
+          "deliverables": [
+            "Daily Execution Plans",
+            "SLA Status Reports",
+            "Escalation Alerts"
+          ]
+        },
+        {
+          "id": "EXEC-04",
+          "department_id": "DEPT-01",
+          "title": "Chief Technology Officer",
+          "agent_archetype": "Khadija (Chief Architect)",
+          "execution_mode": "AI_ARCHITECT",
+          "governing_brain": "codelift",
+          "activation_version": "v1.0",
+          "default_active": true,
+          "permission_tier": "TIER_2_ORCHESTRATOR",
+          "responsibilities": "System topology, stack selection, software/3D/hardware integration architecture, and ADR governance.",
+          "deliverables": [
+            "System Architecture Blueprints",
+            "ADRs",
+            "Stack Standards"
+          ]
+        },
+        {
+          "id": "EXEC-05",
+          "department_id": "DEPT-01",
+          "title": "Chief Product Officer",
+          "agent_archetype": "Hania (Product & UX Vision)",
+          "execution_mode": "AI_ARCHITECT",
+          "governing_brain": "designer",
+          "activation_version": "v1.0",
+          "default_active": true,
+          "permission_tier": "TIER_2_ORCHESTRATOR",
+          "responsibilities": "Product portfolio strategy, design-fit standards, and SaaS spinout qualification.",
+          "deliverables": [
+            "Product Portfolio Thesis",
+            "Design-Fit Mandates",
+            "SaaS Spinout Briefs"
+          ]
+        },
+        {
+          "id": "EXEC-06",
+          "department_id": "DEPT-01",
+          "title": "Strategy & Decision Support",
+          "agent_archetype": "Hussain (Decision Analyst)",
+          "execution_mode": "AI_SPECIALIST",
+          "governing_brain": "zis",
+          "activation_version": "v2.0",
+          "default_active": false,
+          "permission_tier": "TIER_1_READ_ANALYZE",
+          "responsibilities": "3-way trade-off modeling, capital efficiency analysis, and build-vs-buy evaluations.",
+          "deliverables": [
+            "Trade-Off Matrices",
+            "Strategic Decision Memos"
+          ]
+        },
+        {
+          "id": "EXEC-07",
+          "department_id": "DEPT-01",
+          "title": "Risk, Governance & Audit",
+          "agent_archetype": "Zaks (Independent Auditor)",
+          "execution_mode": "AI_AUDITOR",
+          "governing_brain": "zedcu",
+          "activation_version": "v1.0",
+          "default_active": true,
+          "permission_tier": "TIER_2_AUDITOR",
+          "responsibilities": "Independent constitutional verification, $0.00 spend boundary enforcement, and audit trail integrity.",
+          "deliverables": [
+            "Constitutional Audit Logs",
+            "Spend Lock Verifications"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "DEPT-02",
+      "name": "Market Intelligence & Business Development",
+      "role_count": 8,
+      "head_of_department": "MKT-01",
+      "governing_brains": [
+        "seo",
+        "wise"
+      ],
+      "mission": "Discover real market problems, validate commercial demand, generate qualified leads, and close high-margin contracts.",
+      "roles": [
+        {
+          "id": "MKT-01",
+          "department_id": "DEPT-02",
+          "title": "Market Research",
+          "agent_archetype": "Maryam (Market Researcher)",
+          "execution_mode": "AI_SPECIALIST",
+          "governing_brain": "seo",
+          "activation_version": "v1.0",
+          "default_active": true,
+          "permission_tier": "TIER_1_READ_ANALYZE",
+          "responsibilities": "Analyze industry verticals, search demand telemetry, and emerging problem spaces.",
+          "deliverables": [
+            "Market Study Reports",
+            "Demand Telemetry Snapshots"
+          ]
+        },
+        {
+          "id": "MKT-02",
+          "department_id": "DEPT-02",
+          "title": "Customer Discovery",
+          "agent_archetype": "Discovery Analyst",
+          "execution_mode": "AI_COPILOT",
+          "governing_brain": "wise",
+          "activation_version": "v1.0",
+          "default_active": true,
+          "permission_tier": "TIER_1_READ_ANALYZE",
+          "responsibilities": "Structure customer interview scripts, synthesize pain points, and quantify economic severity.",
+          "deliverables": [
+            "Customer Discovery Matrices",
+            "Pain Severity Logs"
+          ]
+        },
+        {
+          "id": "MKT-03",
+          "department_id": "DEPT-02",
+          "title": "Competitor Intelligence",
+          "agent_archetype": "Competitor Analyst",
+          "execution_mode": "AI_SPECIALIST",
+          "governing_brain": "seo",
+          "activation_version": "v1.0",
+          "default_active": false,
+          "permission_tier": "TIER_1_READ_ANALYZE",
+          "responsibilities": "Audit competitor offerings, pricing vulnerabilities, UX flaws, and technical gaps.",
+          "deliverables": [
+            "Competitor Teardown Reports",
+            "Positioning Gap Grids"
+          ]
+        },
+        {
+          "id": "MKT-04",
+          "department_id": "DEPT-02",
+          "title": "Opportunity Validation",
+          "agent_archetype": "Validation Gatekeeper",
+          "execution_mode": "AI_AUDITOR",
+          "governing_brain": "seo",
+          "activation_version": "v1.0",
+          "default_active": true,
+          "permission_tier": "TIER_2_AUDITOR",
+          "responsibilities": "Score leads and product ideas against the 5-Point Validation Filter and 11-dimension model.",
+          "deliverables": [
+            "5-Point Validation Scorecards",
+            "Go/No-Go Recommendations"
+          ]
+        },
+        {
+          "id": "MKT-05",
+          "department_id": "DEPT-02",
+          "title": "Lead Generation",
+          "agent_archetype": "Outbound & Funnel Specialist",
+          "execution_mode": "AI_SPECIALIST",
+          "governing_brain": "seo",
+          "activation_version": "v1.0",
+          "default_active": false,
+          "permission_tier": "TIER_1_READ_ANALYZE",
+          "responsibilities": "Build technical authority funnels, open-source showcases, and targeted prospect lists.",
+          "deliverables": [
+            "Qualified Prospect Lists",
+            "Inbound Funnel Assets"
+          ]
+        },
+        {
+          "id": "MKT-06",
+          "department_id": "DEPT-02",
+          "title": "Sales & Negotiation",
+          "agent_archetype": "Deal Closer Copilot",
+          "execution_mode": "HUMAN_LED_COPILOT",
+          "governing_brain": "wise",
+          "activation_version": "v1.0",
+          "default_active": true,
+          "permission_tier": "TIER_3_EXECUTIVE",
+          "responsibilities": "Lead discovery calls, pitch Sprint Zero packages, and negotiate commercial terms under Zak's sign-off.",
+          "deliverables": [
+            "Discovery Call Briefs",
+            "Negotiated Deal Terms"
+          ]
+        },
+        {
+          "id": "MKT-07",
+          "department_id": "DEPT-02",
+          "title": "Partnerships",
+          "agent_archetype": "Channel & Alliance Lead",
+          "execution_mode": "HUMAN_LED_COPILOT",
+          "governing_brain": "wise",
+          "activation_version": "v3.0",
+          "default_active": false,
+          "permission_tier": "TIER_2_ORCHESTRATOR",
+          "responsibilities": "Forge white-label engineering partnerships with design boutiques and hardware fabrication labs.",
+          "deliverables": [
+            "Agency Partner Playbooks",
+            "Referral Agreements"
+          ]
+        },
+        {
+          "id": "MKT-08",
+          "department_id": "DEPT-02",
+          "title": "Pricing & Proposals",
+          "agent_archetype": "Proposal Architect",
+          "execution_mode": "AI_SPECIALIST",
+          "governing_brain": "zaxterlab",
+          "activation_version": "v1.0",
+          "default_active": true,
+          "permission_tier": "TIER_2_WRITER",
+          "responsibilities": "Author Sprint Zero and Full-Build proposals enforcing 50/25/25 cash-flow terms.",
+          "deliverables": [
+            "Client Proposals",
+            "Fixed-Scope SOWs"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "DEPT-03",
+      "name": "Product & Delivery Management",
+      "role_count": 7,
+      "head_of_department": "PRD-01",
+      "governing_brains": [
+        "designer",
+        "zaxterlab"
+      ],
+      "mission": "Translate validated problems into deterministic PRDs, acceptance criteria, sprint DAGs, and predictable releases.",
+      "roles": [
+        {
+          "id": "PRD-01",
+          "department_id": "DEPT-03",
+          "title": "Product Strategy",
+          "agent_archetype": "Hania (Product Strategist)",
+          "execution_mode": "AI_COPILOT",
+          "governing_brain": "designer",
+          "activation_version": "v1.0",
+          "default_active": true,
+          "permission_tier": "TIER_2_ORCHESTRATOR",
+          "responsibilities": "Define product value propositions, roadmap horizons, and reusable module extraction.",
+          "deliverables": [
+            "Product Strategy Maps",
+            "Value Proposition Canvases"
+          ]
+        },
+        {
+          "id": "PRD-02",
+          "department_id": "DEPT-03",
+          "title": "Product Manager",
+          "agent_archetype": "Technical PM",
+          "execution_mode": "AI_SPECIALIST",
+          "governing_brain": "designer",
+          "activation_version": "v1.0",
+          "default_active": true,
+          "permission_tier": "TIER_2_WRITER",
+          "responsibilities": "Own product backlog, user journey prioritization, and cross-functional alignment.",
+          "deliverables": [
+            "Prioritized Backlogs",
+            "Feature Specs"
+          ]
+        },
+        {
+          "id": "PRD-03",
+          "department_id": "DEPT-03",
+          "title": "Business Analyst",
+          "agent_archetype": "Domain Systems Analyst",
+          "execution_mode": "AI_SPECIALIST",
+          "governing_brain": "zis",
+          "activation_version": "v1.0",
+          "default_active": false,
+          "permission_tier": "TIER_1_READ_ANALYZE",
+          "responsibilities": "Map complex business rules, financial ledgers, and operational state machines.",
+          "deliverables": [
+            "State Machine Diagrams",
+            "Domain Rule Catalogs"
+          ]
+        },
+        {
+          "id": "PRD-04",
+          "department_id": "DEPT-03",
+          "title": "Project Manager",
+          "agent_archetype": "Hadi (Tactical Planner)",
+          "execution_mode": "AI_SPECIALIST",
+          "governing_brain": "zaxterlab",
+          "activation_version": "v1.0",
+          "default_active": true,
+          "permission_tier": "TIER_2_ORCHESTRATOR",
+          "responsibilities": "Manage 1-week sprint execution, milestone gates, and critical-path blockers.",
+          "deliverables": [
+            "Sprint Plans",
+            "Milestone Burndown Logs"
+          ]
+        },
+        {
+          "id": "PRD-05",
+          "department_id": "DEPT-03",
+          "title": "Program Manager",
+          "agent_archetype": "Portfolio Program Lead",
+          "execution_mode": "AI_SPECIALIST",
+          "governing_brain": "zaxterlab",
+          "activation_version": "v2.0",
+          "default_active": false,
+          "permission_tier": "TIER_2_ORCHESTRATOR",
+          "responsibilities": "Coordinate shared libraries and dependencies across concurrent client and internal projects.",
+          "deliverables": [
+            "Cross-Project Dependency Graphs",
+            "Portfolio Health Reports"
+          ]
+        },
+        {
+          "id": "PRD-06",
+          "department_id": "DEPT-03",
+          "title": "Requirements & Acceptance Criteria",
+          "agent_archetype": "Specification Engineer",
+          "execution_mode": "AI_SPECIALIST",
+          "governing_brain": "designer",
+          "activation_version": "v1.0",
+          "default_active": true,
+          "permission_tier": "TIER_2_WRITER",
+          "responsibilities": "Write deterministic PRDs and verifiable acceptance criteria with Designer-Studio contracts.",
+          "deliverables": [
+            "Approved PRDs",
+            "Acceptance Criteria Checklists"
+          ]
+        },
+        {
+          "id": "PRD-07",
+          "department_id": "DEPT-03",
+          "title": "Resource & Dependency Planning",
+          "agent_archetype": "DAG Scheduler",
+          "execution_mode": "AI_SPECIALIST",
+          "governing_brain": "zaxterlab",
+          "activation_version": "v2.0",
+          "default_active": false,
+          "permission_tier": "TIER_2_ORCHESTRATOR",
+          "responsibilities": "Compute topological task orderings, specialist capacity, and spawning proposals.",
+          "deliverables": [
+            "Topological Task DAGs",
+            "Capacity Allocations"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "DEPT-04",
+      "name": "Design & Creative",
+      "role_count": 9,
+      "head_of_department": "DES-01",
+      "governing_brains": [
+        "designer",
+        "studio",
+        "bob"
+      ],
+      "mission": "Own UX architecture, WCAG accessibility, design systems, photographic reality, and 3D visual storytelling.",
+      "roles": [
+        {
+          "id": "DES-01",
+          "department_id": "DEPT-04",
+          "title": "Creative Director",
+          "agent_archetype": "Sentinel Creative Lead",
+          "execution_mode": "HUMAN_LED_COPILOT",
+          "governing_brain": "designer",
+          "activation_version": "v1.0",
+          "default_active": true,
+          "permission_tier": "TIER_2_ORCHESTRATOR",
+          "responsibilities": "Direct visual language, brand distinctiveness, and cross-project anti-monotony reasoning.",
+          "deliverables": [
+            "Project Visual Briefs",
+            "Anti-Monotony Audits"
+          ]
+        },
+        {
+          "id": "DES-02",
+          "department_id": "DEPT-04",
+          "title": "UX & Information Architect",
+          "agent_archetype": "UX Systems Architect",
+          "execution_mode": "AI_SPECIALIST",
+          "governing_brain": "designer",
+          "activation_version": "v1.0",
+          "default_active": true,
+          "permission_tier": "TIER_2_WRITER",
+          "responsibilities": "Engineer navigation hierarchies, user flows, cognitive load reduction, and wireframe schematics.",
+          "deliverables": [
+            "Information Architecture Maps",
+            "Interactive Wireframes"
+          ]
+        },
+        {
+          "id": "DES-03",
+          "department_id": "DEPT-04",
+          "title": "UI & Product Designer",
+          "agent_archetype": "Interface Craft Specialist",
+          "execution_mode": "AI_SPECIALIST",
+          "governing_brain": "designer",
+          "activation_version": "v1.0",
+          "default_active": true,
+          "permission_tier": "TIER_2_WRITER",
+          "responsibilities": "Design high-precision interfaces with intentional Light and Dark companion appearances.",
+          "deliverables": [
+            "Light/Dark Companion UI Specs",
+            "Screen Layouts"
+          ]
+        },
+        {
+          "id": "DES-04",
+          "department_id": "DEPT-04",
+          "title": "Design Systems Engineer",
+          "agent_archetype": "Token & Primitive Architect",
+          "execution_mode": "AI_SPECIALIST",
+          "governing_brain": "designer",
+          "activation_version": "v1.0",
+          "default_active": true,
+          "permission_tier": "TIER_2_WRITER",
+          "responsibilities": "Maintain typography scales, spacing grids, semantic color tokens, and reusable UI primitives.",
+          "deliverables": [
+            "Design Token Manifests (CSS/JSON)",
+            "Component Contracts"
+          ]
+        },
+        {
+          "id": "DES-05",
+          "department_id": "DEPT-04",
+          "title": "Interaction & Motion Designer",
+          "agent_archetype": "Musab (Motion & Choreography)",
+          "execution_mode": "AI_SPECIALIST",
+          "governing_brain": "bob",
+          "activation_version": "v2.0",
+          "default_active": false,
+          "permission_tier": "TIER_2_WRITER",
+          "responsibilities": "Design purposeful state transitions, camera choreography, and reduced-motion accessibility modes.",
+          "deliverables": [
+            "Motion Choreography Specs",
+            "Transition Curves"
+          ]
+        },
+        {
+          "id": "DES-06",
+          "department_id": "DEPT-04",
+          "title": "Brand & Visual Identity Specialist",
+          "agent_archetype": "Brand Intelligence Specialist",
+          "execution_mode": "AI_SPECIALIST",
+          "governing_brain": "designer",
+          "activation_version": "v1.0",
+          "default_active": false,
+          "permission_tier": "TIER_2_WRITER",
+          "responsibilities": "Apply category priors, cultural context, and typographic identity without generic AI cliches.",
+          "deliverables": [
+            "Brand Identity Guidelines",
+            "Category Prior Analyses"
+          ]
+        },
+        {
+          "id": "DES-07",
+          "department_id": "DEPT-04",
+          "title": "Studio Photographic & Realism Director",
+          "agent_archetype": "Studio Production Lead",
+          "execution_mode": "AI_SPECIALIST",
+          "governing_brain": "studio",
+          "activation_version": "v1.0",
+          "default_active": true,
+          "permission_tier": "TIER_2_WRITER",
+          "responsibilities": "Execute 170-protocol camera/lens/lighting/material pipelines and enforce hard locks on source assets.",
+          "deliverables": [
+            "Photographic Asset Bundles",
+            "Studio Production Rationales"
+          ]
+        },
+        {
+          "id": "DES-08",
+          "department_id": "DEPT-04",
+          "title": "3D & Spatial Visual Artist",
+          "agent_archetype": "3D Asset & Shader Artist",
+          "execution_mode": "AI_SPECIALIST",
+          "governing_brain": "bob",
+          "activation_version": "v3.0",
+          "default_active": false,
+          "permission_tier": "TIER_2_WRITER",
+          "responsibilities": "Create optimized GLTF meshes, PBR materials, environment lighting, and spatial scene compositions.",
+          "deliverables": [
+            "Optimized GLTF/3D Models",
+            "PBR Texture Sets"
+          ]
+        },
+        {
+          "id": "DES-09",
+          "department_id": "DEPT-04",
+          "title": "Accessibility (WCAG) & Ergonomics Specialist",
+          "agent_archetype": "WCAG Compliance Specialist",
+          "execution_mode": "AI_AUDITOR",
+          "governing_brain": "designer",
+          "activation_version": "v1.0",
+          "default_active": true,
+          "permission_tier": "TIER_2_AUDITOR",
+          "responsibilities": "Enforce W3C WCAG 2.2 AA (including 2.5.3 Label in Name & 3.3.2 Labels or Instructions) and keyboard ergonomics.",
+          "deliverables": [
+            "WCAG 2.2 Compliance Reports",
+            "Label-in-Name Audits"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "DEPT-05",
+      "name": "Software & AI Engineering",
+      "role_count": 9,
+      "head_of_department": "SWE-01",
+      "governing_brains": [
+        "codelift",
+        "zaxterlab",
+        "zis"
+      ],
+      "mission": "Architect and build production full-stack applications, multi-agent systems, and build-verified codebases.",
+      "roles": [
+        {
+          "id": "SWE-01",
+          "department_id": "DEPT-05",
+          "title": "Principal Systems & Cloud Architect",
+          "agent_archetype": "Systems Architect",
+          "execution_mode": "AI_ARCHITECT",
+          "governing_brain": "codelift",
+          "activation_version": "v1.0",
+          "default_active": true,
+          "permission_tier": "TIER_2_WRITER",
+          "responsibilities": "Design modular monoliths, API contracts, edge deployment topologies, and fault-tolerant systems.",
+          "deliverables": [
+            "System Schemas",
+            "API Specifications"
+          ]
+        },
+        {
+          "id": "SWE-02",
+          "department_id": "DEPT-05",
+          "title": "Frontend & Design-to-Code Engineer",
+          "agent_archetype": "Reem (CodeLift Engineer)",
+          "execution_mode": "AI_SPECIALIST",
+          "governing_brain": "codelift",
+          "activation_version": "v1.0",
+          "default_active": true,
+          "permission_tier": "TIER_2_WRITER",
+          "responsibilities": "Reconstruct UX designs into clean, responsive, AST-verified React/Next.js/Tailwind or semantic web apps.",
+          "deliverables": [
+            "Production Frontend Code",
+            "AST-Verified UI Components"
+          ]
+        },
+        {
+          "id": "SWE-03",
+          "department_id": "DEPT-05",
+          "title": "Backend & API Engineer",
+          "agent_archetype": "Backend Services Engineer",
+          "execution_mode": "AI_SPECIALIST",
+          "governing_brain": "codelift",
+          "activation_version": "v1.0",
+          "default_active": true,
+          "permission_tier": "TIER_2_WRITER",
+          "responsibilities": "Build type-safe REST/RPC endpoints, authentication, webhooks, and background job queues.",
+          "deliverables": [
+            "Backend Service Modules",
+            "API Controllers"
+          ]
+        },
+        {
+          "id": "SWE-04",
+          "department_id": "DEPT-05",
+          "title": "Data & Database Engineer",
+          "agent_archetype": "Persistence & Schema Engineer",
+          "execution_mode": "AI_SPECIALIST",
+          "governing_brain": "zis",
+          "activation_version": "v1.0",
+          "default_active": true,
+          "permission_tier": "TIER_2_WRITER",
+          "responsibilities": "Design normalized relational schemas (PostgreSQL/SQLite/Prisma), migrations, indexes, and ledger queries.",
+          "deliverables": [
+            "Database Migrations",
+            "ERD & Query Layers"
+          ]
+        },
+        {
+          "id": "SWE-05",
+          "department_id": "DEPT-05",
+          "title": "AI Agent & Orchestration Engineer",
+          "agent_archetype": "Agent Runtime Engineer",
+          "execution_mode": "AI_SPECIALIST",
+          "governing_brain": "zaxterlab",
+          "activation_version": "v2.0",
+          "default_active": false,
+          "permission_tier": "TIER_2_WRITER",
+          "responsibilities": "Implement multi-agent state machines, tool-call sandboxes, and Auditor refinement loops.",
+          "deliverables": [
+            "Agent Orchestration Pipelines",
+            "Tool Sandbox Contracts"
+          ]
+        },
+        {
+          "id": "SWE-06",
+          "department_id": "DEPT-05",
+          "title": "LLM Routing & Context Memory Engineer",
+          "agent_archetype": "Cognitive Memory Engineer",
+          "execution_mode": "AI_SPECIALIST",
+          "governing_brain": "zis",
+          "activation_version": "v2.0",
+          "default_active": false,
+          "permission_tier": "TIER_2_WRITER",
+          "responsibilities": "Build provider-neutral model adapters (local Ollama/free-tier), context compaction, and episodic memory.",
+          "deliverables": [
+            "Model Router Adapters",
+            "Memory Retrieval Schemas"
+          ]
+        },
+        {
+          "id": "SWE-07",
+          "department_id": "DEPT-05",
+          "title": "Automation & Workflow Integration Engineer",
+          "agent_archetype": "Integration Specialist",
+          "execution_mode": "AI_SPECIALIST",
+          "governing_brain": "codelift",
+          "activation_version": "v2.0",
+          "default_active": false,
+          "permission_tier": "TIER_2_WRITER",
+          "responsibilities": "Connect WhatsApp bots, payment webhooks, CRM pipelines, and deterministic cron workflows.",
+          "deliverables": [
+            "Webhook Connectors",
+            "Automation Scripts"
+          ]
+        },
+        {
+          "id": "SWE-08",
+          "department_id": "DEPT-05",
+          "title": "DevOps, CI/CD & Edge Platform Engineer",
+          "agent_archetype": "Hasan (Infrastructure Lead)",
+          "execution_mode": "AI_SPECIALIST",
+          "governing_brain": "zedcu",
+          "activation_version": "v1.0",
+          "default_active": true,
+          "permission_tier": "TIER_2_WRITER",
+          "responsibilities": "Configure zero-cost CI/CD pipelines, Docker containers, systemd daemons, and edge deployments.",
+          "deliverables": [
+            "CI/CD Workflows",
+            "Deployment Runbooks"
+          ]
+        },
+        {
+          "id": "SWE-09",
+          "department_id": "DEPT-05",
+          "title": "Performance & Build Verification Engineer",
+          "agent_archetype": "CodeLift Build Validator",
+          "execution_mode": "AI_AUDITOR",
+          "governing_brain": "codelift",
+          "activation_version": "v1.0",
+          "default_active": true,
+          "permission_tier": "TIER_2_AUDITOR",
+          "responsibilities": "Validate AST imports, bundle sizes, Lighthouse metrics, and zero-error compilation before merge.",
+          "deliverables": [
+            "AST Build Verification Certificates",
+            "Latency Benchmarks"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "DEPT-06",
+      "name": "Interactive & Physical Engineering",
+      "role_count": 8,
+      "head_of_department": "PHY-01",
+      "governing_brains": [
+        "bob",
+        "multarc",
+        "studio"
+      ],
+      "mission": "Engineer real-time 3D WebGL/WebGPU experiences, spatial/AR interfaces, ESP32/STM32 firmware, IoT sensors, and TinyML.",
+      "roles": [
+        {
+          "id": "PHY-01",
+          "department_id": "DEPT-06",
+          "title": "Real-Time 3D & WebGL/WebGPU Engineer",
+          "agent_archetype": "Bob (WebGL Architect)",
+          "execution_mode": "AI_SPECIALIST",
+          "governing_brain": "bob",
+          "activation_version": "v3.0",
+          "default_active": false,
+          "permission_tier": "TIER_2_WRITER",
+          "responsibilities": "Build 60-FPS Three.js/WebGL/WebGPU viewports, custom GLSL shaders, and interactive product configurators.",
+          "deliverables": [
+            "Three.js/WebGL Modules",
+            "Custom Shader Pipelines"
+          ]
+        },
+        {
+          "id": "PHY-02",
+          "department_id": "DEPT-06",
+          "title": "Game Engine & Simulation Architect",
+          "agent_archetype": "Simulation & Physics Architect",
+          "execution_mode": "AI_SPECIALIST",
+          "governing_brain": "multarc",
+          "activation_version": "v3.0",
+          "default_active": false,
+          "permission_tier": "TIER_2_WRITER",
+          "responsibilities": "Engineer interactive physics simulations, digital twins, and state-driven 3D environments.",
+          "deliverables": [
+            "Digital Twin Engines",
+            "Interactive Simulation Scenes"
+          ]
+        },
+        {
+          "id": "PHY-03",
+          "department_id": "DEPT-06",
+          "title": "Spatial Computing & AR/XR Engineer",
+          "agent_archetype": "Spatial XR Specialist",
+          "execution_mode": "AI_SPECIALIST",
+          "governing_brain": "bob",
+          "activation_version": "v3.0",
+          "default_active": false,
+          "permission_tier": "TIER_2_WRITER",
+          "responsibilities": "Develop WebXR, Apple VisionOS, and mobile AR spatial inspection and placement applications.",
+          "deliverables": [
+            "WebXR / VisionOS Prototypes",
+            "Spatial Interaction Rigs"
+          ]
+        },
+        {
+          "id": "PHY-04",
+          "department_id": "DEPT-06",
+          "title": "Electronic & Circuit Design Engineer",
+          "agent_archetype": "Hardware Schematic Lead",
+          "execution_mode": "HUMAN_LED_COPILOT",
+          "governing_brain": "zis",
+          "activation_version": "v4.0",
+          "default_active": false,
+          "permission_tier": "TIER_2_WRITER",
+          "responsibilities": "Design KiCad schematics, power regulation, galvanic isolation, and SPICE/Wokwi circuit simulations.",
+          "deliverables": [
+            "KiCad Schematics & BOMs",
+            "SPICE Simulation Logs"
+          ]
+        },
+        {
+          "id": "PHY-05",
+          "department_id": "DEPT-06",
+          "title": "Embedded Firmware Engineer",
+          "agent_archetype": "ESP32/STM32 Firmware Engineer",
+          "execution_mode": "AI_SPECIALIST",
+          "governing_brain": "codelift",
+          "activation_version": "v4.0",
+          "default_active": false,
+          "permission_tier": "TIER_2_WRITER",
+          "responsibilities": "Write deterministic C/C++ and FreeRTOS firmware with watchdog timers, OTA updates, and fail-safe states.",
+          "deliverables": [
+            "ESP32/STM32 Firmware Images",
+            "Hardware Abstraction Layers"
+          ]
+        },
+        {
+          "id": "PHY-06",
+          "department_id": "DEPT-06",
+          "title": "IoT Telemetry & Sensor Fusion Specialist",
+          "agent_archetype": "Telemetry & Sensor Specialist",
+          "execution_mode": "AI_SPECIALIST",
+          "governing_brain": "zis",
+          "activation_version": "v4.0",
+          "default_active": false,
+          "permission_tier": "TIER_2_WRITER",
+          "responsibilities": "Integrate I2C/SPI sensor arrays (IMU, thermal, optical) and stream sub-50ms MQTT/WebSocket telemetry.",
+          "deliverables": [
+            "MQTT Telemetry Pipelines",
+            "Sensor Calibration Profiles"
+          ]
+        },
+        {
+          "id": "PHY-07",
+          "department_id": "DEPT-06",
+          "title": "Edge AI & TinyML Engineer",
+          "agent_archetype": "On-Device Neural Specialist",
+          "execution_mode": "AI_SPECIALIST",
+          "governing_brain": "zis",
+          "activation_version": "v4.0",
+          "default_active": false,
+          "permission_tier": "TIER_2_WRITER",
+          "responsibilities": "Quantize and deploy TinyML models on microcontrollers for local acoustic, vibration, and gesture inference.",
+          "deliverables": [
+            "Quantized TFLite Micro Models",
+            "Edge Inference Benchmarks"
+          ]
+        },
+        {
+          "id": "PHY-08",
+          "department_id": "DEPT-06",
+          "title": "Robotics, Mechatronics & HMI Engineer",
+          "agent_archetype": "Actuation & HMI Specialist",
+          "execution_mode": "HUMAN_LED_COPILOT",
+          "governing_brain": "bob",
+          "activation_version": "v4.0",
+          "default_active": false,
+          "permission_tier": "TIER_2_WRITER",
+          "responsibilities": "Bridge web/spatial human-machine interfaces (HMI) with physical servos, actuators, and robotic kinematics.",
+          "deliverables": [
+            "HMI Control Panels",
+            "Fail-Closed Actuator Controllers"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "DEPT-07",
+      "name": "Quality, Security & Reliability",
+      "role_count": 8,
+      "head_of_department": "QSR-01",
+      "governing_brains": [
+        "designer",
+        "studio",
+        "codelift",
+        "zedcu"
+      ],
+      "mission": "Enforce Dual-Gate QC (Sentinel Design Fit + Studio Forensic Reality + CodeLift AST Build), security, and hardware safety.",
+      "roles": [
+        {
+          "id": "QSR-01",
+          "department_id": "DEPT-07",
+          "title": "QA Lead & Test Strategy Architect",
+          "agent_archetype": "Aroosh (QA Architect)",
+          "execution_mode": "AI_AUDITOR",
+          "governing_brain": "codelift",
+          "activation_version": "v1.0",
+          "default_active": true,
+          "permission_tier": "TIER_2_AUDITOR",
+          "responsibilities": "Define hermetic test plans, edge-case matrices, and acceptance verification gates.",
+          "deliverables": [
+            "Master Test Plans",
+            "QA Sign-Off Reports"
+          ]
+        },
+        {
+          "id": "QSR-02",
+          "department_id": "DEPT-07",
+          "title": "Automated Unit, Integration & E2E Engineer",
+          "agent_archetype": "Test Automation Specialist",
+          "execution_mode": "AI_SPECIALIST",
+          "governing_brain": "codelift",
+          "activation_version": "v1.0",
+          "default_active": true,
+          "permission_tier": "TIER_2_WRITER",
+          "responsibilities": "Author deterministic unit, API integration, and browser E2E tests with zero network flakiness.",
+          "deliverables": [
+            "Automated Test Suites",
+            "Coverage Reports"
+          ]
+        },
+        {
+          "id": "QSR-03",
+          "department_id": "DEPT-07",
+          "title": "Design Fit QC Reviewer",
+          "agent_archetype": "Sentinel Design-Fit Gate",
+          "execution_mode": "AI_AUDITOR",
+          "governing_brain": "designer",
+          "activation_version": "v1.0",
+          "default_active": true,
+          "permission_tier": "TIER_2_AUDITOR",
+          "responsibilities": "Execute `design_fit_qc` verifying hierarchy, placement, accessibility, and adherence to the Designer brief.",
+          "deliverables": [
+            "design_fit_qc Certificates",
+            "UX Critique Findings"
+          ]
+        },
+        {
+          "id": "QSR-04",
+          "department_id": "DEPT-07",
+          "title": "Forensic Visual Reality QC Auditor",
+          "agent_archetype": "Studio Forensic Gate",
+          "execution_mode": "AI_AUDITOR",
+          "governing_brain": "studio",
+          "activation_version": "v1.0",
+          "default_active": true,
+          "permission_tier": "TIER_2_AUDITOR",
+          "responsibilities": "Execute `image_qc` checking physical causality (shadow<-light, fold<-gravity), hard locks, and anti-AI realism.",
+          "deliverables": [
+            "image_qc Forensic Reports",
+            "Causality Defect Logs"
+          ]
+        },
+        {
+          "id": "QSR-05",
+          "department_id": "DEPT-07",
+          "title": "Application & Infrastructure Security Engineer",
+          "agent_archetype": "Zara (Security Auditor)",
+          "execution_mode": "AI_AUDITOR",
+          "governing_brain": "zedcu",
+          "activation_version": "v1.0",
+          "default_active": true,
+          "permission_tier": "TIER_2_AUDITOR",
+          "responsibilities": "Scan for leaked secrets, enforce tenant isolation, audit OWASP vectors, and lock sandbox boundaries.",
+          "deliverables": [
+            "Security Audit Certificates",
+            "Secret Scan Logs"
+          ]
+        },
+        {
+          "id": "QSR-06",
+          "department_id": "DEPT-07",
+          "title": "Hardware Safety & Physical Reliability Auditor",
+          "agent_archetype": "Electrical Safety Auditor",
+          "execution_mode": "HUMAN_LED_COPILOT",
+          "governing_brain": "zis",
+          "activation_version": "v4.0",
+          "default_active": false,
+          "permission_tier": "TIER_2_AUDITOR",
+          "responsibilities": "Verify thermal limits, galvanic isolation, brownout recovery, and fail-closed actuator de-energizing.",
+          "deliverables": [
+            "Hardware Safety Checklists",
+            "Fail-Safe Test Logs"
+          ]
+        },
+        {
+          "id": "QSR-07",
+          "department_id": "DEPT-07",
+          "title": "Site Reliability & Observability Engineer",
+          "agent_archetype": "SRE & Telemetry Monitor",
+          "execution_mode": "AI_SPECIALIST",
+          "governing_brain": "zaxterlab",
+          "activation_version": "v2.0",
+          "default_active": false,
+          "permission_tier": "TIER_1_READ_ANALYZE",
+          "responsibilities": "Monitor uptime, p95 API latency, 60-FPS WebGL budgets, and automated rollback triggers.",
+          "deliverables": [
+            "Observability Dashboards",
+            "Incident Post-Mortems"
+          ]
+        },
+        {
+          "id": "QSR-08",
+          "department_id": "DEPT-07",
+          "title": "Release & Acceptance Gatekeeper",
+          "agent_archetype": "Umer (Release Gatekeeper)",
+          "execution_mode": "AI_AUDITOR",
+          "governing_brain": "zaxterlab",
+          "activation_version": "v1.0",
+          "default_active": true,
+          "permission_tier": "TIER_3_GATEKEEPER",
+          "responsibilities": "Block production release until CodeLift AST, Sentinel Design-Fit, Studio Image QC, 100% payment, and Zak sign-off pass.",
+          "deliverables": [
+            "Final Release Clearance Packets"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "DEPT-08",
+      "name": "Client Delivery & Growth",
+      "role_count": 7,
+      "head_of_department": "DLV-01",
+      "governing_brains": [
+        "codelift",
+        "seo"
+      ],
+      "mission": "Manage client onboarding, production handover, documentation, SLAs, retainer expansion, and verified case studies.",
+      "roles": [
+        {
+          "id": "DLV-01",
+          "department_id": "DEPT-08",
+          "title": "Client Solutions & Onboarding Lead",
+          "agent_archetype": "Solutions Onboarding Lead",
+          "execution_mode": "HUMAN_LED_COPILOT",
+          "governing_brain": "designer",
+          "activation_version": "v1.0",
+          "default_active": true,
+          "permission_tier": "TIER_2_ORCHESTRATOR",
+          "responsibilities": "Onboard signed clients, provision isolated project workspaces, and align Sprint Zero kickoffs.",
+          "deliverables": [
+            "Client Onboarding Packets",
+            "Kickoff Briefs"
+          ]
+        },
+        {
+          "id": "DLV-02",
+          "department_id": "DEPT-08",
+          "title": "Technical Account & Delivery Manager",
+          "agent_archetype": "Delivery Account Lead",
+          "execution_mode": "AI_SPECIALIST",
+          "governing_brain": "zaxterlab",
+          "activation_version": "v1.0",
+          "default_active": true,
+          "permission_tier": "TIER_2_WRITER",
+          "responsibilities": "Deliver weekly demo milestones, manage scope change requests, and coordinate staging sign-offs.",
+          "deliverables": [
+            "Weekly Milestone Demos",
+            "Staging Sign-Off Records"
+          ]
+        },
+        {
+          "id": "DLV-03",
+          "department_id": "DEPT-08",
+          "title": "Deployment & Handover Specialist",
+          "agent_archetype": "Handover Engineer",
+          "execution_mode": "AI_SPECIALIST",
+          "governing_brain": "codelift",
+          "activation_version": "v1.0",
+          "default_active": true,
+          "permission_tier": "TIER_2_WRITER",
+          "responsibilities": "Execute clean production cutovers and transfer client-owned repositories after 100% invoice settlement.",
+          "deliverables": [
+            "Production Handover Bundles",
+            "IP Transfer Receipts"
+          ]
+        },
+        {
+          "id": "DLV-04",
+          "department_id": "DEPT-08",
+          "title": "Technical Documentation & Training Specialist",
+          "agent_archetype": "Huzaifa (Documentation Lead)",
+          "execution_mode": "AI_SPECIALIST",
+          "governing_brain": "zis",
+          "activation_version": "v1.0",
+          "default_active": true,
+          "permission_tier": "TIER_2_WRITER",
+          "responsibilities": "Write operator manuals, API references, architecture guides, and client training runbooks.",
+          "deliverables": [
+            "Operator Manuals",
+            "API & Architecture Guides"
+          ]
+        },
+        {
+          "id": "DLV-05",
+          "department_id": "DEPT-08",
+          "title": "Customer Success & SLA Support Engineer",
+          "agent_archetype": "SLA Support Specialist",
+          "execution_mode": "AI_SPECIALIST",
+          "governing_brain": "zaxterlab",
+          "activation_version": "v2.0",
+          "default_active": false,
+          "permission_tier": "TIER_1_READ_ANALYZE",
+          "responsibilities": "Handle post-launch warranty tickets, uptime monitoring, and preventive maintenance.",
+          "deliverables": [
+            "SLA Health Reports",
+            "Issue Resolution Logs"
+          ]
+        },
+        {
+          "id": "DLV-06",
+          "department_id": "DEPT-08",
+          "title": "Account Expansion & Retainer Strategist",
+          "agent_archetype": "Retention & Upsell Analyst",
+          "execution_mode": "AI_COPILOT",
+          "governing_brain": "seo",
+          "activation_version": "v2.0",
+          "default_active": false,
+          "permission_tier": "TIER_1_READ_ANALYZE",
+          "responsibilities": "Identify phase-2 expansion opportunities, ongoing advisory retainers, and recurring bottlenecks across clients.",
+          "deliverables": [
+            "Retainer Proposals",
+            "Recurring Bottleneck Logs"
+          ]
+        },
+        {
+          "id": "DLV-07",
+          "department_id": "DEPT-08",
+          "title": "Case Study & Proof-of-Execution Producer",
+          "agent_archetype": "Portfolio Producer",
+          "execution_mode": "AI_SPECIALIST",
+          "governing_brain": "studio",
+          "activation_version": "v1.0",
+          "default_active": true,
+          "permission_tier": "TIER_2_WRITER",
+          "responsibilities": "Package completed client builds into high-authority technical case studies with before/after metrics.",
+          "deliverables": [
+            "Published Case Studies",
+            "Interactive Demo Reels"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "DEPT-09",
+      "name": "Company Operations",
+      "role_count": 6,
+      "head_of_department": "OPS-01",
+      "governing_brains": [
+        "zedcu",
+        "taxbot",
+        "zis"
+      ],
+      "mission": "Enforce 50/25/25 cash flow, $0.00 spend locks, IP ring-fencing, contract compliance, and the Institutional Knowledge Vault.",
+      "roles": [
+        {
+          "id": "OPS-01",
+          "department_id": "DEPT-09",
+          "title": "Finance, Billing & Cash-Flow Controller",
+          "agent_archetype": "Cash-Flow & Ledger Controller",
+          "execution_mode": "AI_AUDITOR",
+          "governing_brain": "taxbot",
+          "activation_version": "v1.0",
+          "default_active": true,
+          "permission_tier": "TIER_2_AUDITOR",
+          "responsibilities": "Enforce the 50/25/25 milestone payment rule, reconcile invoices, and maintain tax-ready ledgers.",
+          "deliverables": [
+            "Milestone Payment Clearances",
+            "Financial Ledgers"
+          ]
+        },
+        {
+          "id": "OPS-02",
+          "department_id": "DEPT-09",
+          "title": "Zero-Spend Quota & Cost Auditor",
+          "agent_archetype": "ZEDCU Spend Guard",
+          "execution_mode": "AI_AUDITOR",
+          "governing_brain": "zedcu",
+          "activation_version": "v1.0",
+          "default_active": true,
+          "permission_tier": "TIER_3_GATEKEEPER",
+          "responsibilities": "Enforce the hard $0.00 default spend lock across cloud, APIs, and tokens unless explicitly overridden by Zak.",
+          "deliverables": [
+            "Zero-Spend Audit Logs",
+            "Quota Utilization Reports"
+          ]
+        },
+        {
+          "id": "OPS-03",
+          "department_id": "DEPT-09",
+          "title": "Legal, Contracts & IP Ring-Fencing Specialist",
+          "agent_archetype": "IP & Contract Guardian",
+          "execution_mode": "AI_COPILOT",
+          "governing_brain": "zis",
+          "activation_version": "v1.0",
+          "default_active": true,
+          "permission_tier": "TIER_2_AUDITOR",
+          "responsibilities": "Separate PRODE background IP (`designer`, `studio`, `codelift`, `zaxterlab`) from client deliverables in all MSAs.",
+          "deliverables": [
+            "IP Ring-Fenced MSAs/SOWs",
+            "License Schedules"
+          ]
+        },
+        {
+          "id": "OPS-04",
+          "department_id": "DEPT-09",
+          "title": "Knowledge Vault & Artifact Librarian",
+          "agent_archetype": "ZIS Memory Librarian",
+          "execution_mode": "AI_SPECIALIST",
+          "governing_brain": "zis",
+          "activation_version": "v1.0",
+          "default_active": true,
+          "permission_tier": "TIER_2_WRITER",
+          "responsibilities": "Index all PRDs, ADRs, reusable UI components, shaders, and firmware modules in the Knowledge Vault.",
+          "deliverables": [
+            "Indexed Knowledge Vault Records",
+            "Reusable Asset Catalogs"
+          ]
+        },
+        {
+          "id": "OPS-05",
+          "department_id": "DEPT-09",
+          "title": "Internal Tooling & Workspace Administrator",
+          "agent_archetype": "Workspace & CLI Custodian",
+          "execution_mode": "AI_SPECIALIST",
+          "governing_brain": "zaxterlab",
+          "activation_version": "v2.0",
+          "default_active": false,
+          "permission_tier": "TIER_2_WRITER",
+          "responsibilities": "Maintain DevContainers, mobile coding workflows (`pixelcoding`), and local offline model servers.",
+          "deliverables": [
+            "Workspace Configs",
+            "Tooling Health Checks"
+          ]
+        },
+        {
+          "id": "OPS-06",
+          "department_id": "DEPT-09",
+          "title": "Talent, Partner & Vendor Coordinator",
+          "agent_archetype": "External Resource Coordinator",
+          "execution_mode": "HUMAN_LED_COPILOT",
+          "governing_brain": "hrapp",
+          "activation_version": "v3.0",
+          "default_active": false,
+          "permission_tier": "TIER_2_ORCHESTRATOR",
+          "responsibilities": "Coordinate external PCB fab houses, specialized hardware contractors, and vetted domain advisors when needed.",
+          "deliverables": [
+            "Vendor Qualification Records",
+            "Contractor NDAs"
+          ]
+        }
+      ]
     }
-  },
-  "required": ["version", "departments"]
+  ]
 }
