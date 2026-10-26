@@ -8,7 +8,14 @@ import sys
 from pathlib import Path
 from typing import List, Optional
 
-from prode.catalog import DEPARTMENTS, ROLES
+from prode.catalog import (
+    COMPANY_PROFILE,
+    DEPARTMENTS,
+    PROJECTS,
+    REVENUE_ENGINES,
+    ROLES,
+    VERSIONS,
+)
 from prode.db import DEFAULT_DB_PATH, ProdeDB
 from prode.engine import ProdeEngine
 from prode.server import run_server
@@ -125,7 +132,17 @@ def cmd_export_schemas() -> int:
         "departments": dept_list,
     }
     out_path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
-    print(f"Exported {len(DEPARTMENTS)} departments and {len(ROLES)} roles to {out_path}")
+    seed_path = root / "schemas" / "company_os_seed.json"
+    seed_payload = {
+        "company_profile": COMPANY_PROFILE,
+        "revenue_engines": REVENUE_ENGINES,
+        "departments": DEPARTMENTS,
+        "roles": ROLES,
+        "versions": VERSIONS,
+        "projects": PROJECTS,
+    }
+    seed_path.write_text(json.dumps(seed_payload, indent=2) + "\n", encoding="utf-8")
+    print(f"Exported {len(DEPARTMENTS)} departments and {len(ROLES)} roles to {out_path} and {seed_path}")
     return 0
 
 

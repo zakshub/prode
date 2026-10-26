@@ -3,8 +3,9 @@ __pycache__/
 *.py[cod]
 *$py.class
 
-# Local runtime SQLite database & daemon logs
+# Local runtime SQLite / JSON state & daemon logs
 prode.db
 prode.db-journal
+.prode_state.json
 .prode.pid
 .prode.log
