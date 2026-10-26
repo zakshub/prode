@@ -983,8 +983,9 @@
       });
       const data = await res.json();
       showToast(`Role ${roleId} updated to ${data.is_active ? 'ACTIVE' : 'DORMANT'}`);
-      await renderAll();
-    
+      await loadDashboard();
+    }
+
     let STOREFRONT_ACTIVE = false;
 
     function toggleStorefrontView() {
@@ -1077,9 +1078,6 @@
         statusEl.textContent = "✅ Inquiry recorded in local memory!";
         showToast("Inquiry recorded!");
       }
-    }
-
-    loadDashboard();
     }
 
     async function simulateProject(projectId) {
