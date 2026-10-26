@@ -3,6 +3,7 @@ PRODE Hermetic Unit & Integration Test Suite.
 Runs 100% offline with an in-memory SQLite database (:memory:) and zero network calls.
 """
 
+import os
 import unittest
 from pathlib import Path
 
@@ -231,6 +232,26 @@ class TestProdeCompanyOS(unittest.TestCase):
         self.assertIn('<label for="opp-pain">', html)
         self.assertIn('<label for="saas-clients">', html)
         self.assertIn('<label for="art-title">', html)
+
+    def test_11_scaffold_client_project(self):
+        import tempfile
+        import shutil
+        with tempfile.TemporaryDirectory() as tmpdir:
+            res = self.engine.scaffold_client_project(
+                client_name="Apex Health",
+                project_title="Cardiac Telemetry Monitor",
+                project_type="cyber_physical",
+                base_dir=tmpdir
+            )
+            self.assertEqual(res["files_count"], 5)
+            self.assertTrue(os.path.exists(os.path.join(res["project_dir"], "docs", "PRD.md")))
+            self.assertTrue(os.path.exists(os.path.join(res["project_dir"], "docs", "ARCHITECTURE.md")))
+            self.assertTrue(os.path.exists(os.path.join(res["project_dir"], "package.json")))
+            self.assertTrue(os.path.exists(os.path.join(res["project_dir"], "README.md")))
+            self.assertTrue(os.path.exists(os.path.join(res["project_dir"], "src", "app", "page.tsx")))
+            # Verify artifact logged in vault
+            vault = self.db.get_knowledge_vault()
+            self.assertTrue(any(v["id"] == res["artifact_id"] for v in vault))
 
 
 if __name__ == "__main__":

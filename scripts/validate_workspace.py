@@ -23,6 +23,7 @@ REQUIRED_FILES = [
     "docs/11_IMPLEMENTATION_ROADMAP.md",
     "docs/12_MASTER_EXECUTION_PLAN.md",
     "docs/13_OPERATOR_MANUAL.md",
+    "docs/14_EXECUTIVE_PITCH_DECK.md",
     "schemas/role_taxonomy.json",
     "schemas/project_manifest_schema.json",
     "templates/proposal_template.md",

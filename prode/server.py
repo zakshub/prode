@@ -101,6 +101,18 @@ def dispatch_api_request(
                     problem_summary=problem,
                 )
                 return 201, res
+            if path == "/api/project/scaffold":
+                client_name = body.get("client_name", "Acme Labs")
+                project_title = body.get("project_title", "Custom Enterprise Platform")
+                project_type = body.get("project_type", "sprint_zero")
+                features = body.get("features")
+                res = engine.scaffold_client_project(
+                    client_name=client_name,
+                    project_title=project_title,
+                    project_type=project_type,
+                    features=features,
+                )
+                return 201, res
             if path == "/api/vault/create":
                 art = engine.create_vault_artifact(
                     artifact_type=body.get("artifact_type", "PRD"),

@@ -10,7 +10,7 @@ PRODE Execution & Governance Engine:
 """
 
 from collections import deque
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional, Tuple
 
 from prode.catalog import REVENUE_ENGINES
 from prode.db import ProdeDB, utc_now
@@ -549,6 +549,233 @@ PRODE operates with a strict milestone-governed payment schedule:
             "timeline": timeline_str,
             "proposal_markdown": proposal_md,
             "payment_schedule": {"m1_deposit_50": p1, "m2_staging_25": p2, "m3_final_25": p3},
+        }
+
+    def scaffold_client_project(
+        self,
+        client_name: str,
+        project_title: str,
+        project_type: str = "sprint_zero",
+        features: Optional[List[str]] = None,
+        base_dir: Optional[str] = None,
+    ) -> Dict[str, Any]:
+        import os
+        import re
+
+        features_list = features or [
+            "Next.js App Router & Tailwind CSS",
+            "Interactive Three.js 3D Viewport",
+            "Hardware Microcontroller Telemetry Hook (ESP32/MQTT)",
+            "Role-Based Access Control & Database Schema"
+        ]
+
+        safe_client = re.sub(r'[^a-zA-Z0-9]', '_', client_name.strip()).lower().strip('_') or "client"
+        safe_proj = re.sub(r'[^a-zA-Z0-9]', '_', project_title.strip()).lower().strip('_') or "product"
+        slug = f"{safe_client}_{safe_proj}"
+
+        if not base_dir:
+            base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "projects", slug))
+        else:
+            base_dir = os.path.join(base_dir, slug)
+
+        docs_dir = os.path.join(base_dir, "docs")
+        src_app_dir = os.path.join(base_dir, "src", "app")
+        os.makedirs(docs_dir, exist_ok=True)
+        os.makedirs(src_app_dir, exist_ok=True)
+
+        now = utc_now()
+
+        # 1. PRD.md
+        prd_content = f"""# Product Requirements Document (PRD)
+## {project_title} — Client Engineering Specification
+
+- **Client Organization:** {client_name}
+- **Engineering Partner:** PRODE (AI-Native Product Engineering & Interactive Technology)
+- **Sovereign Executive:** Zak (EXEC-01)
+- **Status:** APPROVED & INITIALIZED
+- **Generated At:** {now}
+
+---
+
+### 1. Executive Summary & Problem Statement
+{client_name} requires a high-performance product built to production standards without speculative waste. This repository contains the complete specification, architecture, and starter implementation delivered under PRODE's guaranteed 50/25/25 cash-flow and Dual-Gate Quality framework.
+
+### 2. Core Functional Scope & Features
+""" + "\n".join(f"- [x] **Feature {i+1}:** {f}" for i, f in enumerate(features_list)) + f"""
+
+### 3. Non-Functional Invariants
+- **Visual Design Standard:** Governed by `zakshub/designer` (WCAG AAA contrast, semantic token hierarchy).
+- **Interactive 3D / Realism:** Governed by `zakshub/bob` and `zakshub/studio` (60 FPS WebGL, physically accurate materials).
+- **Code Velocity & Cleanliness:** Governed by `zakshub/codelift` (zero compiler warnings, TypeScript strict mode).
+- **Telemetry Latency:** Sub-100ms bidirectional packet delivery.
+
+### 4. 50/25/25 Milestone Acceptance Criteria
+1. **Milestone 1 (50% Deposit Cleared):** Architecture, database schemas, and UX wireframes complete.
+2. **Milestone 2 (25% on Staging Demo):** Live interactive clickable prototype + 3D viewport hosted on staging.
+3. **Milestone 3 (25% on Final Handover):** Production deployment, full IP transfer, and clean Git repository handover.
+"""
+
+        # 2. ARCHITECTURE.md
+        arch_content = f"""# System Architecture Specification
+## {project_title} ({slug})
+
+### 1. Technology Stack
+- **Frontend Framework:** Next.js 14+ (App Router, Server & Client Components)
+- **Styling & UI Tokens:** Tailwind CSS with Sentinel Companion palettes
+- **3D Spatial Graphics:** Three.js / WebGL with procedural fallback
+- **Backend & Persistence:** SQLite (Dev) / PostgreSQL (Prod) via Prisma ORM
+- **Cyber-Physical Gateway:** MQTT / WebSockets for IoT & ESP32 telemetry
+
+### 2. Directory Layout
+```text
+{slug}/
+├── docs/
+│   ├── PRD.md              # Product Requirements Document
+│   └── ARCHITECTURE.md     # Engineering & Data Architecture
+├── src/
+│   └── app/
+│       ├── layout.tsx      # Root HTML shell & meta
+│       └── page.tsx        # Modern dashboard & 3D view
+├── package.json            # Node.js dependencies
+└── README.md               # Quickstart guide
+```
+
+### 3. Security & Quality Guardrails
+- All user inputs sanitized against SQL injection and XSS.
+- No third-party tracking scripts or speculative analytics.
+- Zero-spend rule: All development verified locally without paid API locks.
+"""
+
+        # 3. package.json
+        pkg_content = f"""{{
+  "name": "{slug}",
+  "version": "0.1.0",
+  "private": true,
+  "description": "{project_title} engineered by PRODE",
+  "scripts": {{
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  }},
+  "dependencies": {{
+    "next": "^14.2.0",
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0",
+    "lucide-react": "^0.360.0",
+    "three": "^0.160.0"
+  }},
+  "devDependencies": {{
+    "@types/node": "^20.0.0",
+    "@types/react": "^18.3.0",
+    "autoprefixer": "^10.4.0",
+    "postcss": "^8.4.0",
+    "tailwindcss": "^3.4.0",
+    "typescript": "^5.4.0"
+  }}
+}}
+"""
+
+        # 4. README.md
+        readme_content = f"""# {project_title}
+**Engineered by PRODE for {client_name}**
+
+This project was automatically scaffolded using PRODE's AI-Native Product Engineering engine.
+
+## Quickstart (Under 60 Seconds)
+
+```bash
+# 1. Install dependencies
+npm install
+
+# 2. Run local development server
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) to view your product live.
+
+## Documentation
+- [Product Requirements Document (PRD)](docs/PRD.md)
+- [System Architecture](docs/ARCHITECTURE.md)
+"""
+
+        # 5. src/app/page.tsx
+        page_content = f"""// {project_title} — Generated by PRODE
+export default function HomePage() {{
+  return (
+    <main className="min-h-screen bg-slate-950 text-slate-100 p-8 flex flex-col items-center justify-center">
+      <div className="max-w-2xl w-full bg-slate-900 border border-slate-800 rounded-xl p-8 shadow-2xl">
+        <div className="flex items-center gap-2 mb-4">
+          <span className="px-3 py-1 text-xs font-bold rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/30">
+            PRODE VERIFIED SCAFFOLD
+          </span>
+          <span className="px-3 py-1 text-xs font-bold rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
+            50/25/25 CASH-FLOW ACTIVE
+          </span>
+        </div>
+        <h1 className="text-3xl font-extrabold mb-2 text-white">{project_title}</h1>
+        <p className="text-slate-400 mb-6">
+          Client Workspace for <strong className="text-slate-200">{client_name}</strong>. Ready for custom UI and cyber-physical integration.
+        </p>
+        <div className="border-t border-slate-800 pt-4 flex justify-between text-xs text-slate-500">
+          <span>Engineered by PRODE</span>
+          <span>Founder Sovereign: Zak (EXEC-01)</span>
+        </div>
+      </div>
+    </main>
+  );
+}}
+"""
+
+        # Write files
+        files_created = {
+            os.path.join(docs_dir, "PRD.md"): prd_content,
+            os.path.join(docs_dir, "ARCHITECTURE.md"): arch_content,
+            os.path.join(base_dir, "package.json"): pkg_content,
+            os.path.join(base_dir, "README.md"): readme_content,
+            os.path.join(src_app_dir, "page.tsx"): page_content,
+        }
+
+        for path, data in files_created.items():
+            with open(path, "w", encoding="utf-8") as f:
+                f.write(data)
+
+        # Store in Knowledge Vault
+        art_id = f"KV-SCAFFOLD-{slug.upper()[:20]}"
+        self.db._conn.execute(
+            """
+            INSERT OR REPLACE INTO knowledge_vault (
+                id, artifact_type, project_id, title, ip_classification,
+                governing_brain, content, created_by_role, created_at
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """,
+            (
+                art_id,
+                "PROJECT_SCAFFOLD",
+                slug,
+                f"Project Scaffolder & PRD: {project_title} ({client_name})",
+                "CLIENT_IP",
+                "codelift",
+                f"Generated 5 production starter files in {base_dir}. PRD, Architecture, package.json, and Next.js starter page.",
+                "PRD-01",
+                now,
+            ),
+        )
+
+        self.db.log_event(
+            actor="PRD-01 (Principal Product Architect)",
+            action="PROJECT_SCAFFOLDED",
+            target_id=slug,
+            details=f"Scaffolded full codebase and PRD for {client_name} at {base_dir}.",
+        )
+
+        return {
+            "slug": slug,
+            "project_dir": base_dir,
+            "artifact_id": art_id,
+            "files_count": len(files_created),
+            "files": list(files_created.keys()),
+            "message": f"Successfully scaffolded {project_title} into {base_dir}",
         }
 
     def get_dashboard_summary(self) -> Dict[str, Any]:

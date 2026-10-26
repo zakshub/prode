@@ -324,6 +324,9 @@
       <button type="button" class="btn" id="view-mode-toggle-btn" onclick="toggleStorefrontView()" style="background:#2563EB;color:#FFF;">
         👁️ View Client Storefront
       </button>
+      <button type="button" class="btn btn-secondary" onclick="openPitchModal()" style="border:1px solid #3B82F6;">
+        📊 Executive Pitch Deck
+      </button>
       <button type="button" class="btn btn-secondary" id="theme-toggle-btn" onclick="toggleTheme()">
         Switch Appearance Mode
       </button>
@@ -1071,12 +1074,22 @@
           </div>
           <p style="font-size:0.85rem;margin:0.35rem 0;">${ap.summary}</p>
           ${ap.status === 'PENDING' ? `
-            <div style="display:flex;gap:0.5rem;margin-top:0.5rem;">
+            <div style="display:flex;gap:0.5rem;margin-top:0.5rem;flex-wrap:wrap;">
               <button type="button" class="btn" onclick="decideApproval('${ap.id}', 'APPROVED')">Approve as Zak (EXEC-01)</button>
               <button type="button" class="btn btn-secondary" onclick="decideApproval('${ap.id}', 'REJECTED')">Reject</button>
-              ${ap.approval_type === "CLIENT_INQUIRY" ? `<button type="button" class="btn" style="background:#059669;color:#FFF;" onclick="generateProposalFromInquiry('${ap.id}')">📄 1-Click Generate Official Proposal</button>` : ""}
+              ${ap.approval_type === "CLIENT_INQUIRY" ? `
+                <button type="button" class="btn" style="background:#059669;color:#FFF;" onclick="generateProposalFromInquiry('${ap.id}')">📄 Generate Proposal</button>
+                <button type="button" class="btn" style="background:#7C3AED;color:#FFF;" onclick="scaffoldFromInquiry('${ap.id}')">🚀 Auto-Scaffold Codebase</button>
+              ` : ""}
             </div>
-          ` : `<div style="font-size:0.76rem;color:var(--text-muted);">Decided by ${ap.decided_by} at ${ap.decided_at}</div>`}
+          ` : `
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:0.5rem;flex-wrap:wrap;gap:0.5rem;">
+              <div style="font-size:0.76rem;color:var(--text-muted);">Decided by ${ap.decided_by} at ${ap.decided_at}</div>
+              ${ap.approval_type === "CLIENT_INQUIRY" && ap.status === 'APPROVED' ? `
+                <button type="button" class="btn" style="background:#7C3AED;color:#FFF;padding:0.3rem 0.65rem;font-size:0.8rem;" onclick="scaffoldFromInquiry('${ap.id}')">🚀 Auto-Scaffold Codebase</button>
+              ` : ""}
+            </div>
+          `}
         </div>
       `).join('');
 
@@ -1155,6 +1168,7 @@
         });
         const data = await res.json();
         LATEST_PROPOSAL_MD = data.proposal_markdown;
+        LATEST_SCAFFOLD_TARGET = { client_name: data.client_name, project_title: data.project_title };
         document.getElementById("prop-modal-title").textContent = data.project_title + " &mdash; " + data.client_name;
         document.getElementById("prop-modal-content").textContent = data.proposal_markdown;
         document.getElementById("proposal-modal").style.display = "block";
@@ -1163,6 +1177,70 @@
       } catch (err) {
         showToast("Error generating proposal: " + err);
       }
+    }
+
+    let LATEST_SCAFFOLD_TARGET = { client_name: "Apex Labs", project_title: "Custom Interactive Platform" };
+
+    async function scaffoldFromInquiry(inquiryId) {
+      const ap = STATE.approvals.find(a => a.id === inquiryId);
+      if (!ap) return;
+      showToast("PRD-01 scaffolding project directory & PRD...");
+
+      let clientName = "Apex Labs";
+      let projTitle = "Custom Interactive Platform";
+
+      if (ap.summary.includes("from ")) {
+        const afterFrom = ap.summary.split("from ")[1];
+        if (afterFrom.includes(" for ")) {
+          clientName = afterFrom.split(" for ")[0];
+        }
+      }
+      if (ap.summary.includes("'")) {
+        const parts = ap.summary.split("'");
+        if (parts.length >= 2) projTitle = parts[1];
+      }
+
+      await executeProjectScaffold(clientName, projTitle);
+    }
+
+    async function scaffoldFromCurrentProposal() {
+      if (!LATEST_SCAFFOLD_TARGET || !LATEST_SCAFFOLD_TARGET.client_name) {
+        showToast("No active proposal to scaffold.");
+        return;
+      }
+      await executeProjectScaffold(LATEST_SCAFFOLD_TARGET.client_name, LATEST_SCAFFOLD_TARGET.project_title);
+    }
+
+    async function executeProjectScaffold(clientName, projectTitle) {
+      try {
+        const res = await fetch("/api/project/scaffold", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            client_name: clientName,
+            project_title: projectTitle,
+            project_type: "sprint_zero"
+          })
+        });
+        const data = await res.json();
+        showToast("🚀 Codebase Scaffolded: " + data.slug + " (5 files created)");
+        alert(`🎉 PROJECT SCAFFOLDING COMPLETE!\n\nClient Workspace: ${data.project_dir}\nFiles Created: ${data.files_count} (PRD.md, ARCHITECTURE.md, package.json, README.md, page.tsx)\nKnowledge Vault Artifact: ${data.artifact_id}\n\nAll starter files are now on your computer and registered in the Knowledge Vault.`);
+        await loadDashboard();
+      } catch (err) {
+        showToast("Error scaffolding project: " + err);
+      }
+    }
+
+    function openPitchModal() {
+      document.getElementById("pitch-modal").style.display = "block";
+    }
+
+    function closePitchModal() {
+      document.getElementById("pitch-modal").style.display = "none";
+    }
+
+    function printPitchDeck() {
+      window.print();
     }
 
     let STOREFRONT_ACTIVE = false;
@@ -1842,13 +1920,235 @@
           <span class="pill pill-success" style="margin-bottom:0.25rem;">PROPOSAL GENERATED &bull; STORED IN KNOWLEDGE VAULT</span>
           <h3 id="prop-modal-title" style="font-size:1.25rem;margin-top:0.25rem;">Official Project Statement of Work</h3>
         </div>
-        <div style="display:flex;gap:0.5rem;">
+        <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+          <button type="button" class="btn" onclick="scaffoldFromCurrentProposal()" style="background:#7C3AED;color:#FFF;">🚀 Auto-Scaffold Codebase</button>
           <button type="button" class="btn" onclick="copyProposalText()" style="background:#059669;color:#FFF;">📋 Copy to Clipboard</button>
           <button type="button" class="btn btn-secondary" onclick="printProposal()">🖨️ Print / PDF</button>
           <button type="button" class="btn btn-secondary" onclick="closeProposalModal()">✕ Close</button>
         </div>
       </div>
       <div style="background:var(--bg-canvas);border:1px solid var(--border-color);border-radius:6px;padding:1.5rem;font-family:monospace;white-space:pre-wrap;font-size:0.88rem;max-height:550px;overflow-y:auto;line-height:1.5;" id="prop-modal-content"></div>
+    </div>
+  </div>
+
+  <!-- EXECUTIVE PITCH DECK MODAL -->
+  <div id="pitch-modal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(15,23,42,0.85);z-index:9999;overflow-y:auto;padding:1.5rem;">
+    <div style="max-width:960px;margin:1.5rem auto;background:var(--bg-surface);border-radius:12px;border:1px solid var(--border-color);padding:2rem;box-shadow:0 12px 30px rgba(0,0,0,0.6);">
+      
+      <!-- Pitch Deck Modal Header -->
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.5rem;border-bottom:2px solid var(--border-color);padding-bottom:1rem;flex-wrap:wrap;gap:1rem;">
+        <div>
+          <div style="display:flex;gap:0.5rem;align-items:center;margin-bottom:0.35rem;flex-wrap:wrap;">
+            <span class="pill pill-info">CONFIDENTIAL BRIEF</span>
+            <span class="pill pill-success">AI-NATIVE PRODUCT ENGINEERING</span>
+            <span class="pill pill-neutral">SOVEREIGN: ZAK (EXEC-01)</span>
+          </div>
+          <h2 style="font-size:1.6rem;font-weight:800;margin:0 0 0.25rem;">
+            PRODE &mdash; Executive Company Pitch Deck
+          </h2>
+          <p style="font-size:0.9rem;color:var(--text-secondary);margin:0;">
+            10-Slide Strategic Operating Brief for Enterprise Partners, Institutional Clients, and Banks.
+          </p>
+        </div>
+        <div style="display:flex;gap:0.5rem;">
+          <button type="button" class="btn" onclick="printPitchDeck()" style="background:#2563EB;color:#FFF;">🖨️ Print / Save PDF</button>
+          <button type="button" class="btn btn-secondary" onclick="closePitchModal()">✕ Close</button>
+        </div>
+      </div>
+
+      <!-- Slide 1 -->
+      <div class="card" style="margin-bottom:1.25rem;border-left:4px solid #2563EB;">
+        <span class="pill pill-info" style="font-size:0.75rem;">SLIDE 1 &bull; MISSION &amp; CORE VISION</span>
+        <h3 style="font-size:1.3rem;margin:0.5rem 0 0.4rem;">"We Don't Just Design Screens. We Engineer Complete Working Products."</h3>
+        <p style="font-size:0.92rem;color:var(--text-secondary);line-height:1.5;">
+          <strong>The Vision:</strong> Build the world's most disciplined product engineering firm by uniting electronic engineering, high-contrast accessible design, real-time 3D WebGL graphics, and compiler-verified code generation.
+        </p>
+        <p style="font-size:0.88rem;color:var(--text-muted);margin-bottom:0;">
+          <strong>Our Guarantee:</strong> No non-functional drawings. No speculative debt. Every deliverable compiles with zero errors and connects to real systems.
+        </p>
+      </div>
+
+      <!-- Slide 2 -->
+      <div class="card" style="margin-bottom:1.25rem;border-left:4px solid #DC2626;">
+        <span class="pill pill-warn" style="font-size:0.75rem;">SLIDE 2 &bull; THE INDUSTRY PROBLEM</span>
+        <h3 style="font-size:1.3rem;margin:0.5rem 0 0.4rem;">Why 85% of Digital &amp; Hardware Initiatives Fail</h3>
+        <div class="grid-3" style="margin-top:0.75rem;">
+          <div style="background:var(--bg-canvas);padding:0.75rem;border-radius:6px;">
+            <strong style="color:var(--text-primary);display:block;margin-bottom:0.25rem;">1. Siloed Passing of Blame</strong>
+            <span style="font-size:0.83rem;color:var(--text-secondary);">Designers draw screens developers cannot code; programmers write APIs hardware engineers cannot connect.</span>
+          </div>
+          <div style="background:var(--bg-canvas);padding:0.75rem;border-radius:6px;">
+            <strong style="color:var(--text-primary);display:block;margin-bottom:0.25rem;">2. Speculative Payroll Bloat</strong>
+            <span style="font-size:0.83rem;color:var(--text-secondary);">Traditional agencies hire large unverified payrolls that burn cash before securing paying customers.</span>
+          </div>
+          <div style="background:var(--bg-canvas);padding:0.75rem;border-radius:6px;">
+            <strong style="color:var(--text-primary);display:block;margin-bottom:0.25rem;">3. The Mockup Illusion</strong>
+            <span style="font-size:0.83rem;color:var(--text-secondary);">Clients pay $50,000+ for pretty Figma pictures that break when connected to real databases and hardware.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 3 -->
+      <div class="card" style="margin-bottom:1.25rem;border-left:4px solid #059669;">
+        <span class="pill pill-success" style="font-size:0.75rem;">SLIDE 3 &bull; THE SYNTHESIST SOLUTION</span>
+        <h3 style="font-size:1.3rem;margin:0.5rem 0 0.4rem;">How PRODE Outperforms Traditional Software Agencies</h3>
+        <table style="width:100%;margin-top:0.75rem;font-size:0.85rem;">
+          <thead>
+            <tr>
+              <th style="width:50%;">Traditional Agency Model</th>
+              <th style="width:50%;">PRODE Synthesist Architecture</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Disconnected designers, programmers, and outsourced hardware contractors.</td>
+              <td><strong>Unified Engineering:</strong> Electronics + UI Design + 3D WebGL + Clean Code under single leadership.</td>
+            </tr>
+            <tr>
+              <td>Months spent manually typing repetitive boilerplate code.</td>
+              <td><strong>10x Velocity:</strong> Autonomous intelligence mesh generates verified code in hours.</td>
+            </tr>
+            <tr>
+              <td>Loose quality control leading to costly post-release bug fixes.</td>
+              <td><strong>Dual-Gate Forensic QC:</strong> Zero-warning compiler checks + W3C accessibility compliance.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Slide 4 -->
+      <div class="card" style="margin-bottom:1.25rem;border-left:4px solid #7C3AED;">
+        <span class="pill pill-info" style="font-size:0.75rem;">SLIDE 4 &bull; THREE REVENUE ENGINES</span>
+        <h3 style="font-size:1.3rem;margin:0.5rem 0 0.4rem;">Sustainable Business Model (65% to 85%+ Margins)</h3>
+        <div class="grid-3" style="margin-top:0.75rem;">
+          <div style="background:var(--bg-canvas);padding:0.75rem;border-radius:6px;">
+            <div style="display:flex;justify-content:space-between;margin-bottom:0.25rem;">
+              <strong style="color:var(--text-primary);">Engine 1: Client Services</strong>
+              <span class="pill pill-info">65% - 80%</span>
+            </div>
+            <span style="font-size:0.83rem;color:var(--text-secondary);">Sprint Zero Blueprints ($5k-$15k) and Full-Spectrum builds ($25k-$120k) funded by client deposits.</span>
+          </div>
+          <div style="background:var(--bg-canvas);padding:0.75rem;border-radius:6px;">
+            <div style="display:flex;justify-content:space-between;margin-bottom:0.25rem;">
+              <strong style="color:var(--text-primary);">Engine 2: Productized Sprints</strong>
+              <span class="pill pill-success">80% - 90%</span>
+            </div>
+            <span style="font-size:0.83rem;color:var(--text-secondary);">72-Hour Design-to-Code ($3.5k-$8.5k) and Bob 3D interactive web showcases ($10k-$25k).</span>
+          </div>
+          <div style="background:var(--bg-canvas);padding:0.75rem;border-radius:6px;">
+            <div style="display:flex;justify-content:space-between;margin-bottom:0.25rem;">
+              <strong style="color:var(--text-primary);">Engine 3: Proprietary SaaS</strong>
+              <span class="pill pill-warn">85%+ Margin</span>
+            </div>
+            <span style="font-size:0.83rem;color:var(--text-secondary);">Multi-tenant recurring platforms spun out only after validation across &ge;3 paying client projects.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 5 -->
+      <div class="card" style="margin-bottom:1.25rem;border-left:4px solid #0284C7;">
+        <span class="pill pill-info" style="font-size:0.75rem;">SLIDE 5 &bull; OPERATING ARCHITECTURE</span>
+        <h3 style="font-size:1.3rem;margin:0.5rem 0 0.4rem;">9 Company Functions &amp; 69 Specialist Roles</h3>
+        <p style="font-size:0.88rem;color:var(--text-secondary);margin-bottom:0.5rem;">
+          Our organization is modeled after aerospace engineering standards. Every discipline has clear boundaries, input/output contracts, and intelligence governance:
+        </p>
+        <div style="display:flex;flex-wrap:wrap;gap:0.4rem;font-size:0.78rem;">
+          <span class="pill pill-neutral">1. Executive Command (EXEC)</span>
+          <span class="pill pill-neutral">2. Product Architecture (PRD)</span>
+          <span class="pill pill-neutral">3. UX/UI Design (UXD)</span>
+          <span class="pill pill-neutral">4. Visual Reality (VPR)</span>
+          <span class="pill pill-neutral">5. Software Engineering (SWE)</span>
+          <span class="pill pill-neutral">6. 3D &amp; Cyber-Physical (CPE)</span>
+          <span class="pill pill-neutral">7. Forensic Quality (QSR)</span>
+          <span class="pill pill-neutral">8. Revenue Growth (MKT)</span>
+          <span class="pill pill-neutral">9. Operations &amp; IP Vault (OPS)</span>
+        </div>
+      </div>
+
+      <!-- Slide 6 -->
+      <div class="card" style="margin-bottom:1.25rem;border-left:4px solid #10B981;">
+        <span class="pill pill-success" style="font-size:0.75rem;">SLIDE 6 &bull; QUALITY ASSURANCE</span>
+        <h3 style="font-size:1.3rem;margin:0.5rem 0 0.4rem;">Dual-Gate Forensic &amp; Compiler QC</h3>
+        <p style="font-size:0.88rem;color:var(--text-secondary);margin-bottom:0.5rem;">
+          Nothing is delivered to clients without passing two independent verification gates:
+        </p>
+        <div class="grid-2">
+          <div style="background:var(--bg-canvas);padding:0.75rem;border-radius:6px;">
+            <strong style="color:var(--text-primary);display:block;">Gate 1: Designer &amp; Reality Fit</strong>
+            <span style="font-size:0.82rem;color:var(--text-secondary);">Enforces WCAG AAA accessibility, semantic design tokens, and photographic physical causality.</span>
+          </div>
+          <div style="background:var(--bg-canvas);padding:0.75rem;border-radius:6px;">
+            <strong style="color:var(--text-primary);display:block;">Gate 2: Compiler &amp; AST Verification</strong>
+            <span style="font-size:0.82rem;color:var(--text-secondary);">Enforces zero compiler warnings, strict TypeScript types, and hermetic build passing.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 7 -->
+      <div class="card" style="margin-bottom:1.25rem;border-left:4px solid #D97706;">
+        <span class="pill pill-warn" style="font-size:0.75rem;">SLIDE 7 &bull; FINANCIAL GOVERNANCE</span>
+        <h3 style="font-size:1.3rem;margin:0.5rem 0 0.4rem;">$0.00 Speculative Spend &amp; 50/25/25 Cash Flow</h3>
+        <div class="grid-3" style="margin-top:0.75rem;">
+          <div style="background:var(--bg-canvas);padding:0.75rem;border-radius:6px;">
+            <strong style="color:var(--text-primary);display:block;margin-bottom:0.25rem;">50% Deposit Upfront</strong>
+            <span style="font-size:0.83rem;color:var(--text-secondary);">Covers all planning, design, and architecture before code begins. Cash-flow positive from Day 1.</span>
+          </div>
+          <div style="background:var(--bg-canvas);padding:0.75rem;border-radius:6px;">
+            <strong style="color:var(--text-primary);display:block;margin-bottom:0.25rem;">25% On Staging Demo</strong>
+            <span style="font-size:0.83rem;color:var(--text-secondary);">Due only after the client interacts with the working product in their browser and approves functionality.</span>
+          </div>
+          <div style="background:var(--bg-canvas);padding:0.75rem;border-radius:6px;">
+            <strong style="color:var(--text-primary);display:block;margin-bottom:0.25rem;">25% On Final Handover</strong>
+            <span style="font-size:0.83rem;color:var(--text-secondary);">Released upon clean Git repository handover, production launch, and complete intellectual property transfer.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 8 -->
+      <div class="card" style="margin-bottom:1.25rem;border-left:4px solid #2563EB;">
+        <span class="pill pill-info" style="font-size:0.75rem;">SLIDE 8 &bull; 5-PHASE EVOLUTION ROADMAP</span>
+        <h3 style="font-size:1.3rem;margin:0.5rem 0 0.4rem;">Disciplined Step-by-Step Company Growth (v1.0 &rarr; v5.0)</h3>
+        <div style="display:flex;flex-direction:column;gap:0.4rem;font-size:0.83rem;margin-top:0.5rem;">
+          <div style="padding:0.4rem 0.6rem;background:var(--bg-canvas);border-radius:4px;"><strong>v1.0 Foundation (Current):</strong> Blueprint complete, 69 roles cataloged, $0 spend guard, control center live.</div>
+          <div style="padding:0.4rem 0.6rem;background:var(--bg-canvas);border-radius:4px;"><strong>v2.0 Client Services:</strong> 3 enterprise clients onboarded via Sprint Zero; dual-gate QC verified.</div>
+          <div style="padding:0.4rem 0.6rem;background:var(--bg-canvas);border-radius:4px;"><strong>v3.0 Productized Automation:</strong> Repeatable 72-hour design-to-code pipelines and Bob 3D showcases.</div>
+          <div style="padding:0.4rem 0.6rem;background:var(--bg-canvas);border-radius:4px;"><strong>v4.0 Cyber-Physical Integration:</strong> ESP32/STM32 microcontrollers connected to real-time 3D web twins.</div>
+          <div style="padding:0.4rem 0.6rem;background:var(--bg-canvas);border-radius:4px;"><strong>v5.0 Proprietary SaaS Spinouts:</strong> Recurring SaaS platforms spun out from proven, client-tested modules.</div>
+        </div>
+      </div>
+
+      <!-- Slide 9 -->
+      <div class="card" style="margin-bottom:1.25rem;border-left:4px solid #065F46;">
+        <span class="pill pill-success" style="font-size:0.75rem;">SLIDE 9 &bull; CYBER-PHYSICAL &amp; IOT EDGE</span>
+        <h3 style="font-size:1.3rem;margin:0.5rem 0 0.4rem;">Real Hardware Connected to Web Browsers</h3>
+        <p style="font-size:0.88rem;color:var(--text-secondary);margin-bottom:0.5rem;">
+          Most software companies can only make websites. PRODE integrates real electronic hardware directly with 3D WebGL:
+        </p>
+        <ul style="font-size:0.85rem;color:var(--text-secondary);line-height:1.6;margin:0;padding-left:1.25rem;">
+          <li><strong>Microcontroller Firmware:</strong> High-reliability C/C++ on ESP32-S3 and STM32 with FreeRTOS.</li>
+          <li><strong>Sub-100ms Telemetry:</strong> MQTT and WebSocket gateways streaming real-time sensor data.</li>
+          <li><strong>Zero-Plugin 3D Twins:</strong> Interactive Three.js digital models rendering live hardware telemetry at 60 FPS.</li>
+        </ul>
+      </div>
+
+      <!-- Slide 10 -->
+      <div class="card" style="margin-bottom:1rem;border-left:4px solid #1E293B;">
+        <span class="pill pill-neutral" style="font-size:0.75rem;">SLIDE 10 &bull; LEADERSHIP &amp; SOVEREIGNTY</span>
+        <h3 style="font-size:1.3rem;margin:0.5rem 0 0.4rem;">Founder Leadership: The Synthesist Advantage</h3>
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;margin-top:0.75rem;">
+          <div>
+            <strong style="font-size:1.05rem;display:block;">Zak (EXEC-01) &mdash; Sovereign Founder &amp; Architect</strong>
+            <p style="font-size:0.86rem;color:var(--text-secondary);margin:0.25rem 0 0.5rem;">
+              Electronic Engineering background synthesized with advanced multi-agent systems, UX design systems, and spatial 3D graphics.
+            </p>
+            <span style="font-size:0.8rem;color:var(--text-muted);">
+              Official Repository: <a href="https://github.com/zakshub/prode" target="_blank" style="color:var(--accent-primary);">github.com/zakshub/prode</a> &bull; Execution Twin: ZaxterLab
+            </span>
+          </div>
+          <button type="button" class="btn" onclick="closePitchModal()" style="padding:0.5rem 1rem;">Done Reviewing</button>
+        </div>
+      </div>
+
     </div>
   </div>
 
