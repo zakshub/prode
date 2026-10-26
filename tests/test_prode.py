@@ -253,6 +253,32 @@ class TestProdeCompanyOS(unittest.TestCase):
             vault = self.db.get_knowledge_vault()
             self.assertTrue(any(v["id"] == res["artifact_id"] for v in vault))
 
+    def test_12_hardware_telemetry_and_digital_twin(self):
+        # 1. Nominal telemetry check
+        telem = self.engine.get_hardware_telemetry()
+        self.assertEqual(telem["device_id"], "PRODE-ESP32-S3-01")
+        self.assertEqual(telem["status"], "NOMINAL")
+        self.assertAlmostEqual(telem["core_temp_c"], 38.4, places=1)
+
+        # 2. Trigger thermal spike
+        spike = self.engine.set_hardware_telemetry_mode("THERMAL_SPIKE")
+        self.assertEqual(spike["status"], "THERMAL_ALERT")
+        self.assertGreater(spike["core_temp_c"], 70.0)
+
+        # 3. Trigger vibration anomaly
+        vib = self.engine.set_hardware_telemetry_mode("VIBRATION_ANOMALY")
+        self.assertEqual(vib["status"], "IMU_EXCURSION")
+        self.assertGreater(vib["vibration_freq_hz"], 50.0)
+
+        # 4. Trigger deep sleep
+        sleep = self.engine.set_hardware_telemetry_mode("DEEP_SLEEP")
+        self.assertEqual(sleep["status"], "LOW_POWER_SLEEP")
+        self.assertLess(sleep["current_draw_ma"], 1.0)
+
+        # 5. Invalid mode rejection
+        with self.assertRaises(ValueError):
+            self.engine.set_hardware_telemetry_mode("INVALID_MODE")
+
 
 if __name__ == "__main__":
     unittest.main()

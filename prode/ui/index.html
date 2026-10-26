@@ -547,6 +547,80 @@
             </div>
           </div>
         </div>
+
+        <!-- Live Hardware Telemetry & Edge Simulator Strip -->
+        <div style="margin-top:1.5rem;padding-top:1.25rem;border-top:1px solid var(--border-color);">
+          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.75rem;margin-bottom:0.75rem;">
+            <div>
+              <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
+                <span class="pill pill-success" id="hw-status-pill">● EDGE CONNECTED (ESP32-S3)</span>
+                <span style="font-size:0.78rem;color:var(--text-muted);font-family:monospace;">FIRMWARE: v2.4.1-RTOS &bull; MQTT 20Hz &bull; MESH ID: #04</span>
+              </div>
+              <strong style="font-size:1.05rem;display:block;margin-top:0.35rem;">
+                Live Cyber-Physical Telemetry &amp; Anomaly Simulator
+              </strong>
+            </div>
+
+            <!-- Simulation Trigger Buttons -->
+            <div style="display:flex;gap:0.4rem;flex-wrap:wrap;">
+              <button type="button" class="btn" id="btn-sim-nominal" onclick="triggerHardwareSim('NOMINAL')" style="font-size:0.78rem;padding:0.4rem 0.75rem;background:#059669;color:#FFF;">
+                ✓ Normal Mode
+              </button>
+              <button type="button" class="btn btn-secondary" id="btn-sim-heat" onclick="triggerHardwareSim('THERMAL_SPIKE')" style="font-size:0.78rem;padding:0.4rem 0.75rem;">
+                🔥 Thermal Spike (78&deg;C)
+              </button>
+              <button type="button" class="btn btn-secondary" id="btn-sim-vib" onclick="triggerHardwareSim('VIBRATION_ANOMALY')" style="font-size:0.78rem;padding:0.4rem 0.75rem;">
+                ⚠️ Vibration Alert (85Hz)
+              </button>
+              <button type="button" class="btn btn-secondary" id="btn-sim-sleep" onclick="triggerHardwareSim('DEEP_SLEEP')" style="font-size:0.78rem;padding:0.4rem 0.75rem;">
+                🌙 Deep Sleep (&lt;10&mu;A)
+              </button>
+            </div>
+          </div>
+
+          <!-- 4 Telemetry Metrics Cards -->
+          <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));gap:0.75rem;margin-bottom:1rem;">
+            <div style="background:var(--bg-canvas);border:1px solid var(--border-color);border-radius:6px;padding:0.75rem;">
+              <span style="font-size:0.72rem;color:var(--text-muted);display:block;font-weight:600;">CORE TEMPERATURE</span>
+              <strong id="telem-temp" style="font-size:1.35rem;color:var(--text-primary);font-family:monospace;">38.4 &deg;C</strong>
+              <div style="font-size:0.72rem;color:#059669;margin-top:2px;" id="telem-temp-status">Safe (Under 65&deg;C)</div>
+            </div>
+
+            <div style="background:var(--bg-canvas);border:1px solid var(--border-color);border-radius:6px;padding:0.75rem;">
+              <span style="font-size:0.72rem;color:var(--text-muted);display:block;font-weight:600;">IMU VIBRATION FREQ</span>
+              <strong id="telem-vib" style="font-size:1.35rem;color:var(--text-primary);font-family:monospace;">12.4 Hz</strong>
+              <div style="font-size:0.72rem;color:#059669;margin-top:2px;" id="telem-vib-status">Calm Harmonics</div>
+            </div>
+
+            <div style="background:var(--bg-canvas);border:1px solid var(--border-color);border-radius:6px;padding:0.75rem;">
+              <span style="font-size:0.72rem;color:var(--text-muted);display:block;font-weight:600;">SUPPLY VOLTAGE &amp; CURRENT</span>
+              <strong id="telem-power" style="font-size:1.35rem;color:var(--text-primary);font-family:monospace;">3.92 V / 140 mA</strong>
+              <div style="font-size:0.72rem;color:#059669;margin-top:2px;" id="telem-power-status">LiPo Nominal</div>
+            </div>
+
+            <div style="background:var(--bg-canvas);border:1px solid var(--border-color);border-radius:6px;padding:0.75rem;">
+              <span style="font-size:0.72rem;color:var(--text-muted);display:block;font-weight:600;">WIRELESS RSSI &amp; MESH</span>
+              <strong id="telem-rssi" style="font-size:1.35rem;color:var(--text-primary);font-family:monospace;">-58 dBm</strong>
+              <div style="font-size:0.72rem;color:#059669;margin-top:2px;" id="telem-rssi-status">Strong 2.4 GHz Link</div>
+            </div>
+          </div>
+
+          <!-- Real-Time Sparkline Waveform Canvas -->
+          <div style="background:#050914;border:1px solid #1E293B;border-radius:6px;padding:0.6rem 0.85rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;">
+            <div style="font-size:0.72rem;color:#94A3B8;font-family:monospace;white-space:nowrap;">
+              STREAM: <span id="telem-stream-packet" style="color:#38BDF8;">PKT #1043 &bull; 20 Hz</span>
+            </div>
+            <canvas id="telemetry-waveform-canvas" width="450" height="34" style="flex:1;min-width:200px;max-width:550px;height:34px;display:block;border-radius:4px;background:#030712;"></canvas>
+            <div style="font-size:0.72rem;color:#10B981;font-family:monospace;white-space:nowrap;" id="telem-state-badge">
+              ● REAL-TIME SYNC
+            </div>
+          </div>
+
+          <!-- Plain English Explainer -->
+          <p style="font-size:0.83rem;color:var(--text-secondary);margin:0.75rem 0 0;line-height:1.45;">
+            <strong>💡 What this demonstrates:</strong> This is a real-time <em>Digital Twin</em>. If a physical sensor in a factory, medical device, or drone shakes too violently or overheats, our software instantly reflects it in 3D, highlights the fault, and warns operators before physical damage occurs.
+          </p>
+        </div>
       </div>
 
       <!-- Interactive Estimator & Inquiry Form -->
@@ -1287,6 +1361,9 @@
     let currentLighting = 'neon';
     let frameCount3D = 0, lastFpsTime = performance.now();
     let isFallbackCanvas = false, fallbackCanvas = null, fallbackCtx = null;
+    let HARDWARE_SIM_MODE = "NOMINAL";
+    let telemPacketSeq = 1043;
+    let telemLastPktTime = 0;
 
     function initOrResume3DShowcase() {
       threeRunning = true;
@@ -1479,21 +1556,63 @@
 
       updateCameraPosition();
 
-      // Rotate crystal core and pulsing cage
-      if (diamondMesh) diamondMesh.rotation.y += 0.02;
-      if (cageMesh) {
-        cageMesh.rotation.y -= 0.015;
-        cageMesh.rotation.x += 0.01;
+      // Mechanical Jitter Simulation on Anomaly
+      if (puckGroup) {
+        if (HARDWARE_SIM_MODE === "VIBRATION_ANOMALY") {
+          puckGroup.position.x = (Math.random() - 0.5) * 0.08;
+          puckGroup.position.z = (Math.random() - 0.5) * 0.08;
+        } else {
+          puckGroup.position.x = 0;
+          puckGroup.position.z = 0;
+        }
       }
 
-      // Pulse LEDs
-      const t = timestamp * 0.004;
+      // Rotate crystal core and pulsing cage
+      const spinSpeed = HARDWARE_SIM_MODE === 'DEEP_SLEEP' ? 0.003 : 0.02;
+      if (diamondMesh) diamondMesh.rotation.y += spinSpeed;
+      if (cageMesh) {
+        cageMesh.rotation.y -= spinSpeed * 0.8;
+        cageMesh.rotation.x += spinSpeed * 0.5;
+      }
+
+      // Pulse LEDs & Dynamic Color States based on Hardware Simulator
+      const ledSpeed = HARDWARE_SIM_MODE === 'DEEP_SLEEP' ? 0.001 : HARDWARE_SIM_MODE === 'VIBRATION_ANOMALY' ? 0.016 : 0.004;
+      const t = timestamp * ledSpeed;
       ledNodes.forEach((item, idx) => {
         const intensity = (Math.sin(t + idx * 0.8) + 1) * 0.5;
         if (item.mesh.material && item.mesh.scale) {
           item.mesh.scale.setScalar(0.8 + intensity * 0.5);
+          if (HARDWARE_SIM_MODE === 'THERMAL_SPIKE') {
+            item.mesh.material.color.setHex(0xEF4444); // Crimson Strobe
+          } else if (HARDWARE_SIM_MODE === 'VIBRATION_ANOMALY') {
+            item.mesh.material.color.setHex(0xF59E0B); // Amber Warning
+          } else if (HARDWARE_SIM_MODE === 'DEEP_SLEEP') {
+            item.mesh.material.color.setHex(0x3B82F6); // Low-power blue
+          } else {
+            item.mesh.material.color.setHex(0x10B981); // Emerald Nominal
+          }
         }
       });
+
+      // Update crystal core emission for thermal/anomaly state
+      if (diamondMesh && diamondMesh.material) {
+        if (HARDWARE_SIM_MODE === 'THERMAL_SPIKE') {
+          diamondMesh.material.color.setHex(0xEF4444);
+          diamondMesh.material.emissive.setHex(0xB91C1C);
+        } else if (HARDWARE_SIM_MODE === 'VIBRATION_ANOMALY') {
+          diamondMesh.material.color.setHex(0xF59E0B);
+          diamondMesh.material.emissive.setHex(0xD97706);
+        } else if (HARDWARE_SIM_MODE === 'DEEP_SLEEP') {
+          diamondMesh.material.color.setHex(0x1E293B);
+          diamondMesh.material.emissive.setHex(0x0F172A);
+        } else {
+          diamondMesh.material.color.setHex(0x38BDF8);
+          diamondMesh.material.emissive.setHex(0x0284C7);
+        }
+      }
+
+      // Draw real-time streaming sparkline waveform
+      drawTelemetryWaveform(timestamp);
 
       threeRenderer.render(threeScene, threeCamera);
 
@@ -1684,6 +1803,132 @@
       ledNodes.forEach(item => {
         item.mesh.position.y = 0.18 + t * 0.25;
       });
+    }
+
+    async function triggerHardwareSim(mode) {
+      HARDWARE_SIM_MODE = mode;
+      
+      const btnNominal = document.getElementById("btn-sim-nominal");
+      const btnHeat = document.getElementById("btn-sim-heat");
+      const btnVib = document.getElementById("btn-sim-vib");
+      const btnSleep = document.getElementById("btn-sim-sleep");
+      
+      [btnNominal, btnHeat, btnVib, btnSleep].forEach(b => {
+        if (b) { b.classList.add("btn-secondary"); b.style.background = ""; b.style.color = ""; }
+      });
+
+      const pill = document.getElementById("hw-status-pill");
+      const tempEl = document.getElementById("telem-temp");
+      const tempStat = document.getElementById("telem-temp-status");
+      const vibEl = document.getElementById("telem-vib");
+      const vibStat = document.getElementById("telem-vib-status");
+      const pwrEl = document.getElementById("telem-power");
+      const pwrStat = document.getElementById("telem-power-status");
+      const rssiEl = document.getElementById("telem-rssi");
+      const rssiStat = document.getElementById("telem-rssi-status");
+      const badge = document.getElementById("telem-state-badge");
+
+      if (mode === "THERMAL_SPIKE") {
+        if (btnHeat) { btnHeat.classList.remove("btn-secondary"); btnHeat.style.background = "#DC2626"; btnHeat.style.color = "#FFF"; }
+        if (pill) { pill.className = "pill pill-warn"; pill.textContent = "⚠️ THERMAL SPIKE ALERT (78.4°C)"; }
+        if (tempEl) tempEl.textContent = "78.4 °C";
+        if (tempStat) { tempStat.textContent = "CRITICAL EXCURSION (>65°C)"; tempStat.style.color = "#DC2626"; }
+        if (vibEl) vibEl.textContent = "14.8 Hz";
+        if (vibStat) { vibStat.textContent = "Elevated Fan Resonances"; vibStat.style.color = "#D97706"; }
+        if (pwrEl) pwrEl.textContent = "3.86 V / 280 mA";
+        if (pwrStat) { pwrStat.textContent = "Thermal Throttling Active"; pwrStat.style.color = "#DC2626"; }
+        if (badge) { badge.textContent = "● THERMAL WARNING"; badge.style.color = "#DC2626"; }
+        showToast("🔥 Telemetry: Core thermal excursion detected (78.4°C)!");
+      } else if (mode === "VIBRATION_ANOMALY") {
+        if (btnVib) { btnVib.classList.remove("btn-secondary"); btnVib.style.background = "#D97706"; btnVib.style.color = "#FFF"; }
+        if (pill) { pill.className = "pill pill-warn"; pill.textContent = "⚠️ MECHANICAL VIBRATION ALERT"; }
+        if (tempEl) tempEl.textContent = "42.1 °C";
+        if (tempStat) { tempStat.textContent = "Acceptable (<65°C)"; tempStat.style.color = "#059669"; }
+        if (vibEl) vibEl.textContent = "86.2 Hz";
+        if (vibStat) { vibStat.textContent = "CRITICAL HARMONIC SPIKE"; vibStat.style.color = "#DC2626"; }
+        if (pwrEl) pwrEl.textContent = "3.89 V / 210 mA";
+        if (pwrStat) { pwrStat.textContent = "High IMU Sampling Rate"; pwrStat.style.color = "#D97706"; }
+        if (badge) { badge.textContent = "● IMU SPIKE ALERT"; badge.style.color = "#D97706"; }
+        showToast("⚠️ Telemetry: IMU vibration anomaly detected (86.2 Hz)!");
+      } else if (mode === "DEEP_SLEEP") {
+        if (btnSleep) { btnSleep.classList.remove("btn-secondary"); btnSleep.style.background = "#475569"; btnSleep.style.color = "#FFF"; }
+        if (pill) { pill.className = "pill pill-neutral"; pill.textContent = "🌙 LOW POWER DEEP SLEEP (<10µA)"; }
+        if (tempEl) tempEl.textContent = "24.5 °C";
+        if (tempStat) { tempStat.textContent = "Ambient Idle"; tempStat.style.color = "#64748B"; }
+        if (vibEl) vibEl.textContent = "0.2 Hz";
+        if (vibStat) { vibStat.textContent = "Sensor Dormant"; vibStat.style.color = "#64748B"; }
+        if (pwrEl) pwrEl.textContent = "3.75 V / 0.02 mA";
+        if (pwrStat) { pwrStat.textContent = "Sleep Invariant Maintained"; pwrStat.style.color = "#059669"; }
+        if (badge) { badge.textContent = "🌙 ULTRA LOW POWER"; badge.style.color = "#94A3B8"; }
+        showToast("🌙 Telemetry: Microcontroller entered low-power deep sleep.");
+      } else { // NOMINAL
+        if (btnNominal) { btnNominal.classList.remove("btn-secondary"); btnNominal.style.background = "#059669"; btnNominal.style.color = "#FFF"; }
+        if (pill) { pill.className = "pill pill-success"; pill.textContent = "● EDGE CONNECTED (ESP32-S3)"; }
+        if (tempEl) tempEl.textContent = "38.4 °C";
+        if (tempStat) { tempStat.textContent = "Safe (Under 65°C)"; tempStat.style.color = "#059669"; }
+        if (vibEl) vibEl.textContent = "12.4 Hz";
+        if (vibStat) { vibStat.textContent = "Calm Harmonics"; vibStat.style.color = "#059669"; }
+        if (pwrEl) pwrEl.textContent = "3.92 V / 140 mA";
+        if (pwrStat) { pwrStat.textContent = "LiPo Nominal"; pwrStat.style.color = "#059669"; }
+        if (badge) { badge.textContent = "● REAL-TIME SYNC"; badge.style.color = "#10B981"; }
+        showToast("✓ Telemetry: Normal operational parameters restored.");
+      }
+
+      try {
+        await fetch("/api/hardware/telemetry", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ mode })
+        });
+      } catch (err) {
+        // Safe offline fallback
+      }
+    }
+
+    function drawTelemetryWaveform(timestamp) {
+      const canvas = document.getElementById("telemetry-waveform-canvas");
+      if (!canvas) return;
+      const ctx = canvas.getContext("2d");
+      const w = canvas.width;
+      const h = canvas.height;
+
+      ctx.fillStyle = "#030712";
+      ctx.fillRect(0, 0, w, h);
+
+      // Packet counter HUD
+      if (timestamp - telemLastPktTime >= 50) {
+        telemPacketSeq++;
+        telemLastPktTime = timestamp;
+        const pktEl = document.getElementById("telem-stream-packet");
+        if (pktEl) pktEl.textContent = `PKT #${telemPacketSeq} • 20 Hz`;
+      }
+
+      ctx.beginPath();
+      const t = timestamp * 0.005;
+
+      let strokeColor = "#38BDF8";
+      if (HARDWARE_SIM_MODE === "THERMAL_SPIKE") strokeColor = "#EF4444";
+      else if (HARDWARE_SIM_MODE === "VIBRATION_ANOMALY") strokeColor = "#F59E0B";
+      else if (HARDWARE_SIM_MODE === "DEEP_SLEEP") strokeColor = "#475569";
+
+      ctx.strokeStyle = strokeColor;
+      ctx.lineWidth = 1.8;
+
+      for (let x = 0; x < w; x += 3) {
+        let y = h / 2;
+        if (HARDWARE_SIM_MODE === "VIBRATION_ANOMALY") {
+          y += Math.sin(x * 0.2 + t * 4) * 11 + (Math.sin(x * 0.05 + t * 2) * 4) + (Math.random() - 0.5) * 5;
+        } else if (HARDWARE_SIM_MODE === "THERMAL_SPIKE") {
+          y += Math.sin(x * 0.08 + t * 2) * 10 + Math.cos(x * 0.03 + t) * 4;
+        } else if (HARDWARE_SIM_MODE === "DEEP_SLEEP") {
+          y += (Math.random() - 0.5) * 1.5;
+        } else {
+          y += Math.sin(x * 0.1 + t) * 7;
+        }
+        if (x === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.stroke();
     }
 
     // Standalone HTML5 Canvas Fallback (if Three.js is blocked or offline)

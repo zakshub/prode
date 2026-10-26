@@ -831,3 +831,69 @@ export default function HomePage() {{
             "knowledge_vault": vault,
             "audit_log": audit,
         }
+
+    # ------------------------------------------------------------------
+    # 8. Cyber-Physical & IoT Edge Telemetry Engine (CPE-01 / CPE-02)
+    # ------------------------------------------------------------------
+    _hardware_mode = "NOMINAL"
+    _packet_seq = 1024
+
+    def get_hardware_telemetry(self) -> Dict[str, Any]:
+        ProdeEngine._packet_seq += 1
+        mode = ProdeEngine._hardware_mode
+        if mode == "THERMAL_SPIKE":
+            temp = 78.4
+            vib = 14.8
+            volt = 3.86
+            curr = 280.0
+            rssi = -64
+            status = "THERMAL_ALERT"
+        elif mode == "VIBRATION_ANOMALY":
+            temp = 42.1
+            vib = 86.2
+            volt = 3.89
+            curr = 210.0
+            rssi = -61
+            status = "IMU_EXCURSION"
+        elif mode == "DEEP_SLEEP":
+            temp = 24.5
+            vib = 0.2
+            volt = 3.75
+            curr = 0.02
+            rssi = -78
+            status = "LOW_POWER_SLEEP"
+        else:  # NOMINAL
+            temp = 38.4
+            vib = 12.4
+            volt = 3.92
+            curr = 140.0
+            rssi = -58
+            status = "NOMINAL"
+
+        return {
+            "device_id": "PRODE-ESP32-S3-01",
+            "firmware_version": "v2.4.1-RTOS",
+            "packet_seq": ProdeEngine._packet_seq,
+            "mode": mode,
+            "status": status,
+            "core_temp_c": temp,
+            "vibration_freq_hz": vib,
+            "supply_voltage_v": volt,
+            "current_draw_ma": curr,
+            "wifi_rssi_dbm": rssi,
+            "telemetry_rate_hz": 20,
+        }
+
+    def set_hardware_telemetry_mode(self, mode: str) -> Dict[str, Any]:
+        allowed = {"NOMINAL", "THERMAL_SPIKE", "VIBRATION_ANOMALY", "DEEP_SLEEP"}
+        m_up = mode.upper()
+        if m_up not in allowed:
+            raise ValueError(f"Invalid hardware mode '{mode}'. Allowed: {', '.join(allowed)}")
+        ProdeEngine._hardware_mode = m_up
+        self.db.log_event(
+            actor="CPE-01 (Embedded Systems Lead)",
+            action="HARDWARE_SIMULATION_TRIGGERED",
+            target_id="PRODE-ESP32-S3-01",
+            details=f"Hardware operating condition set to {m_up}.",
+        )
+        return self.get_hardware_telemetry()

@@ -321,8 +321,39 @@ function cmdServe(port = 8080) {
       res.end(JSON.stringify(obj, null, 2));
     };
 
+    let nodePacketSeq = 1042;
+    let nodeHardwareMode = "NOMINAL";
+    const getTelemetryData = () => {
+      nodePacketSeq++;
+      let temp = 38.4, vib = 12.4, volt = 3.92, curr = 140, rssi = -58, status = "NOMINAL";
+      if (nodeHardwareMode === "THERMAL_SPIKE") {
+        temp = 78.4; vib = 14.8; volt = 3.86; curr = 280; rssi = -64; status = "THERMAL_ALERT";
+      } else if (nodeHardwareMode === "VIBRATION_ANOMALY") {
+        temp = 42.1; vib = 86.2; volt = 3.89; curr = 210; rssi = -61; status = "IMU_EXCURSION";
+      } else if (nodeHardwareMode === "DEEP_SLEEP") {
+        temp = 24.5; vib = 0.2; volt = 3.75; curr = 0.02; rssi = -78; status = "LOW_POWER_SLEEP";
+      }
+      return {
+        device_id: "PRODE-ESP32-S3-01",
+        firmware_version: "v2.4.1-RTOS",
+        packet_seq: nodePacketSeq,
+        mode: nodeHardwareMode,
+        status,
+        core_temp_c: temp,
+        vibration_freq_hz: vib,
+        supply_voltage_v: volt,
+        current_draw_ma: curr,
+        wifi_rssi_dbm: rssi,
+        telemetry_rate_hz: 20
+      };
+    };
+
     if (req.method === "GET" && url.pathname === "/api/dashboard") {
       return sendJson(200, buildDashboardSummary(loadState()));
+    }
+
+    if (req.method === "GET" && url.pathname === "/api/hardware/telemetry") {
+      return sendJson(200, getTelemetryData());
     }
 
     if (req.method === "POST") {
@@ -573,6 +604,11 @@ ${clientName} is partnering with PRODE to design and engineer a production-ready
             passed,
             recommendation: passed ? "APPROVED_FOR_V5_SAAS_SPINOUT" : "KEEP_AS_CLIENT_MODULE",
           });
+        }
+
+        if (url.pathname === "/api/hardware/telemetry") {
+          nodeHardwareMode = (body.mode || "NOMINAL").toUpperCase();
+          return sendJson(200, getTelemetryData());
         }
 
         return sendJson(404, { error: "Not found" });

@@ -44,6 +44,8 @@ def dispatch_api_request(
                 return 200, {"knowledge_vault": engine.db.get_knowledge_vault()}
             if path == "/api/approvals":
                 return 200, {"approvals": engine.db.get_approvals()}
+            if path == "/api/hardware/telemetry":
+                return 200, engine.get_hardware_telemetry()
 
         elif method == "POST":
             if path == "/api/roles/toggle":
@@ -137,6 +139,10 @@ def dispatch_api_request(
                     external_debt_usd=float(body.get("external_debt_usd", 0.0)),
                     has_direct_distribution=bool(body.get("has_direct_distribution", True)),
                 )
+                return 200, res
+            if path == "/api/hardware/telemetry":
+                mode = body.get("mode", "NOMINAL")
+                res = engine.set_hardware_telemetry_mode(mode)
                 return 200, res
 
         return 404, {"error": f"Route not found: {method} {path}"}
