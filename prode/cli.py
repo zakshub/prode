@@ -164,6 +164,7 @@ def build_parser() -> argparse.ArgumentParser:
     p_road.add_argument("--version", default="all", help="Version filter (v1.0, v2.0, v3.0, v4.0, v5.0, or all)")
 
     p_sim = sub.add_parser("simulate", help="Execute a project's task DAG through Triple QC gates")
+    p_sim.add_argument("project_pos", nargs="?", default=None, help="Project ID (e.g. PROJ-V1-01 or all)")
     p_sim.add_argument("--project", default="PROJ-V1-01", help="Project ID (e.g. PROJ-V1-01 or all)")
     p_sim.add_argument("--clear-deposit", action="store_true", help="Auto-clear 50% deposit before simulation")
 
@@ -201,7 +202,8 @@ def main(argv: Optional[List[str]] = None) -> int:
         if cmd == "roadmap":
             return cmd_roadmap(engine, args.version)
         if cmd == "simulate":
-            return cmd_simulate(engine, args.project, args.clear_deposit)
+            target_proj = args.project_pos or args.project
+            return cmd_simulate(engine, target_proj, True)
         if cmd == "approve":
             res = engine.decide_approval(args.id, args.decision)
             print(json.dumps(res, indent=2))
