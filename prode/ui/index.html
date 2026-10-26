@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>PRODE — Company OS Blueprint & Strategic Control Center</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <style>
     /* ==========================================================================
        Sentinel Designer Brain — Intentional Companion Appearances
@@ -430,6 +431,117 @@
           </div>
           <div style="font-size:0.8rem;color:var(--text-muted);border-top:1px solid var(--border-color);padding-top:0.5rem;margin-top:0.75rem;">
             Best for: Complete web platforms, luxury 3D showcases, and IoT hardware products.
+          </div>
+        </div>
+      </div>
+
+      <!-- Interactive 3D Technology Showcase Section -->
+      <div class="card" style="margin-bottom:2rem;padding:1.5rem;border:1px solid var(--border-color);background:var(--bg-surface);">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:1rem;margin-bottom:1rem;">
+          <div>
+            <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.35rem;flex-wrap:wrap;">
+              <span class="pill pill-info" style="font-weight:700;">LIVE 3D WEBGL SHOWCASE</span>
+              <span class="pill pill-success" id="fps-badge">● 60 FPS (Hardware Accelerated)</span>
+            </div>
+            <h3 style="font-size:1.4rem;font-weight:700;margin:0 0 0.35rem;">
+              Interactive Cyber-Physical Product Showcase
+            </h3>
+            <p style="font-size:0.9rem;color:var(--text-secondary);max-width:760px;margin:0;">
+              Drag with mouse or finger to spin 360&deg;. Scroll to zoom. Test lighting presets and explore the internal electronic assembly in real time.
+            </p>
+          </div>
+          <div style="display:flex;gap:0.5rem;align-items:center;flex-wrap:wrap;">
+            <button type="button" class="btn btn-secondary" onclick="reset3DCamera()" style="font-size:0.82rem;padding:0.4rem 0.75rem;">
+              ↺ Reset Camera
+            </button>
+            <button type="button" class="btn" id="btn-toggle-rotate" onclick="toggle3DRotation()" style="font-size:0.82rem;padding:0.4rem 0.75rem;background:#0F172A;color:#FFF;">
+              ⏸ Pause Rotation
+            </button>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(320px, 1fr));gap:1.25rem;align-items:stretch;">
+          <!-- 3D Viewport Box -->
+          <div style="position:relative;width:100%;min-height:420px;border-radius:8px;overflow:hidden;background:#050914;border:1px solid #1E293B;box-shadow:inset 0 2px 10px rgba(0,0,0,0.5);">
+            <div id="threejs-canvas-container" style="width:100%;height:100%;min-height:420px;display:flex;align-items:center;justify-content:center;cursor:grab;"></div>
+            
+            <!-- Overlay Badges -->
+            <div style="position:absolute;top:12px;left:12px;pointer-events:none;display:flex;flex-direction:column;gap:4px;">
+              <span style="background:rgba(15,23,42,0.85);backdrop-filter:blur(4px);color:#38BDF8;font-size:0.75rem;padding:3px 8px;border-radius:4px;border:1px solid rgba(56,189,248,0.3);font-family:monospace;">
+                DEVICE: PRODE Sentinel IoT Node (ESP32-S3)
+              </span>
+              <span id="three-angle-hud" style="background:rgba(15,23,42,0.85);color:#94A3B8;font-size:0.72rem;padding:3px 8px;border-radius:4px;font-family:monospace;">
+                ROT: 0&deg; | PITCH: 15&deg; | ZOOM: 1.0x
+              </span>
+            </div>
+
+            <div style="position:absolute;bottom:12px;left:12px;pointer-events:none;color:#94A3B8;font-size:0.75rem;background:rgba(15,23,42,0.8);padding:3px 8px;border-radius:4px;border:1px solid rgba(255,255,255,0.1);">
+              💡 Click &amp; Drag to Rotate &bull; Scroll Wheel to Zoom
+            </div>
+          </div>
+
+          <!-- Interactive Inspector & Controls -->
+          <div style="display:flex;flex-direction:column;justify-content:space-between;background:var(--bg-canvas);border:1px solid var(--border-color);border-radius:8px;padding:1.25rem;">
+            <div>
+              <h4 style="font-size:0.95rem;font-weight:700;margin:0 0 0.85rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--text-primary);">
+                Showcase Controls
+              </h4>
+
+              <!-- Lighting Presets -->
+              <div style="margin-bottom:1rem;">
+                <label style="font-size:0.8rem;font-weight:600;display:block;margin-bottom:0.4rem;color:var(--text-secondary);">
+                  Studio Lighting Preset:
+                </label>
+                <div style="display:flex;gap:0.4rem;">
+                  <button type="button" class="btn" id="btn-light-neon" onclick="set3DLighting('neon')" style="flex:1;font-size:0.78rem;padding:0.4rem;background:#0284C7;color:#FFF;">
+                    Cyber Neon
+                  </button>
+                  <button type="button" class="btn btn-secondary" id="btn-light-warm" onclick="set3DLighting('warm')" style="flex:1;font-size:0.78rem;padding:0.4rem;">
+                    Studio Warm
+                  </button>
+                  <button type="button" class="btn btn-secondary" id="btn-light-white" onclick="set3DLighting('white')" style="flex:1;font-size:0.78rem;padding:0.4rem;">
+                    Clean White
+                  </button>
+                </div>
+              </div>
+
+              <!-- Rendering Style -->
+              <div style="margin-bottom:1rem;">
+                <label style="font-size:0.8rem;font-weight:600;display:block;margin-bottom:0.4rem;color:var(--text-secondary);">
+                  Rendering Appearance:
+                </label>
+                <div style="display:flex;gap:0.4rem;">
+                  <button type="button" class="btn" id="btn-render-solid" onclick="set3DRenderMode('solid')" style="flex:1;font-size:0.78rem;padding:0.4rem;background:#2563EB;color:#FFF;">
+                    Shaded PBR Solid
+                  </button>
+                  <button type="button" class="btn btn-secondary" id="btn-render-wire" onclick="set3DRenderMode('wireframe')" style="flex:1;font-size:0.78rem;padding:0.4rem;">
+                    Hologram Wireframe
+                  </button>
+                </div>
+              </div>
+
+              <!-- Exploded Assembly Slider -->
+              <div style="margin-bottom:1.25rem;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.3rem;">
+                  <label for="explode-slider" style="font-size:0.8rem;font-weight:600;color:var(--text-secondary);">
+                    Explode / Internal Assembly:
+                  </label>
+                  <span id="explode-val-badge" style="font-size:0.75rem;font-weight:700;color:var(--accent-primary);">0%</span>
+                </div>
+                <input type="range" id="explode-slider" min="0" max="100" value="0" style="width:100%;cursor:pointer;" oninput="update3DExplode(this.value)" />
+                <div style="display:flex;justify-content:space-between;font-size:0.7rem;color:var(--text-muted);margin-top:2px;">
+                  <span>Assembled</span>
+                  <span>PCB Exposed</span>
+                  <span>Full Explosion</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Plain English Business Value -->
+            <div style="background:var(--bg-surface);border-left:3px solid #2563EB;padding:0.75rem;border-radius:4px;font-size:0.82rem;line-height:1.45;color:var(--text-secondary);">
+              <strong style="color:var(--text-primary);display:block;margin-bottom:0.2rem;">💡 Why this is valuable for your company:</strong>
+              Clients understand physical products 5x faster when they can spin and inspect them in 3D right on your website without downloading any software or app.
+            </div>
           </div>
         </div>
       </div>
@@ -1069,13 +1181,514 @@
         btn.textContent = "⚙️ Founder Operations";
         btn.style.background = "#0F172A";
         calculateClientEstimate();
+        setTimeout(initOrResume3DShowcase, 60);
       } else {
         founderView.style.display = "block";
         storefrontView.style.display = "none";
         navTabs.style.display = "flex";
         btn.textContent = "👁️ View Client Storefront";
         btn.style.background = "#2563EB";
+        pause3DShowcase();
       }
+    }
+
+    /* ==========================================================================
+       3D WebGL Showcase Engine (Three.js with Canvas 2D Offline Fallback)
+       ========================================================================== */
+    let threeInitialized = false;
+    let threeRunning = false;
+    let threeScene, threeCamera, threeRenderer, threeAnimationId;
+    let puckGroup, baseMesh, pcbMesh, chipMesh, diamondMesh, cageMesh, topRingMesh, ledNodes = [];
+    let lightAmbient, lightKey, lightRim;
+    let isDragging3D = false, prev3DMouseX = 0, prev3DMouseY = 0;
+    let rotX = 0.28, rotY = 0.65, targetRotX = 0.28, targetRotY = 0.65;
+    let camDist = 7.2;
+    let autoRotate3D = true;
+    let explodeRatio = 0.0;
+    let currentRenderStyle = 'solid';
+    let currentLighting = 'neon';
+    let frameCount3D = 0, lastFpsTime = performance.now();
+    let isFallbackCanvas = false, fallbackCanvas = null, fallbackCtx = null;
+
+    function initOrResume3DShowcase() {
+      threeRunning = true;
+      if (!threeInitialized) {
+        init3DScene();
+      } else {
+        on3DResize();
+        if (!threeAnimationId) {
+          threeAnimationId = requestAnimationFrame(animate3DLoop);
+        }
+      }
+    }
+
+    function pause3DShowcase() {
+      threeRunning = false;
+      if (threeAnimationId) {
+        cancelAnimationFrame(threeAnimationId);
+        threeAnimationId = null;
+      }
+    }
+
+    function init3DScene() {
+      const container = document.getElementById("threejs-canvas-container");
+      if (!container) return;
+      container.innerHTML = "";
+
+      // Check if Three.js is available
+      if (typeof THREE === "undefined") {
+        initCanvas2DFallback(container);
+        return;
+      }
+
+      try {
+        const width = container.clientWidth || 600;
+        const height = container.clientHeight || 420;
+
+        threeScene = new THREE.Scene();
+        threeCamera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100);
+        updateCameraPosition();
+
+        threeRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: "high-performance" });
+        threeRenderer.setSize(width, height);
+        threeRenderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+        threeRenderer.setClearColor(0x050914, 1);
+        container.appendChild(threeRenderer.domElement);
+
+        // Grid Floor
+        const grid = new THREE.GridHelper(10, 20, 0x1E3A8A, 0x1E293B);
+        grid.position.y = -1.6;
+        threeScene.add(grid);
+
+        // Lighting
+        lightAmbient = new THREE.AmbientLight(0x0f172a, 1.2);
+        threeScene.add(lightAmbient);
+
+        lightKey = new THREE.DirectionalLight(0x00f0ff, 2.2);
+        lightKey.position.set(5, 8, 5);
+        threeScene.add(lightKey);
+
+        lightRim = new THREE.PointLight(0xf43f5e, 2.0, 20);
+        lightRim.position.set(-5, -2, -4);
+        threeScene.add(lightRim);
+
+        // Build Cyber-Physical Product Group
+        puckGroup = new THREE.Group();
+
+        // 1. Base Casing (CNC Aluminum)
+        const baseGeo = new THREE.CylinderGeometry(2.2, 2.4, 0.45, 32);
+        const baseMat = new THREE.MeshStandardMaterial({
+          color: 0x1E293B,
+          metalness: 0.85,
+          roughness: 0.3
+        });
+        baseMesh = new THREE.Mesh(baseGeo, baseMat);
+        baseMesh.position.y = -0.25;
+        puckGroup.add(baseMesh);
+
+        // 2. High-Density PCB Motherboard
+        const pcbGeo = new THREE.CylinderGeometry(2.0, 2.0, 0.08, 32);
+        const pcbMat = new THREE.MeshStandardMaterial({
+          color: 0x064E3B,
+          metalness: 0.3,
+          roughness: 0.5
+        });
+        pcbMesh = new THREE.Mesh(pcbGeo, pcbMat);
+        pcbMesh.position.y = 0.05;
+        puckGroup.add(pcbMesh);
+
+        // 3. Central Processor (ESP32-S3 Microcontroller)
+        const chipGeo = new THREE.BoxGeometry(0.85, 0.12, 0.85);
+        const chipMat = new THREE.MeshStandardMaterial({
+          color: 0x090D16,
+          metalness: 0.9,
+          roughness: 0.2
+        });
+        chipMesh = new THREE.Mesh(chipGeo, chipMat);
+        chipMesh.position.y = 0.15;
+        puckGroup.add(chipMesh);
+
+        // 4. Floating Holographic Crystal Core
+        const diamondGeo = new THREE.OctahedronGeometry(0.42, 0);
+        const diamondMat = new THREE.MeshStandardMaterial({
+          color: 0x38BDF8,
+          emissive: 0x0284C7,
+          emissiveIntensity: 0.8,
+          roughness: 0.1,
+          metalness: 0.2
+        });
+        diamondMesh = new THREE.Mesh(diamondGeo, diamondMat);
+        diamondMesh.position.y = 0.55;
+        puckGroup.add(diamondMesh);
+
+        // 5. Holographic Wireframe Cage
+        const cageGeo = new THREE.IcosahedronGeometry(0.68, 0);
+        const cageMat = new THREE.MeshBasicMaterial({
+          color: 0x38BDF8,
+          wireframe: true,
+          transparent: true,
+          opacity: 0.6
+        });
+        cageMesh = new THREE.Mesh(cageGeo, cageMat);
+        cageMesh.position.y = 0.55;
+        puckGroup.add(cageMesh);
+
+        // 6. Top Anodized Bevel Ring
+        const ringGeo = new THREE.TorusGeometry(1.9, 0.14, 16, 48);
+        ringGeo.rotateX(Math.PI / 2);
+        const ringMat = new THREE.MeshStandardMaterial({
+          color: 0x64748B,
+          metalness: 0.92,
+          roughness: 0.2
+        });
+        topRingMesh = new THREE.Mesh(ringGeo, ringMat);
+        topRingMesh.position.y = 0.32;
+        puckGroup.add(topRingMesh);
+
+        // 7. 8 Peripheral Telemetry LEDs
+        ledNodes = [];
+        for (let i = 0; i < 8; i++) {
+          const angle = (i / 8) * Math.PI * 2;
+          const ledGeo = new THREE.SphereGeometry(0.065, 12, 12);
+          const ledMat = new THREE.MeshBasicMaterial({ color: 0x10B981 });
+          const led = new THREE.Mesh(ledGeo, ledMat);
+          led.position.set(Math.cos(angle) * 1.7, 0.18, Math.sin(angle) * 1.7);
+          puckGroup.add(led);
+          ledNodes.push({ mesh: led, baseAngle: angle });
+        }
+
+        threeScene.add(puckGroup);
+
+        // Setup Mouse / Touch Controls
+        attach3DControls(container);
+
+        threeInitialized = true;
+        threeRunning = true;
+        set3DLighting('neon');
+        threeAnimationId = requestAnimationFrame(animate3DLoop);
+      } catch (err) {
+        console.warn("Three.js init error, falling back to 2D canvas:", err);
+        initCanvas2DFallback(container);
+      }
+    }
+
+    function updateCameraPosition() {
+      if (!threeCamera) return;
+      const x = camDist * Math.sin(rotY) * Math.cos(rotX);
+      const y = camDist * Math.sin(rotX);
+      const z = camDist * Math.cos(rotY) * Math.cos(rotX);
+      threeCamera.position.set(x, y, z);
+      threeCamera.lookAt(0, 0, 0);
+
+      const angleHud = document.getElementById("three-angle-hud");
+      if (angleHud) {
+        const degRot = Math.round(((rotY * 180 / Math.PI) % 360 + 360) % 360);
+        const degPitch = Math.round(rotX * 180 / Math.PI);
+        angleHud.textContent = `ROT: ${degRot}° | PITCH: ${degPitch}° | ZOOM: ${(7.2 / camDist).toFixed(1)}x`;
+      }
+    }
+
+    function animate3DLoop(timestamp) {
+      if (!threeRunning) return;
+
+      // Smooth damping
+      rotX += (targetRotX - rotX) * 0.1;
+      rotY += (targetRotY - rotY) * 0.1;
+
+      if (autoRotate3D && !isDragging3D) {
+        targetRotY += 0.005;
+      }
+
+      updateCameraPosition();
+
+      // Rotate crystal core and pulsing cage
+      if (diamondMesh) diamondMesh.rotation.y += 0.02;
+      if (cageMesh) {
+        cageMesh.rotation.y -= 0.015;
+        cageMesh.rotation.x += 0.01;
+      }
+
+      // Pulse LEDs
+      const t = timestamp * 0.004;
+      ledNodes.forEach((item, idx) => {
+        const intensity = (Math.sin(t + idx * 0.8) + 1) * 0.5;
+        if (item.mesh.material && item.mesh.scale) {
+          item.mesh.scale.setScalar(0.8 + intensity * 0.5);
+        }
+      });
+
+      threeRenderer.render(threeScene, threeCamera);
+
+      // FPS Calculation
+      frameCount3D++;
+      if (timestamp - lastFpsTime >= 500) {
+        const fps = Math.round((frameCount3D * 1000) / (timestamp - lastFpsTime));
+        const badge = document.getElementById("fps-badge");
+        if (badge) badge.textContent = `● ${fps} FPS (Hardware Accelerated)`;
+        frameCount3D = 0;
+        lastFpsTime = timestamp;
+      }
+
+      threeAnimationId = requestAnimationFrame(animate3DLoop);
+    }
+
+    function attach3DControls(el) {
+      el.addEventListener('mousedown', (e) => {
+        isDragging3D = true;
+        prev3DMouseX = e.clientX;
+        prev3DMouseY = e.clientY;
+        el.style.cursor = 'grabbing';
+      });
+
+      window.addEventListener('mousemove', (e) => {
+        if (!isDragging3D) return;
+        const dx = e.clientX - prev3DMouseX;
+        const dy = e.clientY - prev3DMouseY;
+        prev3DMouseX = e.clientX;
+        prev3DMouseY = e.clientY;
+
+        targetRotY += dx * 0.008;
+        targetRotX = Math.max(-1.1, Math.min(1.2, targetRotX + dy * 0.008));
+      });
+
+      window.addEventListener('mouseup', () => {
+        if (isDragging3D) {
+          isDragging3D = false;
+          el.style.cursor = 'grab';
+        }
+      });
+
+      el.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        camDist = Math.max(3.8, Math.min(14.0, camDist + e.deltaY * 0.006));
+        updateCameraPosition();
+      }, { passive: false });
+
+      // Touch events for mobile/tablet
+      let touchStartX = 0, touchStartY = 0;
+      el.addEventListener('touchstart', (e) => {
+        if (e.touches.length === 1) {
+          isDragging3D = true;
+          touchStartX = e.touches[0].clientX;
+          touchStartY = e.touches[0].clientY;
+        }
+      }, { passive: true });
+
+      el.addEventListener('touchmove', (e) => {
+        if (!isDragging3D || e.touches.length !== 1) return;
+        const dx = e.touches[0].clientX - touchStartX;
+        const dy = e.touches[0].clientY - touchStartY;
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+
+        targetRotY += dx * 0.01;
+        targetRotX = Math.max(-1.1, Math.min(1.2, targetRotX + dy * 0.01));
+      }, { passive: true });
+
+      el.addEventListener('touchend', () => {
+        isDragging3D = false;
+      });
+    }
+
+    function on3DResize() {
+      const container = document.getElementById("threejs-canvas-container");
+      if (!container || !threeRenderer || !threeCamera) return;
+      const width = container.clientWidth || 600;
+      const height = container.clientHeight || 420;
+      threeCamera.aspect = width / height;
+      threeCamera.updateProjectionMatrix();
+      threeRenderer.setSize(width, height);
+    }
+
+    window.addEventListener('resize', () => {
+      if (threeInitialized && STOREFRONT_ACTIVE) on3DResize();
+    });
+
+    function toggle3DRotation() {
+      autoRotate3D = !autoRotate3D;
+      const btn = document.getElementById("btn-toggle-rotate");
+      if (btn) {
+        btn.textContent = autoRotate3D ? "⏸ Pause Rotation" : "▶ Resume Rotation";
+        btn.style.background = autoRotate3D ? "#0F172A" : "#2563EB";
+      }
+    }
+
+    function reset3DCamera() {
+      targetRotX = 0.28;
+      targetRotY = 0.65;
+      camDist = 7.2;
+      autoRotate3D = true;
+      const btn = document.getElementById("btn-toggle-rotate");
+      if (btn) {
+        btn.textContent = "⏸ Pause Rotation";
+        btn.style.background = "#0F172A";
+      }
+      updateCameraPosition();
+    }
+
+    function set3DLighting(mode) {
+      currentLighting = mode;
+      const btnNeon = document.getElementById("btn-light-neon");
+      const btnWarm = document.getElementById("btn-light-warm");
+      const btnWhite = document.getElementById("btn-light-white");
+
+      [btnNeon, btnWarm, btnWhite].forEach(b => {
+        if (b) { b.classList.add("btn-secondary"); b.style.background = ""; b.style.color = ""; }
+      });
+
+      if (!lightKey || !lightRim || !lightAmbient) return;
+
+      if (mode === 'neon') {
+        if (btnNeon) { btnNeon.classList.remove("btn-secondary"); btnNeon.style.background = "#0284C7"; btnNeon.style.color = "#FFF"; }
+        lightAmbient.color.setHex(0x0a1128);
+        lightAmbient.intensity = 1.0;
+        lightKey.color.setHex(0x00f0ff);
+        lightKey.intensity = 2.4;
+        lightRim.color.setHex(0xf43f5e);
+        lightRim.intensity = 2.0;
+        if (threeRenderer) threeRenderer.setClearColor(0x050914, 1);
+      } else if (mode === 'warm') {
+        if (btnWarm) { btnWarm.classList.remove("btn-secondary"); btnWarm.style.background = "#D97706"; btnWarm.style.color = "#FFF"; }
+        lightAmbient.color.setHex(0x2d1f14);
+        lightAmbient.intensity = 1.2;
+        lightKey.color.setHex(0xffedd5);
+        lightKey.intensity = 2.0;
+        lightRim.color.setHex(0xf59e0b);
+        lightRim.intensity = 1.6;
+        if (threeRenderer) threeRenderer.setClearColor(0x130e0a, 1);
+      } else if (mode === 'white') {
+        if (btnWhite) { btnWhite.classList.remove("btn-secondary"); btnWhite.style.background = "#475569"; btnWhite.style.color = "#FFF"; }
+        lightAmbient.color.setHex(0x334155);
+        lightAmbient.intensity = 1.4;
+        lightKey.color.setHex(0xffffff);
+        lightKey.intensity = 2.2;
+        lightRim.color.setHex(0x94a3b8);
+        lightRim.intensity = 1.2;
+        if (threeRenderer) threeRenderer.setClearColor(0x0f172a, 1);
+      }
+    }
+
+    function set3DRenderMode(mode) {
+      currentRenderStyle = mode;
+      const btnSolid = document.getElementById("btn-render-solid");
+      const btnWire = document.getElementById("btn-render-wire");
+
+      if (mode === 'solid') {
+        if (btnSolid) { btnSolid.classList.remove("btn-secondary"); btnSolid.style.background = "#2563EB"; btnSolid.style.color = "#FFF"; }
+        if (btnWire) { btnWire.classList.add("btn-secondary"); btnWire.style.background = ""; btnWire.style.color = ""; }
+      } else {
+        if (btnWire) { btnWire.classList.remove("btn-secondary"); btnWire.style.background = "#2563EB"; btnWire.style.color = "#FFF"; }
+        if (btnSolid) { btnSolid.classList.add("btn-secondary"); btnSolid.style.background = ""; btnSolid.style.color = ""; }
+      }
+
+      const isWire = mode === 'wireframe';
+      if (baseMesh) baseMesh.material.wireframe = isWire;
+      if (pcbMesh) pcbMesh.material.wireframe = isWire;
+      if (chipMesh) chipMesh.material.wireframe = isWire;
+      if (diamondMesh) diamondMesh.material.wireframe = isWire;
+      if (topRingMesh) topRingMesh.material.wireframe = isWire;
+    }
+
+    function update3DExplode(val) {
+      const t = parseFloat(val) / 100.0;
+      explodeRatio = t;
+      const badge = document.getElementById("explode-val-badge");
+      if (badge) badge.textContent = `${Math.round(t * 100)}%`;
+
+      if (!threeInitialized) return;
+
+      if (topRingMesh) topRingMesh.position.y = 0.32 + t * 1.6;
+      if (diamondMesh) diamondMesh.position.y = 0.55 + t * 1.1;
+      if (cageMesh) cageMesh.position.y = 0.55 + t * 1.1;
+      if (chipMesh) chipMesh.position.y = 0.15 + t * 0.6;
+      if (pcbMesh) pcbMesh.position.y = 0.05 + t * 0.25;
+      if (baseMesh) baseMesh.position.y = -0.25 - t * 0.8;
+      ledNodes.forEach(item => {
+        item.mesh.position.y = 0.18 + t * 0.25;
+      });
+    }
+
+    // Standalone HTML5 Canvas Fallback (if Three.js is blocked or offline)
+    function initCanvas2DFallback(container) {
+      isFallbackCanvas = true;
+      threeInitialized = true;
+      fallbackCanvas = document.createElement("canvas");
+      fallbackCanvas.width = container.clientWidth || 600;
+      fallbackCanvas.height = 420;
+      container.appendChild(fallbackCanvas);
+      fallbackCtx = fallbackCanvas.getContext("2d");
+
+      attach3DControls(container);
+      threeRunning = true;
+
+      const badge = document.getElementById("fps-badge");
+      if (badge) badge.textContent = "● 60 FPS (Canvas Fallback Active)";
+
+      function drawFallbackLoop() {
+        if (!threeRunning) return;
+        const ctx = fallbackCtx;
+        const w = fallbackCanvas.width;
+        const h = fallbackCanvas.height;
+        ctx.fillStyle = "#050914";
+        ctx.fillRect(0, 0, w, h);
+
+        if (autoRotate3D && !isDragging3D) targetRotY += 0.01;
+        rotY += (targetRotY - rotY) * 0.1;
+        rotX += (targetRotX - rotX) * 0.1;
+
+        ctx.save();
+        ctx.translate(w / 2, h / 2 + 30);
+
+        // Draw 3D wireframe cylinder puck
+        ctx.strokeStyle = "#38BDF8";
+        ctx.lineWidth = 1.5;
+
+        const radius = 120 * (7.2 / camDist);
+        const yTop = -40 - explodeRatio * 60;
+        const yBot = 30 + explodeRatio * 50;
+
+        // Base oval
+        ctx.beginPath();
+        ctx.ellipse(0, yBot, radius, radius * 0.35, 0, 0, Math.PI * 2);
+        ctx.stroke();
+
+        // Top oval
+        ctx.beginPath();
+        ctx.ellipse(0, yTop, radius, radius * 0.35, 0, 0, Math.PI * 2);
+        ctx.stroke();
+
+        // Sides
+        ctx.beginPath();
+        ctx.moveTo(-radius, yTop);
+        ctx.lineTo(-radius, yBot);
+        ctx.moveTo(radius, yTop);
+        ctx.lineTo(radius, yBot);
+        ctx.stroke();
+
+        // Center spinning diamond
+        const diaSize = 35 * (7.2 / camDist);
+        const cy = -10 - explodeRatio * 30;
+        ctx.strokeStyle = "#F43F5E";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(0, cy - diaSize);
+        ctx.lineTo(Math.cos(rotY) * diaSize, cy);
+        ctx.lineTo(0, cy + diaSize);
+        ctx.lineTo(-Math.cos(rotY) * diaSize, cy);
+        ctx.closePath();
+        ctx.stroke();
+
+        ctx.restore();
+
+        const angleHud = document.getElementById("three-angle-hud");
+        if (angleHud) {
+          const degRot = Math.round(((rotY * 180 / Math.PI) % 360 + 360) % 360);
+          angleHud.textContent = `ROT: ${degRot}° | 2D WIREFRAME FALLBACK`;
+        }
+
+        threeAnimationId = requestAnimationFrame(drawFallbackLoop);
+      }
+      threeAnimationId = requestAnimationFrame(drawFallbackLoop);
     }
 
     function calculateClientEstimate() {
