@@ -1,0 +1,39 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "PRODE_RoleTaxonomy",
+  "type": "object",
+  "properties": {
+    "version": { "type": "string" },
+    "last_updated": { "type": "string" },
+    "departments": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "head_of_department": { "type": "string" },
+          "roles": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": { "type": "string" },
+                "title": { "type": "string" },
+                "agent_archetype": { "type": "string" },
+                "permissions": {
+                  "type": "array",
+                  "items": { "type": "string" }
+                },
+                "governing_system": { "type": "string" }
+              },
+              "required": ["id", "title", "agent_archetype", "governing_system"]
+            }
+          }
+        },
+        "required": ["id", "name", "roles"]
+      }
+    }
+  },
+  "required": ["version", "departments"]
+}

@@ -1,0 +1,51 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "PRODE_ProjectManifest",
+  "type": "object",
+  "properties": {
+    "project_id": { "type": "string" },
+    "name": { "type": "string" },
+    "category": {
+      "type": "string",
+      "enum": ["client_custom_build", "productized_service", "proprietary_saas", "cyber_physical_prototype"]
+    },
+    "client": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "contact_email": { "type": "string" },
+        "sow_id": { "type": "string" }
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": ["lead", "sprint_zero", "active_engineering", "dual_qc", "released", "archived"]
+    },
+    "budget": {
+      "type": "object",
+      "properties": {
+        "total_contract_value": { "type": "number" },
+        "upfront_deposit_cleared": { "type": "boolean" },
+        "authorized_cloud_spend_limit": { "type": "number" }
+      },
+      "required": ["total_contract_value", "upfront_deposit_cleared"]
+    },
+    "governing_brains": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["designer", "studio", "codelift", "zaxterlab", "bob", "zedcu"]
+      }
+    },
+    "qc_status": {
+      "type": "object",
+      "properties": {
+        "codelift_ast_verified": { "type": "boolean" },
+        "forensic_reality_verified": { "type": "boolean" },
+        "human_owner_signed_off": { "type": "boolean" }
+      },
+      "required": ["codelift_ast_verified", "forensic_reality_verified", "human_owner_signed_off"]
+    }
+  },
+  "required": ["project_id", "name", "category", "status", "budget", "qc_status"]
+}
