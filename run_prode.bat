@@ -2,14 +2,6 @@
 REM ============================================================================
 REM PRODE Universal Windows Launcher
 REM Automatically detects Python (py / python) OR Node.js (node) on Windows!
-REM Usage:
-REM   run_prode.bat validate
-REM   run_prode.bat test
-REM   run_prode.bat status
-REM   run_prode.bat roles
-REM   run_prode.bat roadmap
-REM   run_prode.bat simulate all
-REM   run_prode.bat serve
 REM ============================================================================
 
 setlocal
@@ -33,18 +25,23 @@ if "%PY_CMD%"=="" (
     )
 )
 
+if /I "%~1"=="open" goto :direct_open
 if NOT "%PY_CMD%"=="" goto :use_python
 
 where node >nul 2>nul
-if %ERRORLEVEL% EQU 0 (
-    goto :use_node
-)
+if %ERRORLEVEL% EQU 0 goto :use_node
 
-echo [ERROR] Neither Python 3 nor Node.js was found in your Windows PATH.
-exit /b 1
+echo [INFO] Neither Python nor Node was found in PATH. Opening standalone UI directly...
+goto :direct_open
+
+:direct_open
+echo Opening PRODE Control Center directly in your default browser...
+start "" "%~dp0prode\ui\index.html"
+exit /b 0
 
 :use_python
 if "%~1"=="" goto :py_serve
+if /I "%~1"=="serve" goto :py_serve
 if /I "%~1"=="validate" (
     %PY_CMD% scripts\validate_workspace.py
     exit /b %ERRORLEVEL%
@@ -55,14 +52,18 @@ if /I "%~1"=="test" (
     %PY_CMD% -m unittest discover -s tests -v
     exit /b %ERRORLEVEL%
 )
-if /I "%~1"=="serve" goto :py_serve
 %PY_CMD% -m prode %*
 exit /b %ERRORLEVEL%
 
 :py_serve
-echo Starting PRODE Web Control Center (Python runtime) on http://127.0.0.1:8080 ...
+echo ==============================================================================
+echo  PRODE Control Center is starting!
+echo  URL: http://127.0.0.1:8080 or http://localhost:8080
+echo  NOTE: Keep this terminal window OPEN while using the browser dashboard.
+echo  Press Ctrl+C to stop the server when finished.
+echo ==============================================================================
 start "" http://127.0.0.1:8080
-%PY_CMD% -m prode serve --host 127.0.0.1 --port 8080
+%PY_CMD% -m prode serve --host 0.0.0.0 --port 8080
 exit /b %ERRORLEVEL%
 
 :use_node
@@ -72,7 +73,12 @@ node scripts\prode_node.mjs %*
 exit /b %ERRORLEVEL%
 
 :node_serve
-echo Starting PRODE Web Control Center (Node.js runtime) on http://127.0.0.1:8080 ...
+echo ==============================================================================
+echo  PRODE Control Center (Node.js engine) is starting!
+echo  URL: http://127.0.0.1:8080 or http://localhost:8080
+echo  NOTE: Keep this terminal window OPEN while using the browser dashboard.
+echo  Press Ctrl+C to stop the server when finished.
+echo ==============================================================================
 start "" http://127.0.0.1:8080
 node scripts\prode_node.mjs serve 8080
 exit /b %ERRORLEVEL%

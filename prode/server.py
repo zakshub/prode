@@ -97,7 +97,7 @@ def dispatch_api_request(
         return 400, {"error": str(exc)}
 
 
-def run_server(host: str = "127.0.0.1", port: int = 8080, db_path: str = DEFAULT_DB_PATH) -> None:
+def run_server(host: str = "0.0.0.0", port: int = 8080, db_path: str = DEFAULT_DB_PATH) -> None:
     db = ProdeDB(db_path=db_path)
     engine = ProdeEngine(db=db)
 

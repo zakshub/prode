@@ -173,7 +173,7 @@ def build_parser() -> argparse.ArgumentParser:
     p_app.add_argument("--decision", default="APPROVED", choices=["APPROVED", "REJECTED"])
 
     p_srv = sub.add_parser("serve", help="Start the local PRODE Web Control Center & API server")
-    p_srv.add_argument("--host", default="127.0.0.1", help="Bind host (default 127.0.0.1)")
+    p_srv.add_argument("--host", default="0.0.0.0", help="Bind host (default 0.0.0.0)")
     p_srv.add_argument("--port", type=int, default=8080, help="Bind port (default 8080)")
 
     sub.add_parser("export-schemas", help="Export full 69-role catalog to schemas/role_taxonomy.json")
