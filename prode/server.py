@@ -63,6 +63,28 @@ def dispatch_api_request(
             if path == "/api/approvals/decide":
                 ap = engine.decide_approval(body["approval_id"], body["decision"])
                 return 200, ap
+            if path == "/api/inquiry/submit":
+                now = engine.db.get_company_state().get("updated_at")
+                inq_id = f"INQ-{len(engine.db.get_approvals()) + 1:03d}"
+                client_name = body.get("name", "Prospective Client")
+                proj_type = body.get("project_type", "Sprint Zero")
+                est_cost = body.get("estimated_cost", "$5,000 - $15,000")
+                desc = body.get("description", "New product inquiry")
+                summary = f"New Client Inquiry from {client_name} for '{proj_type}' (Est: {est_cost}). Details: {desc}"
+                engine.db._conn.execute(
+                    """
+                    INSERT INTO approvals (id, approval_type, target_id, requested_by_role, summary, status, created_at)
+                    VALUES (?, ?, ?, ?, ?, ?, ?)
+                    """,
+                    (inq_id, "CLIENT_INQUIRY", inq_id, "MKT-06", summary, "PENDING", now),
+                )
+                engine.db.log_event(
+                    actor="MKT-06 (Sales Copilot)",
+                    action="CLIENT_INQUIRY_RECEIVED",
+                    target_id=inq_id,
+                    details=summary,
+                )
+                return 201, {"inquiry_id": inq_id, "status": "PENDING_OWNER_REVIEW", "summary": summary}
             if path == "/api/vault/create":
                 art = engine.create_vault_artifact(
                     artifact_type=body.get("artifact_type", "PRD"),

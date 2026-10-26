@@ -365,6 +365,30 @@ function cmdServe(port = 8080) {
           return sendJson(200, ap || {});
         }
 
+        if (url.pathname === "/api/inquiry/submit") {
+          const inqId = `INQ-${String(state.approvals.length + 1).padStart(3, "0")}`;
+          const clientName = body.name || "Prospective Client";
+          const projType = body.project_type || "Sprint Zero";
+          const estCost = body.estimated_cost || "$5,000 - $15,000";
+          const desc = body.description || "New client project";
+          const summary = `New Client Inquiry from ${clientName} for '${projType}' (Est: ${estCost}). Details: ${desc}`;
+          const inq = {
+            id: inqId,
+            approval_type: "CLIENT_INQUIRY",
+            target_id: inqId,
+            requested_by_role: "MKT-06",
+            summary,
+            status: "PENDING",
+            decided_by: null,
+            decided_at: null,
+            created_at: utcNow(),
+          };
+          state.approvals.unshift(inq);
+          logEvent(state, "MKT-06 (Sales Copilot)", "CLIENT_INQUIRY_RECEIVED", inqId, summary);
+          saveState(state);
+          return sendJson(201, { inquiry_id: inqId, status: "PENDING_OWNER_REVIEW", summary });
+        }
+
         if (url.pathname === "/api/vault/create") {
           const art = {
             id: `KV-${body.artifact_type}-${String(state.knowledge_vault.length + 1).padStart(3, "0")}`,

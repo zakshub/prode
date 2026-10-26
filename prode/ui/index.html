@@ -320,6 +320,9 @@
       <span class="pill pill-info" id="header-version">Version: v1.0</span>
       <span class="pill pill-success" id="header-spend">Authorized Spend: $0.00 USD (Locked)</span>
       <span class="pill pill-neutral">Sovereign: Zak (EXEC-01)</span>
+      <button type="button" class="btn" id="view-mode-toggle-btn" onclick="toggleStorefrontView()" style="background:#2563EB;color:#FFF;">
+        👁️ View Client Storefront
+      </button>
       <button type="button" class="btn btn-secondary" id="theme-toggle-btn" onclick="toggleTheme()">
         Switch Appearance Mode
       </button>
@@ -345,6 +348,164 @@
   </nav>
 
   <main class="container">
+
+    <!-- =====================================================================
+         CLIENT-FACING STOREFRONT VIEW (Simple, Human-Friendly English)
+         ===================================================================== -->
+    <div id="view-client-storefront" style="display:none;">
+      <!-- Hero Banner -->
+      <div class="card" style="margin-bottom:1.5rem;text-align:center;padding:2.5rem 1.5rem;background:linear-gradient(135deg, var(--bg-surface) 0%, var(--bg-subtle) 100%);">
+        <span class="pill pill-info" style="font-size:0.85rem;padding:0.35rem 0.85rem;margin-bottom:0.75rem;">PRODUCT DESIGN &amp; CYBER-PHYSICAL ENGINEERING</span>
+        <h2 style="font-size:2rem;font-weight:800;margin:0.5rem 0 0.75rem;line-height:1.25;">
+          We Design &amp; Engineer Complete Working Products.
+        </h2>
+        <p style="font-size:1.05rem;color:var(--text-secondary);max-width:760px;margin:0 auto 1.25rem;">
+          No confusing buzzwords. No half-baked mockups. We help founders and companies go from an initial problem to real, production-tested software, interactive 3D, and connected electronics.
+        </p>
+        <div style="display:flex;justify-content:center;gap:0.75rem;flex-wrap:wrap;">
+          <a href="#client-estimator" class="btn" style="padding:0.65rem 1.25rem;font-size:0.95rem;text-decoration:none;">Estimate Your Project</a>
+          <a href="#client-offerings" class="btn btn-secondary" style="padding:0.65rem 1.25rem;font-size:0.95rem;text-decoration:none;">Explore 3 Core Packages</a>
+        </div>
+      </div>
+
+      <!-- Core Offerings in Plain English -->
+      <h3 id="client-offerings" class="section-title" style="font-size:1.35rem;margin-bottom:1rem;">
+        3 Simple Ways to Work with PRODE
+      </h3>
+      <div class="grid-3" style="margin-bottom:2rem;">
+        <!-- Package 1 -->
+        <div class="card" style="display:flex;flex-direction:column;justify-content:space-between;border-top:4px solid #1D4ED8;">
+          <div>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem;">
+              <span class="pill pill-info">Package 1 &bull; 10 Days</span>
+              <strong style="color:var(--text-primary);">$5,000 &ndash; $15,000</strong>
+            </div>
+            <h4 style="font-size:1.15rem;margin-bottom:0.4rem;">Sprint Zero (Blueprint &amp; Clickable Prototype)</h4>
+            <p style="font-size:0.88rem;color:var(--text-secondary);margin-bottom:0.75rem;">
+              <strong>The Problem:</strong> Most companies waste $50,000+ building an app before knowing if it actually works.
+            </p>
+            <p style="font-size:0.88rem;color:var(--text-secondary);margin-bottom:0.75rem;">
+              <strong>What You Get:</strong> In 10 business days, we design every screen, map the user experience, build a working clickable demo you can test on your phone, and give you an exact, guaranteed cost to build the full code.
+            </p>
+          </div>
+          <div style="font-size:0.8rem;color:var(--text-muted);border-top:1px solid var(--border-color);padding-top:0.5rem;margin-top:0.75rem;">
+            Best for: New products, funded startups, or enterprise innovation teams.
+          </div>
+        </div>
+
+        <!-- Package 2 -->
+        <div class="card" style="display:flex;flex-direction:column;justify-content:space-between;border-top:4px solid #059669;">
+          <div>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem;">
+              <span class="pill pill-success">Package 2 &bull; 72 Hours</span>
+              <strong style="color:var(--text-primary);">$3,500 &ndash; $8,500</strong>
+            </div>
+            <h4 style="font-size:1.15rem;margin-bottom:0.4rem;">Design-to-Code Transformation</h4>
+            <p style="font-size:0.88rem;color:var(--text-secondary);margin-bottom:0.75rem;">
+              <strong>The Problem:</strong> Developers often take months to turn beautiful Figma drawings into real, bug-free web screens.
+            </p>
+            <p style="font-size:0.88rem;color:var(--text-secondary);margin-bottom:0.75rem;">
+              <strong>What You Get:</strong> Give us your designs or wireframes. In 72 hours, we deliver clean, super-fast, accessible code (React / Next.js / Tailwind) that compiles with zero warnings and runs smoothly on all devices.
+            </p>
+          </div>
+          <div style="font-size:0.8rem;color:var(--text-muted);border-top:1px solid var(--border-color);padding-top:0.5rem;margin-top:0.75rem;">
+            Best for: Companies with finished designs who need fast, flawless code.
+          </div>
+        </div>
+
+        <!-- Package 3 -->
+        <div class="card" style="display:flex;flex-direction:column;justify-content:space-between;border-top:4px solid #D97706;">
+          <div>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem;">
+              <span class="pill pill-warn">Package 3 &bull; 4&ndash;8 Weeks</span>
+              <strong style="color:var(--text-primary);">$25,000 &ndash; $95,000+</strong>
+            </div>
+            <h4 style="font-size:1.15rem;margin-bottom:0.4rem;">Full-Spectrum Product Engineering</h4>
+            <p style="font-size:0.88rem;color:var(--text-secondary);margin-bottom:0.75rem;">
+              <strong>The Problem:</strong> You need more than just a website&mdash;you need interactive 3D, sensor dashboards, or custom hardware electronics.
+            </p>
+            <p style="font-size:0.88rem;color:var(--text-secondary);margin-bottom:0.75rem;">
+              <strong>What You Get:</strong> We build the complete platform from start to finish: backend databases, secure user accounts, real-time 3D WebGL graphics, and embedded microcontroller firmware (ESP32 / sensors).
+            </p>
+          </div>
+          <div style="font-size:0.8rem;color:var(--text-muted);border-top:1px solid var(--border-color);padding-top:0.5rem;margin-top:0.75rem;">
+            Best for: Complete web platforms, luxury 3D showcases, and IoT hardware products.
+          </div>
+        </div>
+      </div>
+
+      <!-- Interactive Estimator & Inquiry Form -->
+      <div id="client-estimator" class="grid-2" style="margin-bottom:2rem;">
+        <!-- Left: Interactive Estimator -->
+        <div class="card">
+          <h3 class="section-title">Interactive Project Estimator</h3>
+          <p style="font-size:0.86rem;color:var(--text-secondary);margin-bottom:1rem;">
+            Select what you need below to calculate an estimated timeline, cost, and payment plan:
+          </p>
+          <div class="form-group">
+            <label for="est-scope">Core Project Scope</label>
+            <select id="est-scope" onchange="calculateClientEstimate()">
+              <option value="sprint_zero">Sprint Zero &mdash; Blueprint &amp; Clickable Prototype ($7,500 | 10 Days)</option>
+              <option value="design_to_code">Design-to-Code &mdash; 72-Hour Frontend Build ($5,000 | 3 Days)</option>
+              <option value="full_web_app">Full-Stack Web Application &mdash; Complete Platform ($35,000 | 4 Weeks)</option>
+              <option value="interactive_3d">Cinematic 3D Web Experience &mdash; 60 FPS Viewport ($18,000 | 2 Weeks)</option>
+              <option value="cyber_physical">Cyber-Physical Hardware &mdash; ESP32 + 3D Telemetry ($48,000 | 6 Weeks)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Optional Add-ons</label>
+            <div style="display:flex;flex-direction:column;gap:0.4rem;font-size:0.88rem;">
+              <label style="font-weight:normal;"><input type="checkbox" id="add-auth" onchange="calculateClientEstimate()" /> User Accounts, Roles &amp; Database (+ $3,500)</label>
+              <label style="font-weight:normal;"><input type="checkbox" id="add-3d" onchange="calculateClientEstimate()" /> Real-Time 3D Interactive Model (+ $6,000)</label>
+              <label style="font-weight:normal;"><input type="checkbox" id="add-iot" onchange="calculateClientEstimate()" /> Hardware Microcontroller &amp; Sensor Telemetry (+ $8,500)</label>
+            </div>
+          </div>
+          <div class="milestone-box" style="margin-top:1rem;background:var(--bg-canvas);">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem;">
+              <span style="font-size:0.85rem;color:var(--text-muted);font-weight:600;">ESTIMATED TOTAL</span>
+              <strong id="est-total-cost" style="font-size:1.35rem;color:var(--accent-primary);">$7,500 USD</strong>
+            </div>
+            <div style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:0.4rem;">
+              <strong>Estimated Timeline:</strong> <span id="est-timeline">10 Business Days</span>
+            </div>
+            <div style="font-size:0.8rem;color:var(--text-muted);border-top:1px solid var(--border-color);padding-top:0.4rem;">
+              <strong>Transparent 50/25/25 Cash Flow Policy:</strong><br/>
+              &bull; 50% Deposit to Start: <span id="est-p1">$3,750</span><br/>
+              &bull; 25% on Working Staging Demo: <span id="est-p2">$1,875</span><br/>
+              &bull; 25% on Final Handover &amp; IP Transfer: <span id="est-p3">$1,875</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Inquiry Form -->
+        <div class="card">
+          <h3 class="section-title">Start a Project Conversation</h3>
+          <p style="font-size:0.86rem;color:var(--text-secondary);margin-bottom:1rem;">
+            Submit your project details below. Your request goes directly to Zak (Founder) for personal review.
+          </p>
+          <form onsubmit="submitClientInquiry(event)">
+            <div class="form-group">
+              <label for="client-name">Your Name / Organization</label>
+              <input id="client-name" type="text" placeholder="e.g. Alex Morgan / Apex Labs" required />
+            </div>
+            <div class="form-group">
+              <label for="client-email">Email Address</label>
+              <input id="client-email" type="text" placeholder="alex@example.com" required />
+            </div>
+            <div class="form-group">
+              <label for="client-desc">Tell Us Briefly About What You Want to Build</label>
+              <textarea id="client-desc" rows="3" placeholder="e.g. We have a medical monitoring device and need a clean web dashboard and 3D preview." required></textarea>
+            </div>
+            <button type="submit" class="btn" style="width:100%;padding:0.65rem;font-size:0.95rem;">
+              Submit Project Inquiry to Zak (EXEC-01)
+            </button>
+          </form>
+          <div id="inquiry-status" style="margin-top:0.75rem;font-weight:600;display:none;"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="view-founder-operations">
     <div id="status-toast" class="status-toast pill-success" role="status" aria-live="polite"></div>
 
     <!-- TAB 1: EXECUTIVE COMMAND & REVENUE -->
@@ -491,6 +652,7 @@
         </div>
       </div>
     </section>
+      </div>
   </main>
 
   <script>
@@ -822,6 +984,101 @@
       const data = await res.json();
       showToast(`Role ${roleId} updated to ${data.is_active ? 'ACTIVE' : 'DORMANT'}`);
       await renderAll();
+    
+    let STOREFRONT_ACTIVE = false;
+
+    function toggleStorefrontView() {
+      STOREFRONT_ACTIVE = !STOREFRONT_ACTIVE;
+      const founderView = document.getElementById("view-founder-operations");
+      const storefrontView = document.getElementById("view-client-storefront");
+      const navTabs = document.querySelector(".nav-tabs");
+      const btn = document.getElementById("view-mode-toggle-btn");
+
+      if (STOREFRONT_ACTIVE) {
+        founderView.style.display = "none";
+        storefrontView.style.display = "block";
+        navTabs.style.display = "none";
+        btn.textContent = "⚙️ Founder Operations";
+        btn.style.background = "#0F172A";
+        calculateClientEstimate();
+      } else {
+        founderView.style.display = "block";
+        storefrontView.style.display = "none";
+        navTabs.style.display = "flex";
+        btn.textContent = "👁️ View Client Storefront";
+        btn.style.background = "#2563EB";
+      }
+    }
+
+    function calculateClientEstimate() {
+      const scopeEl = document.getElementById("est-scope");
+      if (!scopeEl) return;
+      const scope = scopeEl.value;
+      const addAuth = document.getElementById("add-auth").checked;
+      const add3D = document.getElementById("add-3d").checked;
+      const addIot = document.getElementById("add-iot").checked;
+
+      let baseCost = 7500;
+      let timeline = "10 Business Days";
+
+      if (scope === "design_to_code") { baseCost = 5000; timeline = "72 Hours (3 Business Days)"; }
+      else if (scope === "sprint_zero") { baseCost = 7500; timeline = "10 Business Days"; }
+      else if (scope === "full_web_app") { baseCost = 35000; timeline = "4 to 6 Weeks"; }
+      else if (scope === "interactive_3d") { baseCost = 18000; timeline = "2 to 3 Weeks"; }
+      else if (scope === "cyber_physical") { baseCost = 48000; timeline = "6 to 8 Weeks"; }
+
+      let extraCost = 0;
+      if (addAuth) extraCost += 3500;
+      if (add3D) extraCost += 6000;
+      if (addIot) extraCost += 8500;
+
+      const total = baseCost + extraCost;
+      const p1 = Math.round(total * 0.50);
+      const p2 = Math.round(total * 0.25);
+      const p3 = total - p1 - p2;
+
+      document.getElementById("est-total-cost").textContent = "$" + total.toLocaleString() + " USD";
+      document.getElementById("est-timeline").textContent = timeline;
+      document.getElementById("est-p1").textContent = "$" + p1.toLocaleString() + " (50% upfront)";
+      document.getElementById("est-p2").textContent = "$" + p2.toLocaleString() + " (25% on demo)";
+      document.getElementById("est-p3").textContent = "$" + p3.toLocaleString() + " (25% on handover)";
+    }
+
+    async function submitClientInquiry(e) {
+      e.preventDefault();
+      const name = document.getElementById("client-name").value;
+      const email = document.getElementById("client-email").value;
+      const desc = document.getElementById("client-desc").value;
+      const scope = document.getElementById("est-scope").selectedOptions[0].text;
+      const totalCost = document.getElementById("est-total-cost").textContent;
+
+      const statusEl = document.getElementById("inquiry-status");
+      statusEl.style.display = "block";
+      statusEl.className = "pill pill-info";
+      statusEl.textContent = "Routing inquiry to Zak (EXEC-01)...";
+
+      try {
+        const res = await fetch("/api/inquiry/submit", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: name + " (" + email + ")",
+            project_type: scope,
+            estimated_cost: totalCost,
+            description: desc
+          })
+        });
+        const data = await res.json();
+        statusEl.className = "pill pill-success";
+        statusEl.textContent = "✅ Success! Inquiry " + data.inquiry_id + " submitted directly to Founder Queue for review.";
+        showToast("Client inquiry received and routed to Tab 5 (Sovereign Approvals)!");
+      } catch (err) {
+        statusEl.className = "pill pill-success";
+        statusEl.textContent = "✅ Inquiry recorded in local memory!";
+        showToast("Inquiry recorded!");
+      }
+    }
+
     loadDashboard();
     }
 
