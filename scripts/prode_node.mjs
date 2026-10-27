@@ -356,6 +356,27 @@ function cmdServe(port = 8080) {
       return sendJson(200, getTelemetryData());
     }
 
+    if (req.method === "GET" && url.pathname === "/api/projects/workspace") {
+      const baseDir = path.resolve(REPO_ROOT, "projects");
+      if (!fs.existsSync(baseDir)) fs.mkdirSync(baseDir, { recursive: true });
+      const entries = fs.readdirSync(baseDir).filter((e) => fs.statSync(path.join(baseDir, e)).isDirectory());
+      const projects = entries.map((slug) => {
+        const pDir = path.join(baseDir, slug);
+        const files = {};
+        const scan = (d, rel) => {
+          for (const item of fs.readdirSync(d)) {
+            const full = path.join(d, item);
+            const r = rel ? `${rel}/${item}` : item;
+            if (fs.statSync(full).isDirectory()) scan(full, r);
+            else files[r] = { path: r, content: fs.readFileSync(full, "utf-8") };
+          }
+        };
+        scan(pDir, "");
+        return { slug, path: pDir, file_count: Object.keys(files).length, files };
+      });
+      return sendJson(200, { projects });
+    }
+
     if (req.method === "POST") {
       let bodyRaw = "";
       req.on("data", (chunk) => (bodyRaw += chunk));
@@ -609,6 +630,52 @@ ${clientName} is partnering with PRODE to design and engineer a production-ready
         if (url.pathname === "/api/hardware/telemetry") {
           nodeHardwareMode = (body.mode || "NOMINAL").toUpperCase();
           return sendJson(200, getTelemetryData());
+        }
+
+        if (url.pathname === "/api/contract/generate") {
+          const clientName = body.client_name || "Apex Health";
+          const clientEmail = body.client_email || "contact@apex.com";
+          const projTitle = body.project_title || "Sentinel Health IoT";
+          const contractType = (body.contract_type || "MSA").toUpperCase();
+          const totalCost = Number(body.total_cost_usd || 7500);
+          const p1 = Math.round(totalCost * 0.50);
+          const p2 = Math.round(totalCost * 0.25);
+          const p3 = Math.round(totalCost * 0.25);
+          const today = utcNow().split("T")[0];
+
+          let content = "";
+          let artType = "MASTER_SERVICES_AGREEMENT";
+          if (contractType.includes("NDA")) {
+            artType = "MUTUAL_NDA";
+            content = `# MUTUAL NON-DISCLOSURE AGREEMENT (NDA)\n\n**DATE:** ${today}\n**PARTIES:** PRODE (Zak EXEC-01) & ${clientName} (${clientEmail})\n\n### 1. Confidentiality Invariant\nAll technical specifications, schemas, and models for **${projTitle}** are held strictly confidential.\n`;
+          } else {
+            content = `# MASTER SERVICES AGREEMENT (MSA)\n\n**CLIENT:** ${clientName}\n**TOTAL GUARANTEED VALUE:** $${totalCost.toLocaleString()} USD\n\n### 50/25/25 Milestone Schedule:\n1. 50% Deposit ($${p1.toLocaleString()})\n2. 25% Staging Demo ($${p2.toLocaleString()})\n3. 25% Final Handover & IP Assignment ($${p3.toLocaleString()})\n`;
+          }
+
+          const artId = `KV-${artType.slice(0, 3)}-${clientName.replace(/[^a-zA-Z0-9]/g, "").toUpperCase().slice(0, 10)}`;
+          state.knowledge_vault.unshift({
+            id: artId,
+            artifact_type: artType,
+            project_id: clientName,
+            title: `${artType} — ${clientName}`,
+            ip_classification: "LEGAL_CONTRACT",
+            governing_brain: "zedcu",
+            content,
+            created_by_role: "EXEC-01",
+            created_at: utcNow()
+          });
+          logEvent(state, "EXEC-01", `LEGAL_${artType}_GENERATED`, artId, `Generated ${artType} for ${clientName}`);
+          saveState(state);
+
+          return sendJson(201, {
+            artifact_id: artId,
+            contract_type: artType,
+            client_name: clientName,
+            project_title: projTitle,
+            total_cost_usd: totalCost,
+            document_markdown: content,
+            effective_date: today
+          });
         }
 
         return sendJson(404, { error: "Not found" });

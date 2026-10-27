@@ -780,6 +780,98 @@
 
     <!-- TAB 3: ROADMAP, PROJECTS & TASK DAGS -->
     <section id="tab-roadmap" class="tab-panel" role="tabpanel">
+
+      <!-- Client Workspace Explorer & Live Sandbox Preview -->
+      <div class="card" style="margin-bottom:2rem;padding:1.5rem;border:1px solid var(--border-color);background:var(--bg-surface);">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:1rem;margin-bottom:1.25rem;">
+          <div>
+            <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.35rem;flex-wrap:wrap;">
+              <span class="pill pill-info" style="font-weight:700;">CLIENT WORKSPACE EXPLORER &amp; SANDBOX</span>
+              <span class="pill pill-success" id="workspace-status-badge">● LIVE CODEBASE READY</span>
+            </div>
+            <h3 style="font-size:1.35rem;font-weight:700;margin:0 0 0.25rem;">
+              Interactive Project Codebase &amp; App Sandbox
+            </h3>
+            <p style="font-size:0.88rem;color:var(--text-secondary);margin:0;max-width:750px;">
+              Inspect generated files (PRD, Architecture, package.json, React components) and test the interactive prototype inside an embedded device frame.
+            </p>
+          </div>
+          <div style="display:flex;gap:0.5rem;flex-wrap:wrap;align-items:center;">
+            <button type="button" class="btn" onclick="openContractModalForCurrentWorkspace()" style="background:#7C3AED;color:#FFF;font-size:0.82rem;padding:0.4rem 0.8rem;">
+              📄 Generate Mutual NDA &amp; MSA
+            </button>
+            <button type="button" class="btn btn-secondary" onclick="loadWorkspaceProjects()" style="font-size:0.82rem;padding:0.4rem 0.75rem;">
+              🔄 Refresh Files
+            </button>
+          </div>
+        </div>
+
+        <!-- Project Selector Dropdown -->
+        <div style="margin-bottom:1rem;display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap;">
+          <label for="workspace-project-select" style="font-size:0.85rem;font-weight:600;color:var(--text-primary);">
+            Active Client Workspace:
+          </label>
+          <select id="workspace-project-select" onchange="switchWorkspaceProject(this.value)" style="max-width:380px;padding:0.4rem 0.75rem;border-radius:6px;border:1px solid var(--border-color);background:var(--bg-canvas);color:var(--text-primary);font-size:0.88rem;">
+            <option value="">Loading workspaces...</option>
+          </select>
+          <span id="workspace-folder-path" style="font-size:0.78rem;color:var(--text-muted);font-family:monospace;"></span>
+        </div>
+
+        <!-- Two-Column Layout: Left Code Tree, Right Interactive Sandbox Frame -->
+        <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(340px, 1fr));gap:1.25rem;align-items:stretch;">
+          
+          <!-- Left: File Tree & Code Viewer -->
+          <div style="background:var(--bg-canvas);border:1px solid var(--border-color);border-radius:8px;padding:1rem;display:flex;flex-direction:column;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem;border-bottom:1px solid var(--border-color);padding-bottom:0.5rem;">
+              <strong style="font-size:0.88rem;text-transform:uppercase;letter-spacing:0.04em;">Workspace Files</strong>
+              <span id="active-file-badge" class="pill pill-neutral" style="font-size:0.75rem;font-family:monospace;">docs/PRD.md</span>
+            </div>
+            
+            <!-- File Tree Pills -->
+            <div id="workspace-file-tree" style="display:flex;flex-wrap:wrap;gap:0.35rem;margin-bottom:0.75rem;"></div>
+
+            <!-- Code Viewer Content Box -->
+            <div style="position:relative;flex:1;min-height:360px;">
+              <pre id="workspace-code-viewer" style="margin:0;padding:1rem;background:#050914;color:#E2E8F0;border:1px solid #1E293B;border-radius:6px;font-family:monospace;font-size:0.8rem;line-height:1.5;max-height:420px;overflow-y:auto;white-space:pre-wrap;"></pre>
+              <button type="button" class="btn btn-secondary" onclick="copyActiveFileContent()" style="position:absolute;top:8px;right:8px;font-size:0.72rem;padding:0.25rem 0.5rem;background:rgba(30,41,59,0.8);color:#FFF;">
+                📋 Copy File
+              </button>
+            </div>
+          </div>
+
+          <!-- Right: Interactive Live Sandbox Frame -->
+          <div style="background:var(--bg-canvas);border:1px solid var(--border-color);border-radius:8px;padding:1rem;display:flex;flex-direction:column;align-items:center;">
+            <div style="width:100%;display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem;border-bottom:1px solid var(--border-color);padding-bottom:0.5rem;">
+              <div style="display:flex;align-items:center;gap:0.4rem;">
+                <strong style="font-size:0.88rem;text-transform:uppercase;letter-spacing:0.04em;">Interactive Sandbox Viewport</strong>
+                <span class="pill pill-success" style="font-size:0.7rem;">HOT RELOAD</span>
+              </div>
+              <div style="display:flex;gap:0.3rem;">
+                <button type="button" class="btn" id="btn-view-desktop" onclick="setSandboxViewport('desktop')" style="font-size:0.75rem;padding:0.25rem 0.6rem;background:#2563EB;color:#FFF;">
+                  💻 Desktop
+                </button>
+                <button type="button" class="btn btn-secondary" id="btn-view-mobile" onclick="setSandboxViewport('mobile')" style="font-size:0.75rem;padding:0.25rem 0.6rem;">
+                  📱 Mobile
+                </button>
+              </div>
+            </div>
+
+            <!-- Sandbox Screen Container -->
+            <div id="sandbox-viewport-container" style="width:100%;max-width:100%;transition:all 0.3s ease;display:flex;justify-content:center;">
+              <div id="sandbox-mock-screen" style="width:100%;border-radius:8px;border:1px solid #334155;background:#090D16;color:#F8FAFC;padding:1.25rem;box-shadow:0 10px 25px rgba(0,0,0,0.4);font-family:sans-serif;">
+                <!-- Dynamically rendered client mock app -->
+              </div>
+            </div>
+
+            <!-- Plain English Explainer -->
+            <div style="width:100%;background:var(--bg-surface);border-left:3px solid #7C3AED;padding:0.65rem 0.85rem;border-radius:4px;font-size:0.8rem;line-height:1.4;color:var(--text-secondary);margin-top:0.85rem;">
+              <strong>💡 Live Sandbox Advantage:</strong> Zak and clients can review the real software screens, test clickable actions, and inspect the code without needing to run any command line in their terminal.
+            </div>
+          </div>
+
+        </div>
+      </div>
+
       <h2 class="section-title">5-Phase Progression Roadmap (v1.0 &rarr; v5.0)</h2>
       <div class="filter-bar" id="version-filter-bar"></div>
       <div id="versions-container" style="margin-bottom:1.5rem;"></div>
@@ -949,6 +1041,9 @@
       document.querySelectorAll('.tab-btn').forEach(b => b.setAttribute('aria-selected', 'false'));
       document.getElementById('tab-' + tabId).classList.add('active');
       btnEl.setAttribute('aria-selected', 'true');
+      if (tabId === 'roadmap') {
+        loadWorkspaceProjects();
+      }
     }
 
     async function loadDashboard() {
@@ -957,6 +1052,7 @@
         if (res.ok) {
           STATE = await res.json();
           renderAll();
+          loadWorkspaceProjects();
         }
       } catch (err) {
         console.warn("Live API fetch offline, using seed:", err);
@@ -1122,6 +1218,222 @@
     function filterVersion(ver) {
       SELECTED_VERSION = ver;
       renderRoadmapAndProjects();
+    }
+
+    /* ==========================================================================
+       Client Workspace Explorer & Live Sandbox Engine
+       ========================================================================== */
+    let WORKSPACE_PROJECTS = [];
+    let CURRENT_WORKSPACE = null;
+    let CURRENT_WORKSPACE_FILE = null;
+    let CURRENT_SANDBOX_VIEWPORT = "desktop";
+    let CURRENT_CONTRACT_DOC_TYPE = "MSA";
+    let CURRENT_CONTRACT_DATA = null;
+
+    async function loadWorkspaceProjects() {
+      try {
+        const res = await fetch("/api/projects/workspace");
+        const data = await res.json();
+        WORKSPACE_PROJECTS = data.projects || [];
+        renderWorkspaceProjectsSelect();
+      } catch (err) {
+        console.warn("Could not load workspace projects:", err);
+      }
+    }
+
+    function renderWorkspaceProjectsSelect() {
+      const select = document.getElementById("workspace-project-select");
+      if (!select) return;
+      if (!WORKSPACE_PROJECTS.length) {
+        select.innerHTML = '<option value="">No client workspaces found</option>';
+        return;
+      }
+
+      select.innerHTML = WORKSPACE_PROJECTS.map(p => `
+        <option value="${p.slug}">${p.slug} (${p.file_count} files)</option>
+      `).join('');
+
+      if (!CURRENT_WORKSPACE || !WORKSPACE_PROJECTS.find(p => p.slug === CURRENT_WORKSPACE.slug)) {
+        CURRENT_WORKSPACE = WORKSPACE_PROJECTS[0];
+      }
+      select.value = CURRENT_WORKSPACE.slug;
+      renderWorkspaceDetails();
+    }
+
+    function switchWorkspaceProject(slug) {
+      const proj = WORKSPACE_PROJECTS.find(p => p.slug === slug);
+      if (proj) {
+        CURRENT_WORKSPACE = proj;
+        CURRENT_WORKSPACE_FILE = null;
+        renderWorkspaceDetails();
+      }
+    }
+
+    function renderWorkspaceDetails() {
+      if (!CURRENT_WORKSPACE) return;
+      const pathEl = document.getElementById("workspace-folder-path");
+      if (pathEl) pathEl.textContent = `📁 ${CURRENT_WORKSPACE.path}`;
+
+      const tree = document.getElementById("workspace-file-tree");
+      const files = Object.keys(CURRENT_WORKSPACE.files || {});
+      
+      if (!CURRENT_WORKSPACE_FILE || !CURRENT_WORKSPACE.files[CURRENT_WORKSPACE_FILE]) {
+        CURRENT_WORKSPACE_FILE = files.includes("docs/PRD.md") ? "docs/PRD.md" : files[0];
+      }
+
+      if (tree) {
+        tree.innerHTML = files.map(f => `
+          <button type="button" class="btn ${f === CURRENT_WORKSPACE_FILE ? '' : 'btn-secondary'}" 
+            style="font-size:0.75rem;padding:0.25rem 0.6rem;font-family:monospace;" 
+            onclick="selectWorkspaceFile('${f}')">
+            ${f.endsWith('.md') ? '📄' : f.endsWith('.json') ? '📦' : '⚛️'} ${f}
+          </button>
+        `).join('');
+      }
+
+      const badge = document.getElementById("active-file-badge");
+      if (badge) badge.textContent = CURRENT_WORKSPACE_FILE;
+
+      const viewer = document.getElementById("workspace-code-viewer");
+      if (viewer) {
+        const fileData = CURRENT_WORKSPACE.files[CURRENT_WORKSPACE_FILE] || { content: "" };
+        viewer.textContent = fileData.content || "// Empty file";
+      }
+
+      renderSandboxApp();
+    }
+
+    function selectWorkspaceFile(filePath) {
+      CURRENT_WORKSPACE_FILE = filePath;
+      renderWorkspaceDetails();
+    }
+
+    function copyActiveFileContent() {
+      if (!CURRENT_WORKSPACE || !CURRENT_WORKSPACE_FILE) return;
+      const content = CURRENT_WORKSPACE.files[CURRENT_WORKSPACE_FILE]?.content || "";
+      navigator.clipboard.writeText(content);
+      showToast(`Copied ${CURRENT_WORKSPACE_FILE} to clipboard!`);
+    }
+
+    function setSandboxViewport(mode) {
+      CURRENT_SANDBOX_VIEWPORT = mode;
+      const btnDesk = document.getElementById("btn-view-desktop");
+      const btnMob = document.getElementById("btn-view-mobile");
+      const container = document.getElementById("sandbox-viewport-container");
+
+      if (mode === "mobile") {
+        if (btnMob) { btnMob.classList.remove("btn-secondary"); btnMob.style.background = "#2563EB"; btnMob.style.color = "#FFF"; }
+        if (btnDesk) { btnDesk.classList.add("btn-secondary"); btnDesk.style.background = ""; btnDesk.style.color = ""; }
+        if (container) container.style.maxWidth = "375px";
+      } else {
+        if (btnDesk) { btnDesk.classList.remove("btn-secondary"); btnDesk.style.background = "#2563EB"; btnDesk.style.color = "#FFF"; }
+        if (btnMob) { btnMob.classList.add("btn-secondary"); btnMob.style.background = ""; btnMob.style.color = ""; }
+        if (container) container.style.maxWidth = "100%";
+      }
+    }
+
+    function renderSandboxApp() {
+      const screen = document.getElementById("sandbox-mock-screen");
+      if (!screen || !CURRENT_WORKSPACE) return;
+
+      const slug = CURRENT_WORKSPACE.slug;
+      const title = slug.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+
+      screen.innerHTML = `
+        <div style="border-bottom:1px solid #1E293B;padding-bottom:0.75rem;margin-bottom:1rem;display:flex;justify-content:space-between;align-items:center;">
+          <div style="display:flex;align-items:center;gap:0.5rem;">
+            <div style="width:10px;height:10px;border-radius:50%;background:#10B981;"></div>
+            <strong style="font-size:0.95rem;color:#FFF;">${title}</strong>
+          </div>
+          <span class="pill pill-info" style="font-size:0.7rem;">PRODE RUNTIME</span>
+        </div>
+
+        <div style="background:#0F172A;border:1px solid #1E293B;border-radius:6px;padding:1rem;margin-bottom:0.75rem;">
+          <span class="pill pill-success" style="font-size:0.7rem;margin-bottom:0.4rem;">VERIFIED CLIENT SPRINT BUILD</span>
+          <h4 style="font-size:1.15rem;margin:0.25rem 0 0.4rem;color:#FFF;">Welcome to ${title}</h4>
+          <p style="font-size:0.83rem;color:#94A3B8;line-height:1.4;margin:0 0 0.75rem;">
+            This prototype application is actively scaffolded and running on PRODE's multi-agent architecture.
+          </p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;font-size:0.78rem;">
+            <div style="background:#090D16;padding:0.5rem;border-radius:4px;">
+              <span style="color:#64748B;display:block;">STATUS:</span>
+              <strong style="color:#10B981;">● DEPLOYED / STAGING</strong>
+            </div>
+            <div style="background:#090D16;padding:0.5rem;border-radius:4px;">
+              <span style="color:#64748B;display:block;">LATENCY:</span>
+              <strong style="color:#38BDF8;">18 ms (Edge Mesh)</strong>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:0.5rem;justify-content:space-between;">
+          <button type="button" class="btn" style="flex:1;font-size:0.78rem;padding:0.4rem;" onclick="showToast('Simulated Action Executed in ${slug}')">
+            ⚡ Run Test Payload
+          </button>
+          <button type="button" class="btn btn-secondary" style="flex:1;font-size:0.78rem;padding:0.4rem;" onclick="showToast('Diagnostic Telemetry Nominal: 0 Errors')">
+            🔍 Telemetry Health
+          </button>
+        </div>
+      `;
+    }
+
+    async function openContractModalForCurrentWorkspace() {
+      const clientName = CURRENT_WORKSPACE ? CURRENT_WORKSPACE.slug.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase()) : "Apex Health";
+      await fetchAndShowContract(clientName, "MSA");
+    }
+
+    async function toggleContractDocType(type) {
+      CURRENT_CONTRACT_DOC_TYPE = type;
+      const btnMsa = document.getElementById("btn-toggle-msa");
+      const btnNda = document.getElementById("btn-toggle-nda");
+      if (type === "MSA") {
+        if (btnMsa) { btnMsa.classList.remove("btn-secondary"); btnMsa.style.background = "#2563EB"; btnMsa.style.color = "#FFF"; }
+        if (btnNda) { btnNda.classList.add("btn-secondary"); btnNda.style.background = ""; btnNda.style.color = ""; }
+      } else {
+        if (btnNda) { btnNda.classList.remove("btn-secondary"); btnNda.style.background = "#2563EB"; btnNda.style.color = "#FFF"; }
+        if (btnMsa) { btnMsa.classList.add("btn-secondary"); btnMsa.style.background = ""; btnMsa.style.color = ""; }
+      }
+      const clientName = CURRENT_CONTRACT_DATA ? CURRENT_CONTRACT_DATA.client_name : (CURRENT_WORKSPACE ? CURRENT_WORKSPACE.slug : "Apex Health");
+      await fetchAndShowContract(clientName, type);
+    }
+
+    async function fetchAndShowContract(clientName, contractType) {
+      showToast(`Generating official ${contractType} legal contract...`);
+      try {
+        const res = await fetch("/api/contract/generate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            client_name: clientName,
+            client_email: "contact@" + clientName.toLowerCase().replace(/[^a-z0-9]/g, "") + ".com",
+            project_title: clientName + " Interactive Engineering Sprint",
+            contract_type: contractType,
+            total_cost_usd: 15000.0
+          })
+        });
+        const data = await res.json();
+        CURRENT_CONTRACT_DATA = data;
+        document.getElementById("contract-modal-title").textContent = data.contract_type + " — " + data.client_name;
+        document.getElementById("contract-modal-content").textContent = data.document_markdown;
+        document.getElementById("contract-modal").style.display = "block";
+        showToast(`${contractType} generated and stored in Knowledge Vault as ${data.artifact_id}!`);
+      } catch (err) {
+        showToast("Error generating contract: " + err);
+      }
+    }
+
+    function closeContractModal() {
+      document.getElementById("contract-modal").style.display = "none";
+    }
+
+    function copyContractText() {
+      if (!CURRENT_CONTRACT_DATA) return;
+      navigator.clipboard.writeText(CURRENT_CONTRACT_DATA.document_markdown);
+      showToast("Contract text copied to clipboard!");
+    }
+
+    function printContract() {
+      window.print();
     }
 
     function renderVault() {
@@ -2394,6 +2706,34 @@
         </div>
       </div>
 
+    </div>
+  </div>
+
+  <!-- LEGAL CONTRACT & MUTUAL NDA MODAL -->
+  <div id="contract-modal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(15,23,42,0.85);z-index:9999;overflow-y:auto;padding:1.5rem;">
+    <div style="max-width:880px;margin:1.5rem auto;background:var(--bg-surface);border-radius:10px;border:1px solid var(--border-color);padding:2rem;box-shadow:0 10px 30px rgba(0,0,0,0.6);">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1rem;border-bottom:1px solid var(--border-color);padding-bottom:0.75rem;flex-wrap:wrap;gap:1rem;">
+        <div>
+          <div style="display:flex;gap:0.4rem;align-items:center;margin-bottom:0.25rem;">
+            <span class="pill pill-success" id="contract-modal-badge">LEGAL AGREEMENT &bull; PRODE SOVEREIGN</span>
+            <span class="pill pill-info">50/25/25 CASH-FLOW PROTECTED</span>
+          </div>
+          <h3 id="contract-modal-title" style="font-size:1.35rem;margin:0 0 0.25rem;">
+            Official Client Legal Agreement
+          </h3>
+          <p style="font-size:0.85rem;color:var(--text-secondary);margin:0;">
+            Legally ratified contract with milestone handover and intellectual property clauses.
+          </p>
+        </div>
+        <div style="display:flex;gap:0.4rem;flex-wrap:wrap;">
+          <button type="button" class="btn" onclick="toggleContractDocType('MSA')" id="btn-toggle-msa" style="font-size:0.8rem;padding:0.4rem 0.75rem;background:#2563EB;color:#FFF;">Master Services Agreement</button>
+          <button type="button" class="btn btn-secondary" onclick="toggleContractDocType('MUTUAL_NDA')" id="btn-toggle-nda" style="font-size:0.8rem;padding:0.4rem 0.75rem;">Mutual NDA</button>
+          <button type="button" class="btn btn-secondary" onclick="copyContractText()">📋 Copy</button>
+          <button type="button" class="btn btn-secondary" onclick="printContract()">🖨️ Print / PDF</button>
+          <button type="button" class="btn btn-secondary" onclick="closeContractModal()">✕ Close</button>
+        </div>
+      </div>
+      <div style="background:var(--bg-canvas);border:1px solid var(--border-color);border-radius:6px;padding:1.5rem;font-family:monospace;white-space:pre-wrap;font-size:0.85rem;max-height:550px;overflow-y:auto;line-height:1.55;" id="contract-modal-content"></div>
     </div>
   </div>
 

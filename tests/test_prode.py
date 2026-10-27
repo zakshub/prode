@@ -279,6 +279,39 @@ class TestProdeCompanyOS(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.engine.set_hardware_telemetry_mode("INVALID_MODE")
 
+    def test_13_workspace_explorer_and_client_contract_suite(self):
+        # 1. Test workspace projects scanner
+        workspaces = self.engine.get_workspace_projects()
+        self.assertIsInstance(workspaces, list)
+        self.assertGreaterEqual(len(workspaces), 1)
+        first = workspaces[0]
+        self.assertIn("slug", first)
+        self.assertIn("files", first)
+        self.assertIn("docs/PRD.md", first["files"])
+
+        # 2. Test MSA contract generation
+        msa = self.engine.generate_client_contract(
+            client_name="Apex Health",
+            client_email="contact@apex.com",
+            project_title="Cardiac Monitor",
+            contract_type="MSA",
+            total_cost_usd=10000.0,
+        )
+        self.assertEqual(msa["contract_type"], "MASTER_SERVICES_AGREEMENT")
+        self.assertIn("50/25/25 Cash-Flow Governance", msa["document_markdown"])
+        self.assertIn("$5,000.00 USD", msa["document_markdown"])
+
+        # 3. Test Mutual NDA generation
+        nda = self.engine.generate_client_contract(
+            client_name="Apex Health",
+            client_email="contact@apex.com",
+            project_title="Cardiac Monitor",
+            contract_type="MUTUAL_NDA",
+            total_cost_usd=10000.0,
+        )
+        self.assertEqual(nda["contract_type"], "MUTUAL_NDA")
+        self.assertIn("MUTUAL NON-DISCLOSURE AGREEMENT", nda["document_markdown"])
+
 
 if __name__ == "__main__":
     unittest.main()

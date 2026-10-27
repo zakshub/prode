@@ -46,6 +46,8 @@ def dispatch_api_request(
                 return 200, {"approvals": engine.db.get_approvals()}
             if path == "/api/hardware/telemetry":
                 return 200, engine.get_hardware_telemetry()
+            if path == "/api/projects/workspace":
+                return 200, {"projects": engine.get_workspace_projects()}
 
         elif method == "POST":
             if path == "/api/roles/toggle":
@@ -144,6 +146,20 @@ def dispatch_api_request(
                 mode = body.get("mode", "NOMINAL")
                 res = engine.set_hardware_telemetry_mode(mode)
                 return 200, res
+            if path == "/api/contract/generate":
+                client_name = body.get("client_name", "Acme Health")
+                client_email = body.get("client_email", "contact@acme.com")
+                project_title = body.get("project_title", "Custom Product")
+                contract_type = body.get("contract_type", "MSA")
+                total_cost_usd = float(body.get("total_cost_usd", 7500.0))
+                res = engine.generate_client_contract(
+                    client_name=client_name,
+                    client_email=client_email,
+                    project_title=project_title,
+                    contract_type=contract_type,
+                    total_cost_usd=total_cost_usd,
+                )
+                return 201, res
 
         return 404, {"error": f"Route not found: {method} {path}"}
 

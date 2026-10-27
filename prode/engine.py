@@ -897,3 +897,198 @@ export default function HomePage() {{
             details=f"Hardware operating condition set to {m_up}.",
         )
         return self.get_hardware_telemetry()
+
+    # ------------------------------------------------------------------
+    # 9. Client Workspace Explorer & Legal Agreement Suite
+    # ------------------------------------------------------------------
+    def get_workspace_projects(self) -> List[Dict[str, Any]]:
+        import os
+        base_projects_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "projects"))
+        if not os.path.exists(base_projects_dir):
+            os.makedirs(base_projects_dir, exist_ok=True)
+            self.scaffold_client_project(
+                client_name="Apex Health",
+                project_title="Sentinel Cardiac IoT Gateway",
+                project_type="cyber_physical",
+                features=[
+                    "Next.js App Router & Tailored Dark Obsidian Theme",
+                    "Real-time 60 FPS Three.js Heart & Sensor Telemetry Viewport",
+                    "ESP32-S3 Microcontroller Telemetry Hook (20 Hz)",
+                    "HIPAA-compliant Local Data Encryption & RBAC",
+                ],
+                base_dir=base_projects_dir,
+            )
+
+        projects_list = []
+        for entry in sorted(os.listdir(base_projects_dir)):
+            proj_dir = os.path.join(base_projects_dir, entry)
+            if not os.path.isdir(proj_dir):
+                continue
+
+            files = {}
+            for root_dir, _, filenames in os.walk(proj_dir):
+                for fn in sorted(filenames):
+                    fpath = os.path.join(root_dir, fn)
+                    rel = os.path.relpath(fpath, proj_dir).replace("\\", "/")
+                    try:
+                        with open(fpath, "r", encoding="utf-8", errors="ignore") as f:
+                            content = f.read()
+                    except Exception:
+                        content = ""
+                    files[rel] = {
+                        "path": rel,
+                        "size": len(content),
+                        "content": content,
+                    }
+
+            projects_list.append({
+                "slug": entry,
+                "path": proj_dir,
+                "file_count": len(files),
+                "files": files,
+            })
+        return projects_list
+
+    def generate_client_contract(
+        self,
+        client_name: str,
+        client_email: str,
+        project_title: str,
+        contract_type: str = "MSA",
+        total_cost_usd: float = 7500.0,
+    ) -> Dict[str, Any]:
+        import re
+        safe_client = re.sub(r'[^a-zA-Z0-9]', '_', client_name.strip()).lower().strip('_') or "client"
+        now = utc_now()
+        today = now.split("T")[0]
+        p1 = round(total_cost_usd * 0.50)
+        p2 = round(total_cost_usd * 0.25)
+        p3 = round(total_cost_usd * 0.25)
+
+        if contract_type.upper() in ("MUTUAL_NDA", "NDA"):
+            art_type = "MUTUAL_NDA"
+            doc_title = f"Mutual Non-Disclosure Agreement (NDA) — {client_name}"
+            content = f"""# MUTUAL NON-DISCLOSURE AGREEMENT (NDA)
+
+**EFFECTIVE DATE:** {today}  
+**PARTIES:**  
+1. **PRODE** (represented by Founder & Sovereign Architect Zak, EXEC-01)  
+2. **{client_name}** (represented by contact email: {client_email})  
+
+---
+
+### 1. Purpose
+The parties wish to explore or execute a product engineering and interactive technology collaboration regarding **{project_title}** ("The Engagement"). In connection with The Engagement, each party may disclose proprietary technical, financial, or architectural information ("Confidential Information").
+
+### 2. Obligations of Non-Disclosure
+Each receiving party agrees to:
+- Hold all Confidential Information in strict confidence, using at least the same degree of care it uses for its own confidential property (and not less than reasonable care).
+- Not disclose, publish, or disseminate Confidential Information to any third party without prior written consent.
+- Restrict internal access solely to those engineers, advisors, or AI orchestration agents with a strict need-to-know.
+
+### 3. Exclusions
+Confidential Information does not include information that:
+- Is or becomes publicly known through no breach of this Agreement.
+- Was already known to the receiving party without confidentiality restrictions prior to disclosure.
+- Is independently developed without reference to the disclosing party's Confidential Information.
+
+### 4. Zero Speculative Spend & Intellectual Property
+PRODE warrants that all architectural analysis and prototyping conducted during discussions adheres to its strict $0.00 unauthorized spend boundary, with zero third-party data leakage or unauthorized commercial sublicensing.
+
+### 5. Term & Governing Law
+This Agreement remains in effect for two (2) years from the Effective Date.
+
+---
+
+### SIGNATURES & RATIFICATION
+
+| For {client_name}: | For PRODE Product Engineering: |
+| :--- | :--- |
+| **Signature:** _________________________ | **Signature:** _________________________ |
+| **Name:** Authorized Representative | **Name:** Zak (EXEC-01) |
+| **Title:** ____________________________ | **Title:** Sovereign Founder & Architect |
+| **Date:** {today} | **Date:** {today} |
+"""
+        else:
+            art_type = "MASTER_SERVICES_AGREEMENT"
+            doc_title = f"Master Services Agreement (MSA) — {client_name} ({project_title})"
+            content = f"""# MASTER SERVICES AGREEMENT (MSA)
+## Product Design, Interactive 3D & Cyber-Physical Engineering
+
+**EFFECTIVE DATE:** {today}  
+**AGREEMENT ID:** MSA-{safe_client.upper()[:12]}-{today.replace("-", "")}  
+**CLIENT:** {client_name} ({client_email})  
+**ENGINEERING FIRM:** PRODE (AI-Native Product Engineering & Interactive Technology Company)  
+**SOVEREIGN ARCHITECT:** Zak (EXEC-01)  
+**TOTAL CONTRACT VALUE:** ${total_cost_usd:,.2f} USD (Fixed-Price Guarantee)  
+
+---
+
+### 1. Scope of Engagement & Guaranteed Deliverables
+PRODE agrees to design, architect, and engineer **{project_title}** in accordance with the Product Requirements Document (PRD) and Dual-Gate Quality standards.
+
+### 2. Transparent 50/25/25 Cash-Flow Governance
+All engineering phases operate under PRODE's guaranteed milestone schedule:
+- **Milestone 1 — 50% Deposit (${p1:,.2f} USD):** Due upon signing prior to architectural sprint kickoff. Covers user journey mapping, WCAG design tokens, and database schemas.
+- **Milestone 2 — 25% Staging Demonstration (${p2:,.2f} USD):** Due upon deployment of the working interactive staging prototype and real-time 3D/telemetry viewport.
+- **Milestone 3 — 25% Production Handover & IP Assignment (${p3:,.2f} USD):** Due upon final production verification, clean Git repository transfer, and complete intellectual property assignment.
+
+### 3. Intellectual Property (IP) Ownership
+- Upon clearance of Milestone 3, all custom client deliverables, UI screens, application code, and hardware schematics created specifically for {client_name} are transferred to {client_name} with 100% full commercial ownership.
+- PRODE retains sovereign ownership of its underlying general frameworks (`zakshub/designer`, `zakshub/codelift`, `zakshub/studio`, `zakshub/bob`).
+
+### 4. Dual-Gate Forensic Quality Warranty
+PRODE warrants that all deliverables pass two independent verification gates:
+1. **Design & Reality QC:** Strictly compliant with W3C WCAG 2.2 AAA accessibility and photographic physical causality.
+2. **Compiler AST QC:** 100% build-passing code with zero compiler warnings and strict type checking.
+PRODE will remediate any reproducible defect within 30 days of release at zero additional cost.
+
+---
+
+### SIGNATURES & EXECUTION
+
+| Authorized Representative for {client_name}: | For PRODE Product Engineering: |
+| :--- | :--- |
+| **Signature:** _________________________ | **Signature:** _________________________ |
+| **Name:** ____________________________ | **Name:** Zak (EXEC-01) |
+| **Title:** ___________________________ | **Title:** Founder & Sovereign Architect |
+| **Date:** {today} | **Date:** {today} |
+"""
+
+        art_id = f"KV-{art_type[:3]}-{safe_client.upper()[:12]}"
+        self.db._conn.execute(
+            """
+            INSERT OR REPLACE INTO knowledge_vault (
+                id, artifact_type, project_id, title, ip_classification,
+                governing_brain, content, created_by_role, created_at
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """,
+            (
+                art_id,
+                art_type,
+                safe_client,
+                doc_title,
+                "LEGAL_CONTRACT",
+                "zedcu",
+                content,
+                "EXEC-01",
+                now,
+            ),
+        )
+
+        self.db.log_event(
+            actor="EXEC-01 (Zak)",
+            action=f"LEGAL_{art_type}_GENERATED",
+            target_id=art_id,
+            details=f"Generated {art_type} for {client_name} (${total_cost_usd:,.2f} USD).",
+        )
+
+        return {
+            "artifact_id": art_id,
+            "contract_type": art_type,
+            "client_name": client_name,
+            "project_title": project_title,
+            "total_cost_usd": total_cost_usd,
+            "document_markdown": content,
+            "effective_date": today,
+        }
